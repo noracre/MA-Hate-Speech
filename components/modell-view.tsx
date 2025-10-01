@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts"
 import Image from "next/image"
-import TrainingDataOverview from "./training-data-overview"
+import Link from "next/link"
 
 // Confusion matrix data
 const confusionMatrixData = [
@@ -266,9 +266,6 @@ export default function ModellView() {
           </Select>
         </div>
       </div>
-
-      {/* Training Data Overview Section */}
-      <TrainingDataOverview />
 
       {/* Comments Section */}
       <Card>
