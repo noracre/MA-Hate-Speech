@@ -24,70 +24,81 @@ interface OverviewViewProps {
 
 const pendingInstances: OverviewInstance[] = [
   {
-    id: "7835",
-    date: "11:55, 09. Juni 2025",
-    content: "verschiedenen Arschlöchern zeigen [...]",
-    author: "Anon",
-    colleagueCommented: true, // Y = true
-    aiClassification: "§ 86 StGB",
+    id: "7836 (1)",
+    date: "09. Juni 2025, 10:20",
+    content: "Kopf abhaken wurde [...]",
+    author: "@Beispielperson",
+    colleagueCommented: true,
+    aiClassification: "§ 140 StGB",
     humanClassification: undefined,
     instanceFile: "instance-1",
     screenshot: "LIME-Screenshot1.PNG",
   },
   {
-    id: "7834",
-    date: "17:12, 08. Juni 2025",
-    content: "verherrlichen Gewaltstaaten [...]",
-    author: "Neo-Magazin-Royale",
-    colleagueCommented: true, // Y = true
-    aiClassification: "§ 186 StGB",
+    id: "7835 (2)",
+    date: "09. Juni 2025, 9:55",
+    content: "Was für ein kleiner feiger besoffener [...]",
+    author: "@Beispieluser",
+    colleagueCommented: true,
+    aiClassification: "§ 140 StGB",
     humanClassification: undefined,
     instanceFile: "instance-2",
     screenshot: "LIME-Screenshot2.PNG",
   },
   {
-    id: "7833",
-    date: "10:41, 09. Juni 2025",
-    content: "Kopf abhaken würde [...]",
-    author: "Beispielnutzer",
-    colleagueCommented: false, // N = false
-    aiClassification: "§ 140 StGB",
+    id: "7834 (3)",
+    date: "09. Juni 2025, 9:18",
+    content: "Du bist ein Wichser und [...]",
+    author: "@Badforyousteve",
+    colleagueCommented: false,
+    aiClassification: "§ 241 StGB",
     humanClassification: undefined,
     instanceFile: "instance-3",
     screenshot: "LIME-Screenshot3.PNG",
   },
   {
-    id: "7832",
-    date: "12:20, 09. Juni 2025",
-    content: "terroristische Vereinigung [...]",
-    author: "Anton30",
-    colleagueCommented: false, // N = false
-    aiClassification: "§ 129a StGB",
+    id: "7832 (4)",
+    date: "09. Juni 2025, 8:59",
+    content: "Ich werde dich finden [...]",
+    author: "@Badforyousteve",
+    colleagueCommented: false,
+    aiClassification: "§ 241 StGB",
     humanClassification: undefined,
     instanceFile: "instance-4",
     screenshot: "LIME-Screenshot4.PNG",
   },
   {
-    id: "7831",
-    date: "14:30, 08. Juni 2025",
-    content: "Gewalt gegen Politiker [...]",
-    author: "Karl Lrak",
-    colleagueCommented: true, // Y = true
-    aiClassification: "§ 241 StGB",
+    id: "7830 (5)",
+    date: "08. Juni 2025, 17:29",
+    content: "Diese Politiker sind alle [...]",
+    author: "@_Iamcate_",
+    colleagueCommented: true,
+    aiClassification: "§ 130 StGB",
     humanClassification: undefined,
     instanceFile: "instance-5",
     screenshot: "LIME-Screenshot5.PNG",
   },
   {
-    id: "7830",
-    date: "16:45, 07. Juni 2025",
-    content: "Volksverhetzung Beispiel [...]",
-    author: "TestUser",
-    colleagueCommented: false, // N = false
-    aiClassification: "§ 130 StGB",
+    id: "7827 (6)",
+    date: "08. Juni 2025, 16:06",
+    content: "Menschen wie du sollten [...]",
+    author: "@mustermax",
+    colleagueCommented: false,
+    aiClassification: "Kein Strafbestand",
     humanClassification: undefined,
     instanceFile: "instance-6",
     screenshot: "LIME-Screenshot6.PNG",
+  },
+    {
+    id: "7826 (7)",
+    date: "08. Juni 2025, 15:30",
+    content: "Du dummer Nazi [...]",
+    author: "@classischeclaudia",
+    colleagueCommented: true,
+    aiClassification: "§ 111  StGB",
+    humanClassification: undefined,
+    instanceFile: "instance-7",
+    screenshot: "LIME-Screenshot7.PNG",
   },
 ]
 
@@ -228,7 +239,6 @@ export default function OverviewView({ onInstanceSelect }: OverviewViewProps) {
               </Select>
             </div>
           </div>
-
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
@@ -354,7 +364,7 @@ export default function OverviewView({ onInstanceSelect }: OverviewViewProps) {
                   <tr
                     key={`${instance.id}-${index}`}
                     className="hover:bg-gray-50 cursor-pointer"
-                    onClick={() => onInstanceSelect(instance.instanceFile)}
+                    onClick={() => onInstanceSelect(`${instance.instanceFile}|${instance.id}`)}
                   >
                     <td className="py-3 px-4 font-medium text-gray-900">#{instance.id}</td>
                     <td className="py-3 px-4 text-gray-700">{instance.date}</td>

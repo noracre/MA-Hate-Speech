@@ -16,7 +16,12 @@ import TrainingDataOverview from "@/components/training-data-overview"
 
 export default function ClassificationApp() {
   const [currentView, setCurrentView] = useState("overview")
-  const [currentInstanceId, setCurrentInstanceId] = useState("7836")
+
+  const [pendingInstanceId, setPendingInstanceId] = useState<string | null>(null)
+  const [pendingInstanceLabel, setPendingInstanceLabel] = useState<string | null>(null)
+
+  const [currentInstanceId, setCurrentInstanceId] = useState("instance-1") // Default instance if none is clicked yet
+  const [currentInstanceLabel, setCurrentInstanceLabel] = useState("7836")
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
   const [showExitWarning, setShowExitWarning] = useState(false)
   const [pendingView, setPendingView] = useState("")
@@ -24,19 +29,21 @@ export default function ClassificationApp() {
   const handleViewChange = (newView: string, instanceId?: string) => {
     if (hasUnsavedChanges && newView !== currentView) {
       setPendingView(newView)
+      if (instanceId) setPendingInstanceId(instanceId)
       setShowExitWarning(true)
     } else {
       setCurrentView(newView)
-      if (instanceId) {
-        setCurrentInstanceId(instanceId)
-      }
+      if (instanceId) setCurrentInstanceId(instanceId)
     }
   }
-
+  
   const confirmViewChange = () => {
     setCurrentView(pendingView)
+    if (pendingInstanceId) setCurrentInstanceId(pendingInstanceId)
     setShowExitWarning(false)
     setHasUnsavedChanges(false)
+    setPendingView("")
+    setPendingInstanceId(null)
   }
 
   const cancelViewChange = () => {
@@ -44,25 +51,17 @@ export default function ClassificationApp() {
     setPendingView("")
   }
 
-  const getInstanceComponent = (instanceId: string) => {
-    switch (instanceId) {
-      case "7837":
-        return <Instance1 onUnsavedChanges={setHasUnsavedChanges} />
-      case "7815":
-        return <Instance2 onUnsavedChanges={setHasUnsavedChanges} />
-      case "7836":
-        return <Instance3 onUnsavedChanges={setHasUnsavedChanges} />
-      case "7835":
-        return <Instance4 onUnsavedChanges={setHasUnsavedChanges} />
-      case "7834":
-        return <Instance5 onUnsavedChanges={setHasUnsavedChanges} />
-      case "7833":
-        return <Instance6 onUnsavedChanges={setHasUnsavedChanges} />
-      case "7832":
-        return <Instance7 onUnsavedChanges={setHasUnsavedChanges} />
-      default:
-        return <Instance3 onUnsavedChanges={setHasUnsavedChanges} />
+  const getInstanceComponent = (instanceFile: string) => {
+    const map: Record<string, JSX.Element> = {
+      "instance-1": <Instance1 onUnsavedChanges={setHasUnsavedChanges} />,
+      "instance-2": <Instance2 onUnsavedChanges={setHasUnsavedChanges} />,
+      "instance-3": <Instance3 onUnsavedChanges={setHasUnsavedChanges} />,
+      "instance-4": <Instance4 onUnsavedChanges={setHasUnsavedChanges} />,
+      "instance-5": <Instance5 onUnsavedChanges={setHasUnsavedChanges} />,
+      "instance-6": <Instance6 onUnsavedChanges={setHasUnsavedChanges} />,
+      "instance-7": <Instance7 onUnsavedChanges={setHasUnsavedChanges} />,
     }
+    return map[instanceFile] ?? <Instance1 onUnsavedChanges={setHasUnsavedChanges} />
   }
 
   return (
@@ -139,8 +138,17 @@ export default function ClassificationApp() {
 
       {/* Content */}
       {currentView === "overview" && (
-        <OverviewView onInstanceSelect={(instanceId) => handleViewChange("instance", instanceId)} />
+        <OverviewView
+          onInstanceSelect={(payload) => {
+            const [file, label] = payload.split("|")
+            handleViewChange("instance", file)
+            setCurrentInstanceLabel(label)
+            // if a view change gets blocked by the modal, remember the label too
+            setPendingInstanceLabel(label)
+          }}
+        />
       )}
+
       {currentView === "instance" && getInstanceComponent(currentInstanceId)}
       {currentView === "modell" && <ModellView />}
       {currentView === "training-data" && <TrainingDataOverview />}
