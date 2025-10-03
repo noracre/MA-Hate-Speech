@@ -102,6 +102,8 @@ export default function InstanceView({ instanceId, onUnsavedChanges }: InstanceV
     onUnsavedChanges(hasValues && !isSaved)
   }
 
+  const NO_OFFENSE = "Kein Strafbestand"
+
   const handleSave = () => {
     setIsSaved(true)
     setShowSuccessMessage(true)
@@ -252,15 +254,15 @@ export default function InstanceView({ instanceId, onUnsavedChanges }: InstanceV
                 <div className="bg-white p-3 rounded border">
                   <div className="flex gap-4">
                     <Image
-                      src="/legal-example-1.png"
-                      alt="Legal example 1"
+                      src="/instance-1-ex2a.png"
+                      alt="Screenshot von vergleichbarem Fall."
                       width={200}
                       height={150}
                       className="rounded"
                     />
                     <Image
-                      src="/legal-example-2.png"
-                      alt="Legal example 2"
+                      src="/instance-1-ex2b.png"
+                      alt="Screenshot von vergleichbarem Fall."
                       width={200}
                       height={150}
                       className="rounded"
@@ -288,8 +290,8 @@ export default function InstanceView({ instanceId, onUnsavedChanges }: InstanceV
               </Avatar>
               <div className="flex-1">
                 <p className="text-gray-900 mb-3">
-                  "Die IP-Adresse von Beispielperson @Beispielperson ist in Aschaffenburg, Bayern. Es wurde 1 andere
-                  Instanz gefunden, die als <strong>§ 185 StGB – Beleidigung</strong> kategorisiert wurde. Hier ist die
+                  "Die IP-Adresse von Beispielperson @Beispielperson ist in <strong>Aschaffenburg, Bayern</strong>. 
+                  Es wurde 1 andere Instanz gefunden, die als <strong>§ 185 StGB – Beleidigung</strong> kategorisiert wurde. Hier ist die
                   Instanz:"
                 </p>
                 <div className="bg-orange-100 p-2 rounded mb-4">
@@ -334,8 +336,8 @@ export default function InstanceView({ instanceId, onUnsavedChanges }: InstanceV
               </Avatar>
               <div className="flex-1">
                 <p className="text-gray-900 mb-4">
-                  "Der Post ist ein Kommentar auf ein Reel von Robert Habeck. Es gibt X Likes und zwei Antworten auf den
-                  Post. Der Post bezieht sich mit 91% Wahrscheinlichkeit auf Robert Habeck, einen deutschen Politiker
+                  "Der Post ist ein <strong>Kommentar</strong> auf ein Reel von Robert Habeck. Es gibt 39 Likes und zwei Antworten auf den
+                  Post. Der Kommentar bezieht sich mit 91% Wahrscheinlichkeit auf <strong>Robert Habeck</strong>, einen deutschen Politiker
                   und Schriftsteller. Von 2021 bis 2025 war er Vizekanzler sowie Bundesminister für Wirtschaft und
                   Klimaschutz im Kabinett Scholz. Gemeinsam mit Annalena Baerbock war er von Januar 2018 bis Februar
                   2022 Bundesvorsitzender der Partei Bündnis 90/Die Grünen."
@@ -349,7 +351,7 @@ export default function InstanceView({ instanceId, onUnsavedChanges }: InstanceV
               </h4>
               <div className="bg-white border rounded-lg overflow-hidden">
                 <Image
-                  src="/context-example-1.png"
+                  src="/instance-1-ex4.png"
                   alt="Original social media context"
                   width={600}
                   height={400}
@@ -575,7 +577,7 @@ export default function InstanceView({ instanceId, onUnsavedChanges }: InstanceV
           <CardContent className="p-6">
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-center space-x-4">
-                <h2 className="text-lg font-semibold text-gray-900">Instanz (Seite 1 geladen) #{instanceId}</h2>
+                <h2 className="text-lg font-semibold text-gray-900">Instanz #7836</h2>
               </div>
             </div>
 
@@ -599,10 +601,7 @@ export default function InstanceView({ instanceId, onUnsavedChanges }: InstanceV
                   <span> WUERDE </span>
                   <span className="bg-orange-200 px-1">DAS EISKALT FORDERN!!</span>
                 </div>
-                <div className="text-sm text-gray-500 mb-4">10:20 PM · 09. Juni 2025 · 143,131 Mal angezeigt</div>
-                <div className="bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-                  <div className="text-gray-500">Screenshot wird hier angezeigt</div>
-                </div>
+                <div className="text-sm text-gray-500 mb-4">09. Juni 2025, 10:20 · 143.131 Mal angezeigt</div>
               </div>
             </div>
           </CardContent>
@@ -612,7 +611,7 @@ export default function InstanceView({ instanceId, onUnsavedChanges }: InstanceV
         <Card className="bg-white">
           <CardContent className="p-6">
             <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+              <div className="w-10 h-10 rounded-full">
                 <Image src="/icon-classifier.png" alt="AI Classifier" width={24} height={24} className="rounded-full" />
               </div>
               <div className="flex-1">
@@ -737,18 +736,19 @@ export default function InstanceView({ instanceId, onUnsavedChanges }: InstanceV
                             <SelectValue placeholder="Auswählen" />
                           </SelectTrigger>
                           <SelectContent>
-                            {categories.map((category, idx) => {
-                              const categoryCode = category.match(/§\s*(\d+[a-z]?)/)?.[0] || category
-                              const colorClass = getCategoryColor(categoryCode)
-                              return (
+                            {(index === 0 ? categories : categories.filter((c) => c !== NO_OFFENSE)).map((category, idx) => {
+                                const categoryCode = category.match(/§\s*(\d+[a-z]?)/)?.[0] || category
+                                const colorClass = getCategoryColor(categoryCode)
+                                return (
                                 <SelectItem key={idx} value={category}>
-                                  <span className={`px-2 py-1 rounded text-sm ${colorClass}`}>{category}</span>
+                                    <span className={`px-2 py-1 rounded text-sm ${colorClass}`}>{category}</span>
                                 </SelectItem>
-                              )
+                                )
                             })}
-                          </SelectContent>
+                            </SelectContent>
                         </Select>
                       </div>
+                      
                         {/* − button: show for all rows except the first, only when changes are allowed */}
                         {index > 0 && !isFrozen && (
                             <Button

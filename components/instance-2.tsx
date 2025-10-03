@@ -12,6 +12,7 @@ import {
   MessageCircle,
   User,
   Plus,
+  Minus,
   ChevronLeft,
   ChevronRight,
   Info,
@@ -72,10 +73,10 @@ export default function InstanceView({ instanceId, onUnsavedChanges }: InstanceV
   const [comments, setComments] = useState<Comment[]>([
     {
       id: 1,
-      author: "Kim Best",
+      author: "Werkstudentin Anna",
       content:
-        'Thema: Für Feedback verwenden\n"Ich denke § 126 StGB – Störung des öffentlichen Friedens durch Androhung von Straftaten könnte besser passen, aber was ist deine Meinung? Falls ja, wäre es ein guter Trainingsdatenpunkt."',
-      timestamp: "vor 2 Stunden",
+        'Thema: Person der öffentlichen Lebens\n"Ich war nicht sicher, ob es ein Strafbestand ist, wenn es um eine Person der öffentlichen Lebens geht."',
+      timestamp: "vor 1 Tag",
       avatar: "/icon-other-user.png",
     },
   ])
@@ -86,12 +87,22 @@ export default function InstanceView({ instanceId, onUnsavedChanges }: InstanceV
     }
   }
 
+  const removeSelectField = (id: number) => {
+    if (selectFields.length <= 1) return // keep at least one field
+    const next = selectFields.filter((f) => f.id !== id)
+    setSelectFields(next)
+    const hasValues = next.some((f) => f.value !== "") // update "unsaved changes" state depending on remaining values
+    onUnsavedChanges(hasValues && !isSaved)
+    }
+
   const updateSelectField = (id: number, value: string) => {
     setSelectFields(selectFields.map((field) => (field.id === id ? { ...field, value } : field)))
 
     const hasValues = selectFields.some((field) => field.value !== "") || value !== ""
     onUnsavedChanges(hasValues && !isSaved)
   }
+
+  const NO_OFFENSE = "Kein Strafbestand"
 
   const handleSave = () => {
     setIsSaved(true)
@@ -114,6 +125,8 @@ export default function InstanceView({ instanceId, onUnsavedChanges }: InstanceV
   const handleUseFeedback = () => {
     setShowFeedbackModal(true)
   }
+
+  const isFrozen = isSaved || feedbackSubmitted
 
   const handleSendComment = () => {
     if (newComment.trim()) {
@@ -231,38 +244,11 @@ export default function InstanceView({ instanceId, onUnsavedChanges }: InstanceV
 
             <div>
               <h4 className="font-semibold text-gray-900 mb-3">Ähnliche Urteile</h4>
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-gray-900 mb-3">
-                  Am 11.11.2024 wurde der in Berlin lebende libanesische Künstler Edwin Nasr im Amtsgericht Berlin-
-                  Tiergarten zu einer Geldstrafe in Höhe von 50 Tagessätzen zu je 20 Euro verurteilt. Dabei ging es um
-                  die folgende Stories vom 7. Oktober 2023 in denen die Gewalt der Hammas als „poetische Gerechtigkeit"
-                  beschrieben wurde:
+            </div>
+            <div className="text-gray-900 space-y-2">
+                <p>
+                  Keine Ähnlichen Urteile gefunden.
                 </p>
-                <div className="bg-white p-3 rounded border">
-                  <div className="flex gap-4">
-                    <Image
-                      src="/legal-example-1.png"
-                      alt="Legal example 1"
-                      width={200}
-                      height={150}
-                      className="rounded"
-                    />
-                    <Image
-                      src="/legal-example-2.png"
-                      alt="Legal example 2"
-                      width={200}
-                      height={150}
-                      className="rounded"
-                    />
-                  </div>
-                </div>
-                <p className="text-gray-900 mt-3">
-                  Im Amtsgericht lässt der Angeklagte eine Erklärung verlesen. Darin heißt es, dass er zum Zeitpunkt der
-                  Veröffentlichungen nichts davon gewusst habe, dass an den Festivalteilnehmern ein Massaker verübt
-                  wurde. In ihrer Urteilsbegründung sagte die Richterin: "Woher sollen die Bilder kommen, wenn man keine
-                  Kenntnis davon hat, was dort passiert ist?"
-                </p>
-              </div>
             </div>
           </div>
         )
@@ -277,13 +263,9 @@ export default function InstanceView({ instanceId, onUnsavedChanges }: InstanceV
               </Avatar>
               <div className="flex-1">
                 <p className="text-gray-900 mb-3">
-                  "Die IP-Adresse von Beispielperson @Beispielperson ist in Aschaffenburg, Bayern. Es wurde 1 andere
-                  Instanz gefunden, die als <strong>§ 185 StGB – Beleidigung</strong> kategorisiert wurde. Hier ist die
-                  Instanz:"
+                  "Die IP-Adresse von Beispieluser @Beispieluser ist in <strong>Köln, Nordrhein-Westfalen</strong>. Es wurde keine andere
+                  Instanz gefunden, die als Hassrede kategorisiert wurde."
                 </p>
-                <div className="bg-orange-100 p-2 rounded mb-4">
-                  Du bist so ein <span className="bg-orange-300 px-1">Dummer Mensch!!</span>
-                </div>
               </div>
             </div>
 
@@ -295,17 +277,17 @@ export default function InstanceView({ instanceId, onUnsavedChanges }: InstanceV
                     <AvatarFallback className="bg-gray-600 text-white rounded-full">B</AvatarFallback>
                   </Avatar>
                   <div>
-                    <div className="font-medium">Beispielperson</div>
-                    <div className="text-gray-600">@Beispielperson</div>
+                    <div className="font-medium">Beispieluser</div>
+                    <div className="text-gray-600">@Beispieluser</div>
                   </div>
                 </div>
                 <div className="text-sm text-gray-900 space-y-1">
                   <div>
-                    <strong>986</strong> Beiträge <strong>845.000</strong> Follower*innen <strong>75</strong> Gefolgt
+                    <strong>4</strong> Beiträge <strong>80</strong> Follower*innen <strong>351</strong> Gefolgt
                   </div>
                   <div className="mt-2">
-                    <div>Autor/ Rebel/ Friedenker</div>
-                    <div>Deutschland, Deutschland, ...</div>
+                    <div>Mein Name ist User. Beispiel User.</div>
+                    <div>Agent 88</div>
                   </div>
                 </div>
               </div>
@@ -323,11 +305,11 @@ export default function InstanceView({ instanceId, onUnsavedChanges }: InstanceV
               </Avatar>
               <div className="flex-1">
                 <p className="text-gray-900 mb-4">
-                  "Der Post ist ein Kommentar auf ein Reel von Robert Habeck. Es gibt X Likes und zwei Antworten auf den
-                  Post. Der Post bezieht sich mit 91% Wahrscheinlichkeit auf Robert Habeck, einen deutschen Politiker
-                  und Schriftsteller. Von 2021 bis 2025 war er Vizekanzler sowie Bundesminister für Wirtschaft und
-                  Klimaschutz im Kabinett Scholz. Gemeinsam mit Annalena Baerbock war er von Januar 2018 bis Februar
-                  2022 Bundesvorsitzender der Partei Bündnis 90/Die Grünen."
+                  "Der Post ist ein <strong>Kommentar</strong> auf ein Reel von Philipp Amthor. Es gibt fünf Likes und eine Antwort auf den 
+                  Kommentar. Der Kommentar bezieht sich mit 95% Wahrscheinlichkeit auf <strong>Philipp Amthor</strong>, einen deutschen Politiker 
+                  der CDU. Er ist seit 2017 Mitglied des Deutschen Bundestages und seit 2025 Parlamentarischer Staatssekretär 
+                  beim Bundesminister für Digitales und Staatsmodernisierung. Zudem ist er seit 2024 Mitgliederbeauftragter im 
+                  Bundesvorstand der CDU. Von April 2024 bis Mai 2025 war er Generalsekretär der CDU Mecklenburg-Vorpommern."
                 </p>
               </div>
             </div>
@@ -338,7 +320,7 @@ export default function InstanceView({ instanceId, onUnsavedChanges }: InstanceV
               </h4>
               <div className="bg-white border rounded-lg overflow-hidden">
                 <Image
-                  src="/context-example-1.png"
+                  src="/instance-2-ex4.png"
                   alt="Original social media context"
                   width={600}
                   height={400}
@@ -564,36 +546,20 @@ export default function InstanceView({ instanceId, onUnsavedChanges }: InstanceV
           <CardContent className="p-6">
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-center space-x-4">
-                <h2 className="text-lg font-semibold text-gray-900">Instanz (Seite 2 geladen) #{instanceId}</h2>
+                <h2 className="text-lg font-semibold text-gray-900">Instanz #7835</h2>
               </div>
             </div>
-
-            <div className="flex items-start space-x-4">
-              <Avatar className="w-10 h-10 rounded-full">
-                <AvatarFallback className="bg-gray-900 text-white rounded-full">
-                  <User className="w-5 h-5" />
-                </AvatarFallback>
-              </Avatar>
-              <div className="flex-1">
-                <div className="flex items-center space-x-2 mb-2">
-                  <span className="font-medium text-gray-900">Beispielperson</span>
-                  <span className="text-sm text-gray-500">@Beispielperson</span>
-                </div>
-                <div className="text-gray-900 mb-3">
-                  <span className="bg-orange-200 px-1">Kopf abhaken</span>
-                  <span>wurde. Und ja </span>
-                  <span className="bg-yellow-200 px-1">natuerlich</span>
-                  <span> also </span>
-                  <span className="bg-yellow-200 px-1">ich</span>
-                  <span> WUERDE </span>
-                  <span className="bg-orange-200 px-1">DAS EISKALT FORDERN!!</span>
-                </div>
-                <div className="text-sm text-gray-500 mb-4">10:20 PM · 09. Juni 2025 · 143,131 Mal angezeigt</div>
-                <div className="bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-                  <div className="text-gray-500">Screenshot wird hier angezeigt</div>
-                </div>
-              </div>
+            <div className="bg-white p-3 rounded border">
+              <Image
+                src="/instance-2-text.png"
+                alt="Klassifizierter Text"
+                width={756}
+                height={110}
+                className="w-full h-auto"
+                priority
+              />
             </div>
+            <div className="text-sm text-gray-500 mb-4">09. Juni 2025, 9:55 · 20.142 Mal angezeigt</div>
           </CardContent>
         </Card>
 
@@ -601,7 +567,7 @@ export default function InstanceView({ instanceId, onUnsavedChanges }: InstanceV
         <Card className="bg-white">
           <CardContent className="p-6">
             <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+              <div className="w-10 h-10 rounded-full">
                 <Image src="/icon-classifier.png" alt="AI Classifier" width={24} height={24} className="rounded-full" />
               </div>
               <div className="flex-1">
@@ -647,7 +613,7 @@ export default function InstanceView({ instanceId, onUnsavedChanges }: InstanceV
                   >
                     <Info className="w-3 h-3 text-white" />
                   </div>
-                  <span className="text-sm">Legaler Kontext (2)</span>
+                  <span className="text-sm">Legaler Kontext (1)</span>
                 </button>
                 <button
                   onClick={() => setActiveTab(activeTab === "author" ? "" : "author")}
@@ -720,36 +686,53 @@ export default function InstanceView({ instanceId, onUnsavedChanges }: InstanceV
                         <Select
                           value={field.value}
                           onValueChange={(value) => updateSelectField(field.id, value)}
-                          disabled={isSaved && !canChangeDecision}
+                          disabled={isFrozen}
                         >
                           <SelectTrigger className="w-full">
                             <SelectValue placeholder="Auswählen" />
                           </SelectTrigger>
                           <SelectContent>
-                            {categories.map((category, idx) => {
-                              const categoryCode = category.match(/§\s*(\d+[a-z]?)/)?.[0] || category
-                              const colorClass = getCategoryColor(categoryCode)
-                              return (
+                            {(index === 0 ? categories : categories.filter((c) => c !== NO_OFFENSE)).map((category, idx) => {
+                                const categoryCode = category.match(/§\s*(\d+[a-z]?)/)?.[0] || category
+                                const colorClass = getCategoryColor(categoryCode)
+                                return (
                                 <SelectItem key={idx} value={category}>
-                                  <span className={`px-2 py-1 rounded text-sm ${colorClass}`}>{category}</span>
+                                    <span className={`px-2 py-1 rounded text-sm ${colorClass}`}>{category}</span>
                                 </SelectItem>
-                              )
+                                )
                             })}
-                          </SelectContent>
+                            </SelectContent>
                         </Select>
                       </div>
+                      
+                        {/* − button: show for all rows except the first, only when changes are allowed */}
+                        {index > 0 && !isFrozen && (
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => removeSelectField(field.id)}
+                                className="w-8 h-8 p-0 bg-transparent rounded-full"
+                                aria-label="Feld entfernen"
+                                title="Feld entfernen"
+                                >
+                                <Minus className="w-4 h-4" />
+                            </Button>
+                        )}
+                      
+                      {/* + button: only on last row, non-empty, not 'Kein Strafbestand', <5 fields, and not frozen */}
                       {index === selectFields.length - 1 &&
                         field.value !== "" &&
+                        field.value !== "Kein Strafbestand" &&    
                         selectFields.length < 5 &&
                         showPlusButton && (
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={addSelectField}
-                            className="w-8 h-8 p-0 bg-transparent rounded-full"
-                          >
-                            <Plus className="w-4 h-4" />
-                          </Button>
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={addSelectField}
+                                className="w-8 h-8 p-0 bg-transparent rounded-full"
+                                >
+                                <Plus className="w-4 h-4" />
+                            </Button>
                         )}
                     </div>
                   ))}
