@@ -5,6 +5,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible"
 import { ChevronDown, ChevronRight } from "lucide-react"
 import Image from "next/image"
+import { Button } from "@/components/ui/button"
 
 /* import React, { useState } from "react"
 import Card from "./ui/card"
@@ -32,6 +33,11 @@ const faqData = [
 	{
 		question: "In welcher Sprache waren die Trainingsdaten?",
 		answer: "Alle Trainingsdaten waren auf Deutsch.",
+	},
+	{
+		question: "Wie sind die Trainingsdaten auf die verschiedenen Kategorien verteilt?",
+		answer:
+			"Die Kategorien sind sehr unausgeglichen verteilt. Das kann die Leistung des Modells negativ beeinflussen.",
 	},
 	{
 		question: "Wie ist die Qualität des Trainingsdatensatzes?",
@@ -222,7 +228,7 @@ wird mit Freiheitsstrafe bis zu drei Jahren oder mit Geldstrafe bestraft.`,
 ]
 
 export default function TrainingDataOverview() {
-	const [openFaqItems, setOpenFaqItems] = useState<number[]>([])
+	const [openFaqItems, setOpenFaqItems] = useState<number[]>([3]) // FAQ item 3 is open by default
 	const [openCategoryItems, setOpenCategoryItems] = useState<number[]>([])
 
 	const toggleFaqItem = (index: number) => {
@@ -277,8 +283,8 @@ export default function TrainingDataOverview() {
 										<Image
 											src="/histogram.png"
 											alt="Histogram showing training data distribution"
-											width={400}
-											height={300}
+											width={600}
+											height={450}
 											className="rounded-lg"
 										/>
 									</div>
@@ -349,6 +355,52 @@ export default function TrainingDataOverview() {
 							</Collapsible>
 						))}
 					</div>
+				</CardContent>
+			</Card>
+
+			{/* Comments Section */}
+			<Card>
+				<CardHeader>
+				<CardTitle>Kommentare zu Modell und Trainingsdaten</CardTitle>
+				</CardHeader>
+				<CardContent className="space-y-4">
+				<div className="flex gap-3">
+					<Image src="/icon-classifier.png" alt="AI" width={40} height={40} className="rounded-full" />
+					<div className="flex-1">
+					<div className="font-medium text-sm">KI-Bot</div>
+					<div className="text-sm text-gray-600 mt-1">
+						Es werden kaum Instanzen als § 187 StGB Verleumdung erkannt, vielleicht müssen wir nochmal
+						nachtrainieren.
+					</div>
+					</div>
+				</div>
+
+				<div className="flex gap-3">
+					<div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+					<Image src="/icon-user.png" alt="User" width={40} height={40} className="w-full h-full object-cover" />
+					</div>
+					<div className="flex-1 space-y-3">
+					<div>
+						<div className="font-medium text-sm">Sie</div>
+						<div className="mt-2">
+						<div className="flex gap-2 mb-2">
+							<span className="text-sm">Thema:</span>
+							<input
+							type="text"
+							placeholder="Auswertung"
+							className="flex-1 px-2 py-1 text-sm border border-gray-300 rounded"
+							/>
+						</div>
+						<div className="text-sm mb-2">Kommentar:</div>
+						<textarea
+							className="w-full p-2 text-sm border border-gray-300 rounded-lg h-20 resize-none"
+							placeholder="Ihr Kommentar..."
+						/>
+						<Button className="mt-2 bg-blue-600 hover:bg-blue-700 text-white">Senden</Button>
+						</div>
+					</div>
+					</div>
+				</div>
 				</CardContent>
 			</Card>
 		</div>
