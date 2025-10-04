@@ -294,8 +294,8 @@ export default function InstanceView({ instanceId, onUnsavedChanges }: InstanceV
                   Es wurde 1 andere Instanz gefunden, die als <strong>§ 185 StGB – Beleidigung</strong> kategorisiert wurde. Hier ist die
                   Instanz:"
                 </p>
-                <div className="bg-orange-100 p-2 rounded mb-4">
-                  Du bist so ein <span className="bg-orange-300 px-1">Dummer Mensch!!</span>
+                <div className="text-gray-900 mb-3">
+                  Du bist so ein <span className="bg-blue-300 px-1">Dummer Mensch!!</span>
                 </div>
               </div>
             </div>
@@ -593,13 +593,13 @@ export default function InstanceView({ instanceId, onUnsavedChanges }: InstanceV
                   <span className="text-sm text-gray-500">@Beispielperson</span>
                 </div>
                 <div className="text-gray-900 mb-3">
-                  <span className="bg-orange-200 px-1">Kopf abhaken</span>
+                  <span className="bg-red-200 px-1">Kopf abhaken</span>
                   <span>wurde. Und ja </span>
-                  <span className="bg-yellow-200 px-1">natuerlich</span>
+                  <span className="bg-red-200 px-1">natuerlich</span>
                   <span> also </span>
-                  <span className="bg-yellow-200 px-1">ich</span>
+                  <span className="bg-red-200 px-1">ich</span>
                   <span> WUERDE </span>
-                  <span className="bg-orange-200 px-1">DAS EISKALT FORDERN!!</span>
+                  <span className="bg-red-200 px-1">DAS EISKALT FORDERN!!</span>
                 </div>
                 <div className="text-sm text-gray-500 mb-4">09. Juni 2025, 10:20 · 143.131 Mal angezeigt</div>
               </div>

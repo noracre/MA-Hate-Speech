@@ -15,7 +15,6 @@ interface OverviewInstance {
   aiClassification: string
   humanClassification?: string
   instanceFile: string
-  screenshot: string
 }
 
 interface OverviewViewProps {
@@ -24,18 +23,7 @@ interface OverviewViewProps {
 
 const pendingInstances: OverviewInstance[] = [
   {
-    id: "7836 (1)",
-    date: "09. Juni 2025, 10:20",
-    content: "Kopf abhaken wurde [...]",
-    author: "@Beispielperson",
-    colleagueCommented: true,
-    aiClassification: "§ 140 StGB",
-    humanClassification: undefined,
-    instanceFile: "instance-1",
-    screenshot: "LIME-Screenshot1.PNG",
-  },
-  {
-    id: "7835 (2)",
+    id: "7835",
     date: "09. Juni 2025, 9:55",
     content: "Was für ein kleiner feiger besoffener [...]",
     author: "@Beispieluser",
@@ -43,10 +31,9 @@ const pendingInstances: OverviewInstance[] = [
     aiClassification: "§ 140 StGB",
     humanClassification: undefined,
     instanceFile: "instance-2",
-    screenshot: "LIME-Screenshot2.PNG",
   },
   {
-    id: "7834 (3)",
+    id: "7834",
     date: "09. Juni 2025, 9:18",
     content: "Du bist ein Wichser und [...]",
     author: "@Badforyousteve",
@@ -54,10 +41,9 @@ const pendingInstances: OverviewInstance[] = [
     aiClassification: "§ 241 StGB",
     humanClassification: undefined,
     instanceFile: "instance-3",
-    screenshot: "LIME-Screenshot3.PNG",
   },
   {
-    id: "7832 (4)",
+    id: "7832",
     date: "09. Juni 2025, 8:59",
     content: "Ich werde dich finden [...]",
     author: "@Badforyousteve",
@@ -65,10 +51,9 @@ const pendingInstances: OverviewInstance[] = [
     aiClassification: "§ 241 StGB",
     humanClassification: undefined,
     instanceFile: "instance-4",
-    screenshot: "LIME-Screenshot4.PNG",
   },
   {
-    id: "7830 (5)",
+    id: "7830",
     date: "08. Juni 2025, 17:29",
     content: "Diese Politiker sind alle [...]",
     author: "@_Iamcate_",
@@ -76,21 +61,9 @@ const pendingInstances: OverviewInstance[] = [
     aiClassification: "§ 130 StGB",
     humanClassification: undefined,
     instanceFile: "instance-5",
-    screenshot: "LIME-Screenshot5.PNG",
-  },
-  {
-    id: "7827 (6)",
-    date: "08. Juni 2025, 16:06",
-    content: "Menschen wie du sollten [...]",
-    author: "@mustermax",
-    colleagueCommented: false,
-    aiClassification: "Kein Strafbestand",
-    humanClassification: undefined,
-    instanceFile: "instance-6",
-    screenshot: "LIME-Screenshot6.PNG",
   },
     {
-    id: "7826 (7)",
+    id: "7826",
     date: "08. Juni 2025, 15:30",
     content: "Du dummer Nazi [...]",
     author: "@classischeclaudia",
@@ -98,21 +71,29 @@ const pendingInstances: OverviewInstance[] = [
     aiClassification: "§ 111  StGB",
     humanClassification: undefined,
     instanceFile: "instance-7",
-    screenshot: "LIME-Screenshot7.PNG",
+  },
+    {
+    id: "7836",
+    date: "09. Juni 2025, 10:20",
+    content: "Kopf abhaken wurde [...]",
+    author: "@Beispielperson",
+    colleagueCommented: true,
+    aiClassification: "§ 140 StGB",
+    humanClassification: undefined,
+    instanceFile: "instance-1",
   },
 ]
 
 const evaluatedInstances: OverviewInstance[] = [
   {
-    id: "7836",
-    date: "12:20, 09. Juni 2025",
-    content: "Kopf abhaken würde [...]",
-    author: "Anton30",
+    id: "7827",
+    date: "08. Juni 2025, 16:06",
+    content: "Menschen wie du sollten [...]",
+    author: "@mustermax",
     colleagueCommented: false,
-    aiClassification: "§ 140 StGB",
-    humanClassification: "§ 126 StGB",
-    instanceFile: "instance-7",
-    screenshot: "LIME-Screenshot7.PNG",
+    aiClassification: "Kein Strafbestand",
+    humanClassification: undefined,
+    instanceFile: "instance-6",
   },
   {
     id: "7835",
@@ -123,7 +104,6 @@ const evaluatedInstances: OverviewInstance[] = [
     aiClassification: "§ 86 StGB",
     humanClassification: "§ 86 StGB",
     instanceFile: "instance-8",
-    screenshot: "LIME-Screenshot8.PNG",
   },
   {
     id: "7836",
@@ -134,7 +114,6 @@ const evaluatedInstances: OverviewInstance[] = [
     aiClassification: "§ 186 StGB",
     humanClassification: "Kein Strafbestand",
     instanceFile: "instance-9",
-    screenshot: "LIME-Screenshot9.PNG",
   },
 ]
 
