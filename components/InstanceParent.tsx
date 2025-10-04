@@ -218,7 +218,7 @@ export default function InstanceParent({
             <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
               <h4 className="font-medium text-blue-900 mb-2">Aktuelle Navigation</h4>
               <div className="space-y-2 text-sm text-blue-800">
-                <div className="flex items-center space-x-2"><Users className="w-4 h-4" /><span>Zugewiesene Posts</span></div>
+                <div className="flex items-center space-x-2"><Users className="w-4 h-4" /><span>Zu beurteilende Instanzen</span></div>
                 <div className="flex items-center space-x-2"><Filter className="w-4 h-4" /><span>Gefiltert nach: § 140 StGB</span></div>
                 <div className="flex items-center space-x-2"><Calendar className="w-4 h-4" /><span>Sortiert nach: Datum (aufsteigend)</span></div>
               </div>
@@ -237,9 +237,8 @@ export default function InstanceParent({
             <div className="border-t pt-4">
               <h4 className="font-medium text-gray-900 mb-3">Aktuelle Position</h4>
               <div className="text-sm text-gray-600">
-                <p>Post 1 von 6 zugewiesenen Posts</p>
+                <p>Post 1 von 6</p>
                 <p>Instanz #{instanceId}</p>
-                <p>Zugewiesen von: Kim Best</p>
               </div>
             </div>
           </div>

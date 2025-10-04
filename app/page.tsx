@@ -90,7 +90,7 @@ export default function ClassificationApp() {
                     : "text-gray-600 hover:text-blue-600"
                 }`}
               >
-                <span>Instanz #{currentInstanceId}</span>
+                <span>Instanz #{currentInstanceLabel}</span>
               </button>
               <button
                 onClick={() => handleViewChange("modell")}

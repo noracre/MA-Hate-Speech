@@ -236,7 +236,7 @@ export default function OverviewView({ onInstanceSelect }: OverviewViewProps) {
                   <tr
                     key={`${instance.id}-${index}`}
                     className="hover:bg-gray-50 cursor-pointer"
-                    onClick={() => onInstanceSelect(instance.instanceFile)}
+                    onClick={() => onInstanceSelect(`${instance.instanceFile}|${instance.id}`)}
                   >
                     <td className="py-3 px-4 font-medium text-gray-900">#{instance.id}</td>
                     <td className="py-3 px-4 text-gray-700">{instance.date}</td>
