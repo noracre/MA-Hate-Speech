@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts"
+import { RotateCcw } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 
@@ -54,20 +55,42 @@ const getHeatmapColor = (value: number, rowIndex: number, colIndex: number) => {
   }
 }
 
+const categoryAccuracy = {
+  Alle: 82,
+  "§ 86 StGB": 9,
+  "§ 86a StGB": 12,
+  "§ 111 StGB": 50,
+  "§ 126 StGB": 11,
+  "§ 130 StGB": 75,
+  "§ 131 StGB": 10,
+  "§ 140 StGB": 59,
+  "§ 166 StGB": 60,
+  "§ 185 StGB": 98,
+  "§ 186 StGB": 80,
+  "§ 187 StGB": 60,
+  "§ 189 StGB": 0,
+  "§ 240 StGB": 0,
+  "§ 241 StGB": 50,
+}
+
 const languageAccuracy = {
-  Deutsch: 82,
+  "Alle": 82,
+  Deutsch: 89,
   Englisch: 70,
   Französisch: 32,
   Turkish: 20,
 }
 
 export default function ModellView() {
-  const [selectedLanguage, setSelectedLanguage] = useState("Deutsch")
-  const [selectedCategory, setSelectedCategory] = useState("")
+  const [selectedLanguage, setSelectedLanguage] = useState("Alle")
+  const [selectedCategory, setSelectedCategory] = useState("Alle")
   const [activeTab, setActiveTab] = useState<"live" | "test">("live")
 
-  const currentAccuracy =
-    languageAccuracy[selectedLanguage as keyof typeof languageAccuracy] || 82
+  const langAcc =
+    languageAccuracy[selectedLanguage as keyof typeof languageAccuracy] ?? 82
+  const catAcc =
+    categoryAccuracy[selectedCategory as keyof typeof categoryAccuracy] ?? 82
+  const currentAccuracy = (langAcc + catAcc) / 2
 
   const falseNegativeData = [
     { name: "Fälschlicherweise nicht klassifizierte Instanzen", value: 32, color: "#ef4444" },
@@ -105,13 +128,16 @@ export default function ModellView() {
         </button>
       </div>
 
-      <div className="text-sm text-gray-600 mb-4">
-        Ihr Team hat bisher <strong>7829</strong> Instanzen kategorisiert. Sie haben davon{" "}
-        <strong>1652</strong> Instanzen kategorisiert.
-      </div>
+      
 
       {activeTab === "live" && (
         <>
+          {/* Info on Top */}
+          <div className="text-sm text-gray-600 mb-4">
+            Ihr Team hat bisher <strong>7829</strong> Instanzen kategorisiert. Sie haben davon{" "}
+            <strong>1652</strong> Instanzen kategorisiert.
+          </div>
+
           {/* Charts Row */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* --- Accuracy Card --- */}
@@ -125,33 +151,6 @@ export default function ModellView() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                {/* Selects inside the card */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
-                  <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Für Kategorie anzeigen" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {headers.map((cat) => (
-                        <SelectItem key={cat} value={cat}>
-                          {cat}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-
-                  <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Für Sprache anzeigen" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Deutsch">Deutsch</SelectItem>
-                      <SelectItem value="Englisch">Englisch</SelectItem>
-                      <SelectItem value="Französisch">Französisch</SelectItem>
-                      <SelectItem value="Turkish">Turkish</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
 
                 {/* Pie Chart */}
                 <div className="h-64 relative">
@@ -169,6 +168,59 @@ export default function ModellView() {
                     <div className="text-2xl font-bold text-blue-500">{currentAccuracy}%</div>
                   </div>
                 </div>
+
+                {/* Selects + Reset */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4 items-end">
+                  {/* Kategorie */}
+                  <div>
+                    <div className="text-xs text-gray-600 mb-1">Für Kategorie zeigen:</div>
+                    <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Für Kategorie anzeigen" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Alle">Alle</SelectItem>
+                        {headers.map((cat) => (
+                          <SelectItem key={cat} value={cat}>
+                            {cat}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* Sprache */}
+                  <div>
+                    <div className="text-xs text-gray-600 mb-1">Für Sprache zeigen:</div>
+                    <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Für Sprache anzeigen" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Alle">Alle</SelectItem>
+                        <SelectItem value="Deutsch">Deutsch</SelectItem>
+                        <SelectItem value="Englisch">Englisch</SelectItem>
+                        <SelectItem value="Französisch">Französisch</SelectItem>
+                        <SelectItem value="Turkish">Turkish</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* Zurücksetzen */}
+                  <div className="sm:justify-self-end">
+                    <Button
+                      variant="outline"
+                      className="w-full sm:w-auto"
+                      onClick={() => {
+                        setSelectedCategory("Alle")
+                        setSelectedLanguage("Alle") 
+                      }}
+                    >
+                      <RotateCcw className="w-4 h-4 mr-2" />
+                      Zurücksetzen
+                    </Button>
+                  </div>
+                </div>
               </CardContent>
             </Card>
 
@@ -183,6 +235,8 @@ export default function ModellView() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
+
+                {/* Pie Chart */}
                 <div className="h-64 relative">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
@@ -201,7 +255,7 @@ export default function ModellView() {
 
                 {/* Button now inside this card */}
                 <Button className="mt-4 bg-blue-600 hover:bg-blue-700 text-white">
-                  Neue Evaluationsrunde starten
+                  In Evaluationsrunde nach weiterenfalschen Negativen suchen
                 </Button>
               </CardContent>
             </Card>
@@ -256,14 +310,178 @@ export default function ModellView() {
       )}
 
       {activeTab === "test" && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Modell Performance auf Testdaten</CardTitle>
-          </CardHeader>
-          <CardContent className="text-sm text-gray-600">
-            Hier könnten Sie dieselben Metriken für ein festes Test-Set anzeigen.
-          </CardContent>
-        </Card>
+        <>
+          <div className="text-sm text-gray-600 mb-4">
+            Dieser Reiter zeigt die Modellperformance auf den Testdaten, bevor das Modell in ihrem Team eingesetzt wurde. 
+            Er hilft ihnen festzustellen, ob die Modellperformance sich seit Inbetriebnahme verschlechtert hat. {" "}
+            <strong>Bisher wurden keine signifikante Verschlechterung festgestellt. Die Differenz zwischen der Genauigkeit vor Inbetriebnahme und der Genauigkiet jetzt ist 0.</strong>
+          </div>
+
+          {/* Charts Row */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* --- Accuracy Card --- */}
+            <Card>
+              <CardHeader>
+                <CardTitle
+                  className="text-lg font-semibold"
+                  title="Dieses Kreisdiagramm zeigt, wie viele Instanzen insgesamt der richtigen Kategorie zugeordnet wurden."
+                >
+                  Genauigkeit
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+
+                {/* Pie Chart */}
+                <div className="h-64 relative">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie data={accuracyData} cx="50%" cy="50%" innerRadius={60} outerRadius={100} dataKey="value">
+                        {accuracyData.map((entry, i) => (
+                          <Cell key={i} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                    </PieChart>
+                  </ResponsiveContainer>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-2xl font-bold text-blue-500">{currentAccuracy}%</div>
+                  </div>
+                </div>
+
+                {/* Selects + Reset */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4 items-end">
+                  {/* Kategorie */}
+                  <div>
+                    <div className="text-xs text-gray-600 mb-1">Für Kategorie zeigen:</div>
+                    <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Für Kategorie anzeigen" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Alle">Alle</SelectItem>
+                        {headers.map((cat) => (
+                          <SelectItem key={cat} value={cat}>
+                            {cat}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* Sprache */}
+                  <div>
+                    <div className="text-xs text-gray-600 mb-1">Für Sprache zeigen:</div>
+                    <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Für Sprache anzeigen" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Alle">Alle</SelectItem>
+                        <SelectItem value="Deutsch">Deutsch</SelectItem>
+                        <SelectItem value="Englisch">Englisch</SelectItem>
+                        <SelectItem value="Französisch">Französisch</SelectItem>
+                        <SelectItem value="Turkish">Turkish</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* Zurücksetzen */}
+                  <div className="sm:justify-self-end">
+                    <Button
+                      variant="outline"
+                      className="w-full sm:w-auto"
+                      onClick={() => {
+                        setSelectedCategory("Alle")
+                        setSelectedLanguage("Alle") 
+                      }}
+                    >
+                      <RotateCcw className="w-4 h-4 mr-2" />
+                      Zurücksetzen
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* --- False Negatives Card --- */}
+            <Card>
+              <CardHeader>
+                <CardTitle
+                  className="text-lg font-semibold"
+                  title="Dieses Kreisdiagramm zeigt, wie viele Instanzen bei der letzten Evaluationsrunde gefunden wurden, die fälschlicherweise keiner Kategorie zugeordnet wurden."
+                >
+                  Falsche Negative
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+
+                {/* Pie Chart */}
+                <div className="h-64 relative">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie data={falseNegativeData} cx="50%" cy="50%" innerRadius={60} outerRadius={100} dataKey="value">
+                        {falseNegativeData.map((entry, i) => (
+                          <Cell key={i} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                    </PieChart>
+                  </ResponsiveContainer>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-2xl font-bold text-red-500">32%</div>
+                  </div>
+                </div>
+
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Confusion Matrix */}
+          <Card>
+            <CardHeader>
+              <CardTitle
+                className="text-lg font-semibold"
+                title="Diese Konfusionsmatrix zeigt, wie Instanzen seit de Einführung zugeordnet wurden. Die Zeilen entsprechen der Zuordnung durch Menschen, die Spalten der Zuordnung durch das KI-Modell. Grüne Zellen auf der diagonalen wurden richtig zugeordnet, andere Zellen wurden falsch zugeordnet. "
+              >
+                Zuordnungen
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="overflow-x-auto">
+                <table className="border-collapse">
+                  <thead>
+                    <tr>
+                      <th className="w-32"></th>
+                      {headers.map((header, i) => (
+                        <th key={i} className="relative w-16 h-24 border border-gray-300 text-xs font-normal text-gray-700">
+                          <div className="absolute inset-0 flex items-center justify-center text-center">
+                            <span className="inline-block transform -rotate-45 whitespace-nowrap">{header}</span>
+                          </div>
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {confusionMatrixData.map((row, r) => (
+                      <tr key={r}>
+                        <td className="p-2 text-xs border border-gray-300 bg-gray-50">{row[0]}</td>
+                        {(row.slice(1) as number[]).map((val, c) => (
+                          <td
+                            key={c}
+                            className="w-16 h-8 text-xs text-center border border-gray-300"
+                            style={{ backgroundColor: getHeatmapColor(val, r, c) }}
+                          >
+                            {val}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </CardContent>
+          </Card>
+        </>
       )}
     </div>
   )

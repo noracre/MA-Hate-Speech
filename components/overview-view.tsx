@@ -176,12 +176,6 @@ export default function OverviewView({ onInstanceSelect }: OverviewViewProps) {
 
   return (
     <div className="max-w-7xl mx-auto p-6 space-y-8">
-      <div className="flex justify-end">
-        <Button onClick={resetFilters} variant="outline" className="flex items-center space-x-2 bg-transparent">
-          <RotateCcw className="w-4 h-4" />
-          <span>Zurücksetzen</span>
-        </Button>
-      </div>
 
       {/* Pending Instances Section */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200">
@@ -216,6 +210,12 @@ export default function OverviewView({ onInstanceSelect }: OverviewViewProps) {
                   ))}
                 </SelectContent>
               </Select>
+            </div>
+            <div className="flex justify-end">
+              <Button onClick={resetFilters} variant="outline" className="flex items-center space-x-2 bg-transparent">
+                <RotateCcw className="w-4 h-4" />
+                <span>Zurücksetzen</span>
+              </Button>
             </div>
           </div>
           <div className="overflow-x-auto">
