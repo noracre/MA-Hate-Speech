@@ -111,7 +111,7 @@ interface OverviewInstance {
 }
 
 interface OverviewViewProps {
-  onInstanceSelect: (instanceId: string) => void
+  onInstanceSelect?: (instanceId: string) => void
 }
 
 const evaluatedInstances: OverviewInstance[] = [

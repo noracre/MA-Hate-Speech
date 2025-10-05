@@ -20,8 +20,11 @@ const categories = [
   "§ 240 StGB – Nötigung",
   "§ 241 StGB – Bedrohung",
 ]
+interface Instance7Props {
+  onUnsavedChanges: (hasChanges: boolean) => void
+}
 
-export default function Instance3() {
+export default function Instance7({ onUnsavedChanges }: Instance7Props) {
   const legalTab = (
     <div className="space-y-6 max-h-96 overflow-y-auto">
       <div>
@@ -133,6 +136,7 @@ export default function Instance3() {
       legalTab={legalTab}
       authorTab={authorTab}
       contentTab={contentTab}
+      onUnsavedChanges={onUnsavedChanges}  // ADD THIS LINE
     />
   )
 }

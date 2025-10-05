@@ -150,7 +150,16 @@ export default function ClassificationApp() {
       )}
 
       {currentView === "instance" && getInstanceComponent(currentInstanceId)}
-      {currentView === "modell" && <ModellView />}
+      {currentView === "modell" && (
+        <ModellView 
+          onInstanceSelect={(payload) => {
+            const [file, label] = payload.split("|")
+            handleViewChange("instance", file)
+            setCurrentInstanceLabel(label)
+            setPendingInstanceLabel(label)
+          }}
+        />
+      )}
       {currentView === "training-data" && <TrainingDataOverview />}
     </div>
   )

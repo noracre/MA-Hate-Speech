@@ -44,7 +44,7 @@ const categories = [
 ]
 
 interface InstanceViewProps {
-  instanceId: string
+  instanceId?: string
   onUnsavedChanges: (hasChanges: boolean) => void
 }
 
