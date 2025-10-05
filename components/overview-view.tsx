@@ -84,39 +84,6 @@ const pendingInstances: OverviewInstance[] = [
   },
 ]
 
-const evaluatedInstances: OverviewInstance[] = [
-  {
-    id: "7827",
-    date: "08. Juni 2025, 16:06",
-    content: "Menschen wie du sollten [...]",
-    author: "@mustermax",
-    colleagueCommented: false,
-    aiClassification: "Kein Strafbestand",
-    humanClassification: undefined,
-    instanceFile: "instance-6",
-  },
-  {
-    id: "7835",
-    date: "11:55, 09. Juni 2025",
-    content: "verschiedenen Arschlöchern zeigen [...]",
-    author: "Karl Lrak",
-    colleagueCommented: false,
-    aiClassification: "§ 86 StGB",
-    humanClassification: "§ 86 StGB",
-    instanceFile: "instance-8",
-  },
-  {
-    id: "7836",
-    date: "12:20, 09. Juni 2025",
-    content: "verherrlichen Gewaltstaaten [...]",
-    author: "Neo-Magazin-Royale",
-    colleagueCommented: true,
-    aiClassification: "§ 186 StGB",
-    humanClassification: "Kein Strafbestand",
-    instanceFile: "instance-9",
-  },
-]
-
 const categories = [
   "§ 86 StGB",
   "§ 86a StGB",
@@ -139,8 +106,6 @@ const categories = [
 export default function OverviewView({ onInstanceSelect }: OverviewViewProps) {
   const [pendingSortOrder, setPendingSortOrder] = useState("desc")
   const [pendingFilterCategory, setPendingFilterCategory] = useState("alle")
-  const [evaluatedSortOrder, setEvaluatedSortOrder] = useState("desc")
-  const [evaluatedFilterCategory, setEvaluatedFilterCategory] = useState("alle")
 
   const filterAndSortInstances = (instances: OverviewInstance[], filterCategory: string, sortOrder: string) => {
     let filtered = instances
@@ -163,16 +128,9 @@ export default function OverviewView({ onInstanceSelect }: OverviewViewProps) {
   const resetFilters = () => {
     setPendingSortOrder("desc")
     setPendingFilterCategory("alle")
-    setEvaluatedSortOrder("desc")
-    setEvaluatedFilterCategory("alle")
   }
 
   const filteredPendingInstances = filterAndSortInstances(pendingInstances, pendingFilterCategory, pendingSortOrder)
-  const filteredEvaluatedInstances = filterAndSortInstances(
-    evaluatedInstances,
-    evaluatedFilterCategory,
-    evaluatedSortOrder,
-  )
 
   return (
     <div className="max-w-7xl mx-auto p-6 space-y-8">
@@ -233,113 +191,6 @@ export default function OverviewView({ onInstanceSelect }: OverviewViewProps) {
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {filteredPendingInstances.map((instance, index) => (
-                  <tr
-                    key={`${instance.id}-${index}`}
-                    className="hover:bg-gray-50 cursor-pointer"
-                    onClick={() => onInstanceSelect(`${instance.instanceFile}|${instance.id}`)}
-                  >
-                    <td className="py-3 px-4 font-medium text-gray-900">#{instance.id}</td>
-                    <td className="py-3 px-4 text-gray-700">{instance.date}</td>
-                    <td className="py-3 px-4 text-gray-700 max-w-xs truncate">{instance.content}</td>
-                    <td className="py-3 px-4 text-gray-700">{instance.author}</td>
-                    <td className="py-3 px-4">
-                      <MessageCircle
-                        className={`w-5 h-5 ${instance.colleagueCommented ? "text-blue-500 fill-blue-500" : "text-gray-300"}`}
-                      />
-                    </td>
-                    <td className="py-3 px-4">
-                      <span
-                        className={`px-3 py-1 rounded-full text-sm font-medium ${getCategoryColor(instance.aiClassification)}`}
-                      >
-                        {instance.aiClassification}
-                      </span>
-                    </td>
-                    <td className="py-3 px-4">
-                      {instance.humanClassification ? (
-                        <span
-                          className={`px-3 py-1 rounded-full text-sm font-medium ${getCategoryColor(instance.humanClassification)}`}
-                        >
-                          {instance.humanClassification}
-                        </span>
-                      ) : (
-                        <span className="text-gray-400">-</span>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      {/* Evaluated Instances Section */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-        <div className="p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">Beurteilte Instanzen</h2>
-
-          {/* Filters for evaluated instances */}
-          <div className="flex items-center space-x-4 mb-4">
-            <div className="flex items-center space-x-2">
-              <span className="text-sm font-medium text-gray-700">Datum</span>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setEvaluatedSortOrder(evaluatedSortOrder === "asc" ? "desc" : "asc")}
-                className="flex items-center space-x-1"
-              >
-                {evaluatedSortOrder === "asc" ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-              </Button>
-            </div>
-            <div className="flex items-center space-x-2">
-              <span className="text-sm font-medium text-gray-700">Von KI klassifiziert als</span>
-              <Select value={evaluatedFilterCategory} onValueChange={setEvaluatedFilterCategory}>
-                <SelectTrigger className="w-48">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="alle">Alle</SelectItem>
-                  {categories.map((category) => (
-                    <SelectItem key={category} value={category}>
-                      {category}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="flex items-center space-x-2">
-              <span className="text-sm font-medium text-gray-700">Von Mensch klassifiziert als</span>
-              <Select value={evaluatedFilterCategory} onValueChange={setEvaluatedFilterCategory}>
-                <SelectTrigger className="w-48">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="alle">Alle</SelectItem>
-                  {categories.map((category) => (
-                    <SelectItem key={category} value={category}>
-                      {category}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-gray-200">
-                  <th className="text-left py-3 px-4 font-medium text-gray-700">Instanznummer</th>
-                  <th className="text-left py-3 px-4 font-medium text-gray-700">Datum</th>
-                  <th className="text-left py-3 px-4 font-medium text-gray-700">Inhalt</th>
-                  <th className="text-left py-3 px-4 font-medium text-gray-700">Post-Verfasser*in</th>
-                  <th className="text-left py-3 px-4 font-medium text-gray-700">Von Kolleg*innen kommentiert</th>
-                  <th className="text-left py-3 px-4 font-medium text-gray-700">Von KI klassifiziert als</th>
-                  <th className="text-left py-3 px-4 font-medium text-gray-700">Von Mensch klassifiziert als</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {filteredEvaluatedInstances.map((instance, index) => (
                   <tr
                     key={`${instance.id}-${index}`}
                     className="hover:bg-gray-50 cursor-pointer"
