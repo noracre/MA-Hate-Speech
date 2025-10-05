@@ -19,6 +19,14 @@ import ChevronDown from "./ui/chevron-down"
 import ChevronRight from "./ui/chevron-right"
 import Image from "next/image" */
 
+interface Comment {
+  id: number
+  author: string
+  content: string
+  timestamp: string
+  avatar: string
+}
+
 const faqData = [
 	{
 		question: "Woher kamen die Trainingsdaten?",
@@ -228,8 +236,20 @@ wird mit Freiheitsstrafe bis zu drei Jahren oder mit Geldstrafe bestraft.`,
 ]
 
 export default function TrainingDataOverview() {
+	const [newComment, setNewComment] = useState("")
 	const [openFaqItems, setOpenFaqItems] = useState<number[]>([3]) // FAQ item 3 is open by default
 	const [openCategoryItems, setOpenCategoryItems] = useState<number[]>([])
+
+	const [comments, setComments] = useState<Comment[]>([
+		{
+		  id: 1,
+		  author: "Kim Best",
+		  content:
+			'Es werden kaum Instanzen als § 187 StGB Verleumdung erkannt, vielleicht müssen wir nochmal nachtrainieren.',
+		  timestamp: "vor 10 Tagen",
+		  avatar: "/icon-other-user.png",
+		},
+	  ])
 
 	const toggleFaqItem = (index: number) => {
 		setOpenFaqItems((prev) =>
@@ -245,6 +265,20 @@ export default function TrainingDataOverview() {
 				? prev.filter((i) => i !== index)
 				: [...prev, index]
 		)
+	}
+
+	const handleSendComment = () => {
+		if (newComment.trim()) {
+		const comment: Comment = {
+			id: Date.now(),
+			author: "Sie",
+			content: newComment,
+			timestamp: "gerade eben",
+			avatar: "/icon-user.png",
+		}
+		setComments([...comments, comment])
+		setNewComment("")
+		}
 	}
 
 	return (
@@ -360,48 +394,47 @@ export default function TrainingDataOverview() {
 
 			{/* Comments Section */}
 			<Card>
-				<CardHeader>
+			<CardHeader>
 				<CardTitle>Kommentare zu Modell und Trainingsdaten</CardTitle>
-				</CardHeader>
-				<CardContent className="space-y-4">
-				<div className="flex gap-3">
-					<Image src="/icon-classifier.png" alt="AI" width={40} height={40} className="rounded-full" />
+			</CardHeader>
+			<CardContent className="space-y-4">
+				{/* Render all comments (existing + newly sent) */}
+				<div className="space-y-4 max-h-96 overflow-y-auto pr-1">
+				{comments.map((c) => (
+					<div key={c.id} className="flex gap-3">
+					<div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+						<Image src={c.avatar} alt={c.author} width={40} height={40} className="w-full h-full object-cover" />
+					</div>
 					<div className="flex-1">
-					<div className="font-medium text-sm">KI-Bot</div>
-					<div className="text-sm text-gray-600 mt-1">
-						Es werden kaum Instanzen als § 187 StGB Verleumdung erkannt, vielleicht müssen wir nochmal
-						nachtrainieren.
+						<div className="font-medium text-sm">{c.author} <span className="text-gray-500 font-normal">· {c.timestamp}</span></div>
+						<div className="text-sm text-gray-700 whitespace-pre-line mt-1">{c.content}</div>
 					</div>
 					</div>
+				))}
 				</div>
 
-				<div className="flex gap-3">
-					<div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+				{/* Input */}
+				<div className="flex gap-3 pt-2 border-t">
+				<div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
 					<Image src="/icon-user.png" alt="User" width={40} height={40} className="w-full h-full object-cover" />
-					</div>
-					<div className="flex-1 space-y-3">
-					<div>
-						<div className="font-medium text-sm">Sie</div>
-						<div className="mt-2">
-						<div className="flex gap-2 mb-2">
-							<span className="text-sm">Thema:</span>
-							<input
-							type="text"
-							placeholder="Auswertung"
-							className="flex-1 px-2 py-1 text-sm border border-gray-300 rounded"
-							/>
-						</div>
-						<div className="text-sm mb-2">Kommentar:</div>
-						<textarea
-							className="w-full p-2 text-sm border border-gray-300 rounded-lg h-20 resize-none"
-							placeholder="Ihr Kommentar..."
-						/>
-						<Button className="mt-2 bg-blue-600 hover:bg-blue-700 text-white">Senden</Button>
-						</div>
-					</div>
+				</div>
+				<div className="flex-1 space-y-2">
+					<div className="font-medium text-sm">Sie</div>
+					<div className="text-sm">
+					<div className="text-sm mb-2">Kommentar:</div>
+					<textarea
+						value={newComment}
+						onChange={(e) => setNewComment(e.target.value)}
+						placeholder="Kommentar eingeben..."
+						className="w-full min-h-[100px] border rounded-md p-2"
+					/>
+					<Button onClick={handleSendComment} className="mt-2 bg-blue-600 hover:bg-blue-700 text-white">
+						Senden
+					</Button>
 					</div>
 				</div>
-				</CardContent>
+				</div>
+			</CardContent>
 			</Card>
 		</div>
 	)
