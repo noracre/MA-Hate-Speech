@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent } from "@/components/ui/card"
@@ -54,6 +54,93 @@ interface Comment {
   content: string
   timestamp: string
   avatar: string
+}
+
+function HighlightableText({
+  text,
+  maxHighlights = Infinity,
+  onChange,
+}: {
+  text: string;
+  maxHighlights?: number;
+  onChange?: (indices: number[], words: string[]) => void;
+}) {
+  const tokens = text.split(/\s+/).filter(Boolean);
+  const [highlighted, setHighlighted] = useState<number[]>([]);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const applyChange = (next: number[]) => {
+    const uniqSorted = Array.from(new Set(next)).sort((a, b) => a - b);
+    setHighlighted(uniqSorted);
+    onChange?.(uniqSorted, uniqSorted.map((i) => tokens[i]));
+  };
+
+  const handleMouseUp = () => {
+    const sel = window.getSelection();
+    if (!sel || !sel.toString().trim()) return;
+
+    const a = sel.anchorNode?.parentElement;
+    const f = sel.focusNode?.parentElement;
+    if (!a || !f) return;
+
+    const startIdx = Number(a.getAttribute("data-idx"));
+    const endIdx = Number(f.getAttribute("data-idx"));
+    if (Number.isNaN(startIdx) || Number.isNaN(endIdx)) return;
+
+    const min = Math.min(startIdx, endIdx);
+    const max = Math.max(startIdx, endIdx);
+
+    const next = [...highlighted];
+    for (let i = min; i <= max; i++) next.push(i);
+
+    const capped = maxHighlights === Infinity
+      ? next
+      : next.slice(0, maxHighlights);
+
+    applyChange(capped);
+    sel.removeAllRanges();
+  };
+
+  const toggleWord = (idx: number) => {
+    let next: number[];
+    if (highlighted.includes(idx)) {
+      next = highlighted.filter((x) => x !== idx);
+    } else {
+      next = highlighted.concat(idx);
+      if (next.length > maxHighlights) next = next.slice(0, maxHighlights);
+    }
+    applyChange(next);
+  };
+
+  return (
+    <div
+      ref={containerRef}
+      onMouseUp={handleMouseUp}
+      className="p-4 border rounded bg-white select-none"
+    >
+      {tokens.map((word, idx) => {
+        const on = highlighted.includes(idx);
+        return (
+          <span
+            key={idx}
+            data-idx={idx}
+            onClick={() => toggleWord(idx)}
+            className={`cursor-text px-0.5 rounded transition ${
+              on ? "bg-yellow-300" : "hover:bg-gray-100"
+            }`}
+          >
+            {word}{idx < tokens.length - 1 && " "}
+          </span>
+        );
+      })}
+
+      {highlighted.length > 0 && (
+        <div className="mt-3 text-sm text-gray-700">
+          Ausgewählt: {highlighted.map((i) => tokens[i]).join(", ")}
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default function InstanceView({ instanceId, onUnsavedChanges }: InstanceViewProps) {
@@ -191,12 +278,6 @@ export default function InstanceView({ instanceId, onUnsavedChanges }: InstanceV
                 <AvatarFallback className="bg-blue-600 text-white rounded-full">S</AvatarFallback>
               </Avatar>
               <div className="flex-1 space-y-3">
-                <div className="text-sm text-gray-700">Thema</div>
-                <input
-                  type="text"
-                  placeholder="Auswählen"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
                 <div className="space-y-2">
                   <label className="text-sm text-gray-700">Kommentar</label>
                   <Textarea
@@ -558,6 +639,23 @@ export default function InstanceView({ instanceId, onUnsavedChanges }: InstanceV
               </div>
 
               <div className="text-gray-700">Es wurden keine ähnlichen Duplikate gefunden.</div>
+
+              {/* Important words selector */}
+              <div className="text-gray-700">Hier können Sie per Klick auswählen, welche Worte besonders relevant für Ihre Klassifizierung waren,
+                 damit das Modell in Zukunft mehr auf diese Worte achtet:</div>
+              <HighlightableText
+                text="Das macht mich so wütend, dass ich ihm den Kopf abhaken wurde. Und ja natürlich also ich WUERDE DAS EISKALT FORDERN!!"
+                maxHighlights={10}
+                onChange={(indices, words) => {
+                  // TODO: Is not saved with the rest when "Einreichen" is clicked
+                }}
+              />
+
+              {/* Textual feedback */}
+              <div className="text-gray-700">Alternativ können Sie hier eine schriftliche Erklärung verfassen, 
+                warum das ein besonders gutes Beispiel für die Kategorie ist:</div>  
+
+              <Textarea value={newComment} onChange={(e) => setNewComment(e.target.value)} placeholder="Erklärung für Feedback eingeben..." className="min-h-[100px]" />
 
               <div className="flex justify-end">
                 <Button

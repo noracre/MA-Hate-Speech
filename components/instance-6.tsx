@@ -122,7 +122,13 @@ export default function Instance6({ onUnsavedChanges }: Instance6Props) {
       legalTab={legalTab}
       authorTab={authorTab}
       contentTab={contentTab}
-      onUnsavedChanges={onUnsavedChanges}  // ADD THIS LINE
+      onUnsavedChanges={onUnsavedChanges}
+      highlightText="Menschen wie du sollten in diesem land nicht leben dürfen. Ihr seid alle gleich und macht nur Probleme."
+      maxHighlights={8}
+      onHighlightChange={(indices, words) => {
+      // persist with feedback payload if you like
+      // console.log({ indices, words })
+    }}
     />
   )
 }

@@ -181,7 +181,13 @@ export default function Instance5({ onUnsavedChanges }: Instance5Props) {
       legalTab={legalTab}
       authorTab={authorTab}
       contentTab={contentTab}
-      onUnsavedChanges={onUnsavedChanges}  // ADD THIS LINE
+      onUnsavedChanges={onUnsavedChanges}
+      highlightText="Diese Politiker sind alle korrupt und sollten alle ins Gefängnis. Das System ist kaputt."
+      maxHighlights={8}
+      onHighlightChange={(indices, words) => {
+      // persist with feedback payload if you like
+      // console.log({ indices, words })
+    }}
     />
   )
 }

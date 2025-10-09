@@ -1,7 +1,7 @@
 // components/InstanceParent.tsx
 "use client"
 
-import { useMemo, useState } from "react"
+import { useMemo, useState, useRef } from "react"
 import Image from "next/image"
 import {
   MessageCircle, User, Plus, Minus, ChevronLeft, ChevronRight, Info, Search, X, Filter, Calendar, Users,
@@ -50,10 +50,83 @@ export type InstanceParentProps = {
   histogramSrc?: string
   histogramAlt?: string
 
+  // HighlightableText
+  highlightText?: string; // text to highlight (per instance)
+  maxHighlights?: number;
+  onHighlightChange?: (indices: number[], words: string[]) => void;
+
   onUnsavedChanges?: (hasChanges: boolean) => void
 }
 
 const NO_OFFENSE = "Kein Strafbestand"
+
+function HighlightableText({
+  text,
+  maxHighlights = Infinity,
+  onChange,
+}: {
+  text: string;
+  maxHighlights?: number;
+  onChange?: (indices: number[], words: string[]) => void;
+}) {
+  const tokens = text.split(/\s+/).filter(Boolean);
+  const [highlighted, setHighlighted] = useState<number[]>([]);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const applyChange = (next: number[]) => {
+    const uniqSorted = Array.from(new Set(next)).sort((a, b) => a - b);
+    setHighlighted(uniqSorted);
+    onChange?.(uniqSorted, uniqSorted.map((i) => tokens[i]));
+  };
+
+  const handleMouseUp = () => {
+    const sel = window.getSelection();
+    if (!sel || !sel.toString().trim()) return;
+    const a = sel.anchorNode?.parentElement;
+    const f = sel.focusNode?.parentElement;
+    if (!a || !f) return;
+
+    const startIdx = Number(a.getAttribute("data-idx"));
+    const endIdx = Number(f.getAttribute("data-idx"));
+    if (Number.isNaN(startIdx) || Number.isNaN(endIdx)) return;
+
+    const min = Math.min(startIdx, endIdx);
+    const max = Math.max(startIdx, endIdx);
+
+    const next = [...highlighted];
+    for (let i = min; i <= max; i++) next.push(i);
+
+    const capped = maxHighlights === Infinity ? next : next.slice(0, maxHighlights);
+    applyChange(capped);
+    sel.removeAllRanges();
+  };
+
+  const toggleWord = (idx: number) => {
+    let next = highlighted.includes(idx)
+      ? highlighted.filter((x) => x !== idx)
+      : highlighted.concat(idx);
+    if (next.length > maxHighlights) next = next.slice(0, maxHighlights);
+    applyChange(next);
+  };
+
+  return (
+    <div ref={containerRef} onMouseUp={handleMouseUp} className="p-4 border rounded bg-white select-none">
+      {tokens.map((word, idx) => {
+        const on = highlighted.includes(idx);
+        return (
+          <span
+            key={idx}
+            data-idx={idx}
+            onClick={() => toggleWord(idx)}
+            className={`cursor-text px-0.5 rounded transition ${on ? "bg-yellow-300" : "hover:bg-gray-100"}`}
+          >
+            {word}{idx < tokens.length - 1 && " "}
+          </span>
+        );
+      })}
+    </div>
+  );
+}
 
 export default function InstanceParent({
   instanceId,
@@ -73,6 +146,9 @@ export default function InstanceParent({
   histogramSrc = "/histogram.png",
   histogramAlt = "Anzahl Trainingsdatenpunkte pro Kategorie",
   onUnsavedChanges = () => {},
+  highlightText = "",
+  maxHighlights = 10,
+  onHighlightChange,
 }: InstanceParentProps) {
   // ----- shared state -----
   const [selectFields, setSelectFields] = useState([{ id: 1, value: "" }])
@@ -175,12 +251,6 @@ export default function InstanceParent({
                 <AvatarFallback className="bg-blue-600 text-white rounded-full">S</AvatarFallback>
               </Avatar>
               <div className="flex-1 space-y-3">
-                <div className="text-sm text-gray-700">Thema</div>
-                <input
-                  type="text"
-                  placeholder="Auswählen"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
                 <div className="space-y-2">
                   <label className="text-sm text-gray-700">Kommentar</label>
                   <Textarea value={newComment} onChange={(e) => setNewComment(e.target.value)} placeholder="Kommentar eingeben..." className="min-h-[100px]" />
@@ -251,7 +321,7 @@ export default function InstanceParent({
       <div className="flex-1 max-w-4xl mx-auto p-6 space-y-6">
         {/* Feedback dialog (shared) */}
         <Dialog open={showFeedbackModal} onOpenChange={setShowFeedbackModal}>
-          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="w-full max-w-[min(1100px,90vw)] max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle className="text-left">Sie wollen die obenstehende Instanz als Beispiel für die Kategorie(n):</DialogTitle>
             </DialogHeader>
@@ -318,6 +388,25 @@ export default function InstanceParent({
               </div>
 
               <div className="text-gray-700">Es wurden keine ähnlichen Duplikate gefunden.</div>
+
+              {/* Important words selector */}
+              <div className="text-gray-700">Hier können Sie per Klick auswählen, welche Worte besonders relevant für Ihre Klassifizierung waren,
+                 damit das Modell in Zukunft mehr auf diese Worte achtet:</div>
+              {highlightText && (
+                <div className="space-y-2">
+                  <HighlightableText
+                    text={highlightText}
+                    maxHighlights={maxHighlights}
+                    onChange={onHighlightChange}
+                  />
+                </div>
+              )}
+
+              {/* Textual feedback */}
+              <div className="text-gray-700">Alternativ können Sie hier eine schriftliche Erklärung verfassen, 
+                warum das ein besonders gutes Beispiel für die Kategorie ist:</div>  
+
+              <Textarea value={newComment} onChange={(e) => setNewComment(e.target.value)} placeholder="Erklärung für Feedback eingeben..." className="min-h-[100px]" />
 
               <div className="flex justify-end">
                 <Button onClick={handleFeedbackSubmit} disabled={!allFeedbackChecksComplete}

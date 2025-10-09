@@ -146,7 +146,13 @@ export default function Instance4({ onUnsavedChanges }: Instance4Props) {
       legalTab={legalTab}
       authorTab={authorTab}
       contentTab={contentTab}
-      onUnsavedChanges={onUnsavedChanges}  // ADD THIS LINE
+      onUnsavedChanges={onUnsavedChanges}
+      highlightText="Ich werde dich finden und dir zeigen was passiert wenn man mich verärgert. Du wirst es bereuen!"
+      maxHighlights={8}
+      onHighlightChange={(indices, words) => {
+      // persist with feedback payload if you like
+      // console.log({ indices, words })
+    }}
     />
   )
 }

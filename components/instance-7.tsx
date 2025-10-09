@@ -137,7 +137,13 @@ export default function Instance7({ onUnsavedChanges }: Instance7Props) {
       legalTab={legalTab}
       authorTab={authorTab}
       contentTab={contentTab}
-      onUnsavedChanges={onUnsavedChanges}  // ADD THIS LINE
+      onUnsavedChanges={onUnsavedChanges}
+      highlightText="Du dummer Nazi-Hurensohn! Ich werde dich finden und dir zeigen was passiert. Geh zurück in dein Land, du gehörst nicht hierher. Diese Politiker sind alle korrupt und sollten alle ins Gefängnis!"
+      maxHighlights={8}
+      onHighlightChange={(indices, words) => {
+      // persist with feedback payload if you like
+      // console.log({ indices, words })
+    }}
     />
   )
 }

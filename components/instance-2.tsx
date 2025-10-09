@@ -147,7 +147,13 @@ export default function Instance2({ onUnsavedChanges }: Instance2Props) {
       legalTab={legalTab}
       authorTab={authorTab}
       contentTab={contentTab}
-      onUnsavedChanges={onUnsavedChanges}  // ADD THIS LINE
+      onUnsavedChanges={onUnsavedChanges}
+      highlightText="Was für ein kleiner feiger besoffener Nazi Hurensohn. Hätte definitiv mit ihm gekämpft. Was für ein kranker dummer Mensch."
+      maxHighlights={8}
+      onHighlightChange={(indices, words) => {
+      // persist with feedback payload if you like
+      // console.log({ indices, words })
+    }}
     />
   )
 }
