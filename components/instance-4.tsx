@@ -137,6 +137,7 @@ export default function Instance4({ onUnsavedChanges }: Instance4Props) {
       instanceTitle="Instanz #7832"
       instanceImageSrc="/instance-4-text.png"
       instanceImageAlt="Klassifizierter Text"
+      limeImageSrc="/instance-4-lime.png"
       dateViews="09. Juni 2025, 8:59 · 1.142 Mal angezeigt"
       aiBadgeText="§241 Bedrohung"
       aiBadgeColorKey="§241 Bedrohung"

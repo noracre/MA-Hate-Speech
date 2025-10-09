@@ -30,6 +30,7 @@ export type InstanceParentProps = {
   instanceImageSrc: string // e.g., "/instance-2-text.png"
   instanceImageAlt: string
   dateViews: string // e.g., "09. Juni 2025, 9:55 · 20.142 Mal angezeigt"
+  limeImageSrc: string // e.g., "/instance-2-lime.png"
 
   // AI badge
   aiBadgeText: string // e.g., "§140 Belohnung und Billigung von Straftaten"
@@ -59,6 +60,7 @@ export default function InstanceParent({
   instanceTitle,
   instanceImageSrc,
   instanceImageAlt,
+  limeImageSrc, 
   dateViews,
   aiBadgeText,
   aiBadgeColorKey,
@@ -339,12 +341,7 @@ export default function InstanceParent({
               <Image src={instanceImageSrc} alt={instanceImageAlt} width={756} height={110} className="w-full h-auto" priority />
             </div>
             <div className="text-sm text-gray-500 mb-4">{dateViews}</div>
-          </CardContent>
-        </Card>
-
-        {/* AI Classification Result (shared shell, per-instance badge) */}
-        <Card className="bg-white">
-          <CardContent className="p-6">
+            {/* AI Classification Result (shared shell, per-instance badge) */}
             <div className="flex items-center space-x-4">
               <div className="w-10 h-10 rounded-full">
                 <Image src="/icon-classifier.png" alt="AI Classifier" width={24} height={24} className="rounded-full" />
@@ -358,6 +355,16 @@ export default function InstanceParent({
                   eingestuft.
                 </p>
               </div>
+            </div>
+            <div className="bg-white p-3 rounded border">
+              <Image
+                src={limeImageSrc}
+                alt="Lime Info"
+                width={600}
+                height={250}
+                className="max-w-[85%] h-auto"
+                priority
+              />
             </div>
 
             <div className="flex items-center justify-between mt-6 border-b border-gray-200">

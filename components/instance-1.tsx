@@ -593,23 +593,24 @@ export default function InstanceView({ instanceId, onUnsavedChanges }: InstanceV
                   <span className="text-sm text-gray-500">@Beispielperson</span>
                 </div>
                 <div className="text-gray-900 mb-3">
-                  <span className="bg-red-200 px-1">Kopf abhaken</span>
-                  <span>wurde. Und ja </span>
-                  <span className="bg-red-200 px-1">natuerlich</span>
-                  <span> also </span>
-                  <span className="bg-red-200 px-1">ich</span>
-                  <span> WUERDE </span>
-                  <span className="bg-red-200 px-1">DAS EISKALT FORDERN!!</span>
+                  <span>Das macht mich so </span>
+                  <span className="bg-red-200 px-1">wütend</span>
+                  <span>, dass ich ihm den </span>
+                  <span className="bg-red-200 px-1">Kopf</span>
+                  <span> </span>
+                  <span className="bg-red-200 px-1">abhaken</span>
+                  <span>würde. Und ja </span>
+                  <span className="bg-red-200 px-1">natürlich</span>
+                  <span> also ich WÜRDE DAS </span>
+                  <span className="bg-red-200 px-1">EISKALT</span>
+                  <span> </span>
+                  <span className="bg-red-200 px-1">FORDERN</span>
+                  <span>!!</span>
                 </div>
                 <div className="text-sm text-gray-500 mb-4">09. Juni 2025, 10:20 · 143.131 Mal angezeigt</div>
               </div>
             </div>
-          </CardContent>
-        </Card>
-
-        {/* AI Classification Result */}
-        <Card className="bg-white">
-          <CardContent className="p-6">
+            {/* AI Classification Result */}
             <div className="flex items-center space-x-4">
               <div className="w-10 h-10 rounded-full">
                 <Image src="/icon-classifier.png" alt="AI Classifier" width={24} height={24} className="rounded-full" />
@@ -625,6 +626,16 @@ export default function InstanceView({ instanceId, onUnsavedChanges }: InstanceV
                   eingestuft.
                 </p>
               </div>
+            </div>
+            <div className="bg-white p-3 rounded border">
+              <Image
+                src="/instance-1-lime.png"
+                alt="Lime Info"
+                width={600}
+                height={250}
+                className="max-w-[85%] h-auto"
+                priority
+              />
             </div>
 
             <div className="flex items-center justify-between mt-6 border-b border-gray-200">

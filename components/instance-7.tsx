@@ -119,6 +119,7 @@ export default function Instance7({ onUnsavedChanges }: Instance7Props) {
       instanceTitle="Instanz #7826"
       instanceImageSrc="/instance-7-text.png"
       instanceImageAlt="Klassifizierter Text"
+      limeImageSrc="/instance-7-lime.png"
       dateViews="08. Juni 2025, 15:30 · 786 Mal angezeigt"
       aiBadgeText="§ 111 Öffentliche Aufforderung zu Straftaten"
       aiBadgeColorKey="§ 111 Öffentliche Aufforderung zu Straftaten"

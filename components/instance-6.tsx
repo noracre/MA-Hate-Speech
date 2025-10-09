@@ -29,52 +29,10 @@ export default function Instance6({ onUnsavedChanges }: Instance6Props) {
     <div className="space-y-6 max-h-96 overflow-y-auto">
       <div>
         <h3 className="font-semibold text-gray-900 mb-3">
-          Gesetzestext aus dem Strafgesetzbuch (StGB): § 130 StGB – Volksverhetzung
+          Dieser Post wurde der Kategorie <span className="italic">"Kein Strafbestand"</span> zugeordnet.
         </h3>
         <div className="text-gray-900 space-y-2">
-          <p>
-            (1) Wer in einer Weise, die geeignet ist, den öffentlichen Frieden zu stören, 1. gegen eine nationale, rassische, religiöse oder durch ihre 
-            ethnische Herkunft bestimmte <span className="bg-red-200 px-1">Gruppe</span>, gegen Teile der Bevölkerung oder gegen einen Einzelnen wegen 
-            dessen Zugehörigkeit zu einer vorbezeichneten Gruppe oder zu einem Teil der Bevölkerung zum <span className="bg-yellow-200 px-1">Hass</span> aufstachelt, zu Gewalt- oder Willkürmaßnahmen auffordert 
-            oder 2. die Menschenwürde anderer dadurch angreift, dass er eine vorbezeichnete Gruppe, Teile der Bevölkerung oder einen Einzelnen wegen dessen Zugehörigkeit
-            zu einer vorbezeichneten Gruppe oder zu einem Teil der Bevölkerung beschimpft, böswillig verächtlich macht oder verleumdet,
-            wird mit Freiheitsstrafe von drei Monaten bis zu fünf Jahren bestraft.
-          </p>
-          <p>
-            (2) Mit Freiheitsstrafe bis zu drei Jahren oder mit Geldstrafe wird bestraft, wer 1. einen <span className="bg-yellow-200 px-1">Inhalt (§ 11 Absatz 3) verbreitet</span> oder 
-            der Öffentlichkeit zugänglich macht oder einer Person unter achtzehn Jahren einen Inhalt (§ 11 Absatz 3) anbietet, überlässt oder zugänglich macht, der 
-            a. zum Hass gegen eine in Absatz 1 Nummer 1 bezeichnete Gruppe, gegen Teile der Bevölkerung oder gegen einen Einzelnen wegen dessen Zugehörigkeit zu einer 
-            in Absatz 1 Nummer 1 bezeichneten Gruppe oder zu einem <span className="bg-yellow-200 px-1">Teil der Bevölkerung</span> aufstachelt, b. zu 
-            <span className="bg-yellow-200 px-1">Gewalt- oder Willkürmaßnahmen</span> gegen in Buchstabe a genannte 
-            Personen oder Personenmehrheiten auffordert oder c. die Menschenwürde von in Buchstabe a genannten Personen oder Personenmehrheiten dadurch angreift, 
-            dass diese beschimpft, böswillig verächtlich gemacht oder verleumdet werden oder 2. einen in Nummer 1 Buchstabe a bis c bezeichneten Inhalt (§ 11 Absatz 3) herstellt, 
-            bezieht, liefert, vorrätig hält, anbietet, bewirbt oder es unternimmt, diesen ein- oder auszuführen, um ihn im Sinne der Nummer 1 zu verwenden oder einer anderen 
-            Person eine solche Verwendung zu ermöglichen.
-          </p>
-          <p>
-            (3) Mit Freiheitsstrafe bis zu fünf Jahren oder mit Geldstrafe wird bestraft, wer eine unter der Herrschaft des Nationalsozialismus begangene Handlung 
-            der in § 6 Abs. 1 des Völkerstrafgesetzbuches bezeichneten Art in einer Weise, die geeignet ist, den öffentlichen Frieden zu stören, öffentlich oder in 
-            einer Versammlung billigt, leugnet oder verharmlost.
-          </p>
-          <p>
-            (4) Mit Freiheitsstrafe bis zu drei Jahren oder mit Geldstrafe wird bestraft, wer öffentlich oder in einer Versammlung den öffentlichen Frieden in einer die 
-            Würde der Opfer verletzenden Weise dadurch stört, dass er die nationalsozialistische Gewalt- und Willkürherrschaft billigt, verherrlicht oder rechtfertigt.
-          </p>
-          <p> 
-            (5) Mit Freiheitsstrafe bis zu drei Jahren oder mit Geldstrafe wird bestraft, wer eine Handlung der in den §§ 6 bis 12 des Völkerstrafgesetzbuches 
-            bezeichneten Art gegen eine der in Absatz 1 Nummer 1 bezeichneten Personenmehrheiten oder gegen einen Einzelnen wegen dessen Zugehörigkeit zu einer dieser 
-            Personenmehrheiten öffentlich oder in einer Versammlung in einer Weise billigt, leugnet oder gröblich verharmlost, die geeignet ist, zu Hass oder Gewalt gegen 
-            eine solche Person oder Personenmehrheit aufzustacheln und den öffentlichen Frieden zu stören.
-          </p>
-          <p>
-            (6) Absatz 2 gilt auch für einen in den Absätzen 3 bis 5 bezeichneten Inhalt (§ 11 Absatz 3).
-          </p>
-          <p>
-            (7) In den Fällen des Absatzes 2 Nummer 1, auch in Verbindung mit Absatz 6, ist der Versuch strafbar.
-          </p>
-          <p>
-            (8) In den Fällen des Absatzes 2, auch in Verbindung mit den Absätzen 6 und 7, sowie in den Fällen der Absätze 3 bis 5 gilt § 86 Absatz 4 entsprechend.
-          </p>
+          <p> Alle Kategorie Definitionen finden Sie im FAQ.</p>
         </div>
       </div>
 
@@ -154,6 +112,7 @@ export default function Instance6({ onUnsavedChanges }: Instance6Props) {
       instanceTitle="Instanz #7827"
       instanceImageSrc="/instance-6-text.png"
       instanceImageAlt="Klassifizierter Text"
+      limeImageSrc="/instance-6-lime.png"
       dateViews="08. Juni 2025, 16:06 · 142 Mal angezeigt"
       aiBadgeText="Kein Strafbestand"
       aiBadgeColorKey="Kein Strafbestand"

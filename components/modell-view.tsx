@@ -352,7 +352,7 @@ export default function ModellView({ onInstanceSelect }: OverviewViewProps) {
 
                 {/* Button now inside this card */}
                 <Button className="mt-4 bg-blue-600 hover:bg-blue-700 text-white">
-                  In Evaluationsrunde nach weiterenfalschen Negativen suchen
+                  In Evaluationsrunde nach weiteren falschen Negativen suchen
                 </Button>
               </CardContent>
             </Card>

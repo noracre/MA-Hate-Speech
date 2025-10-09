@@ -128,6 +128,7 @@ export default function Instance2({ onUnsavedChanges }: Instance2Props) {
       instanceTitle="Instanz #7835"
       instanceImageSrc="/instance-2-text.png"
       instanceImageAlt="Klassifizierter Text"
+      limeImageSrc="/instance-2-lime.png"
       dateViews="09. Juni 2025, 9:55 · 20.142 Mal angezeigt"
       aiBadgeText="§140 Belohnung und Billigung von Straftaten"
       aiBadgeColorKey="§140 Belohnung und Billigung von Straftaten"
