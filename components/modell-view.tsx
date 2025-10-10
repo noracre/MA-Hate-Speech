@@ -111,7 +111,8 @@ interface OverviewInstance {
 }
 
 interface OverviewViewProps {
-  onInstanceSelect?: (instanceId: string) => void
+  onInstanceSelect?: (instanceId: string) => void;
+  onOpenInstanceTab?: (file: string, label: string) => void;
 }
 
 const evaluatedInstances: OverviewInstance[] = [
@@ -147,7 +148,7 @@ const evaluatedInstances: OverviewInstance[] = [
   },
 ]
 
-export default function ModellView({ onInstanceSelect }: OverviewViewProps) {
+export default function ModellView({ onInstanceSelect, onOpenInstanceTab }: OverviewViewProps) {
   const [selectedLanguage, setSelectedLanguage] = useState("Alle")
   const [selectedCategory, setSelectedCategory] = useState("Alle")
   const [activeTab, setActiveTab] = useState<"live" | "test">("live")
@@ -351,7 +352,10 @@ export default function ModellView({ onInstanceSelect }: OverviewViewProps) {
                 </div>
 
                 {/* Button now inside this card */}
-                <Button className="mt-4 bg-blue-600 hover:bg-blue-700 text-white">
+                <Button
+                  className="mt-4 bg-blue-600 hover:bg-blue-700 text-white"
+                  onClick={() => onOpenInstanceTab?.("instance-6", "7827")}
+                >
                   In Evaluationsrunde nach weiteren falschen Negativen suchen
                 </Button>
               </CardContent>

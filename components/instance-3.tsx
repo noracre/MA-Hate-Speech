@@ -23,9 +23,10 @@ const categories = [
 
 interface Instance3Props {
   onUnsavedChanges: (hasChanges: boolean) => void
+  onNext?: () => void
 }
 
-export default function Instance3({ onUnsavedChanges }: Instance3Props) {
+export default function Instance3({ onUnsavedChanges, onNext }: Instance3Props) {
   const legalTab = (
     <div className="space-y-6 max-h-96 overflow-y-auto">
       <div>
@@ -137,6 +138,7 @@ export default function Instance3({ onUnsavedChanges }: Instance3Props) {
       instanceId="7834"
       instanceTitle="Instanz #7834"
       instanceImageSrc="/instance-3-text.png"
+      confidencePercent="75"
       instanceImageAlt="Klassifizierter Text"
       limeImageSrc="/instance-3-lime.png"
       dateViews="09. Juni 2025, 9:18 · 1.142 Mal angezeigt"
@@ -148,6 +150,7 @@ export default function Instance3({ onUnsavedChanges }: Instance3Props) {
       authorTab={authorTab}
       contentTab={contentTab}
       onUnsavedChanges={onUnsavedChanges}
+      onNext={onNext}
       highlightText="Du bist ein Wichser und gehörst nicht hierher. Geh zurück in dein Land!"
       maxHighlights={8}
       onHighlightChange={(indices, words) => {

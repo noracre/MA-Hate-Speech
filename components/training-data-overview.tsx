@@ -395,7 +395,7 @@ export default function TrainingDataOverview() {
 			{/* Comments Section */}
 			<Card>
 			<CardHeader>
-				<CardTitle>Kommentare zu Modell und Trainingsdaten</CardTitle>
+				<CardTitle>Kommentare zu Trainingsdaten und Kategorien</CardTitle>
 			</CardHeader>
 			<CardContent className="space-y-4">
 				{/* Render all comments (existing + newly sent) */}
@@ -419,9 +419,8 @@ export default function TrainingDataOverview() {
 					<Image src="/icon-user.png" alt="User" width={40} height={40} className="w-full h-full object-cover" />
 				</div>
 				<div className="flex-1 space-y-2">
-					<div className="font-medium text-sm">Sie</div>
 					<div className="text-sm">
-					<div className="text-sm mb-2">Kommentar:</div>
+					<label className="text-sm text-gray-700">Kommentar</label>
 					<textarea
 						value={newComment}
 						onChange={(e) => setNewComment(e.target.value)}

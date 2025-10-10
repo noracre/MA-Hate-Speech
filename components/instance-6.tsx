@@ -22,9 +22,10 @@ const categories = [
 ]
 interface Instance6Props {
   onUnsavedChanges: (hasChanges: boolean) => void
+  onNext?: () => void
 }
 
-export default function Instance6({ onUnsavedChanges }: Instance6Props) {
+export default function Instance6({ onUnsavedChanges, onNext }: Instance6Props) {
   const legalTab = (
     <div className="space-y-6 max-h-96 overflow-y-auto">
       <div>
@@ -113,6 +114,7 @@ export default function Instance6({ onUnsavedChanges }: Instance6Props) {
       instanceImageSrc="/instance-6-text.png"
       instanceImageAlt="Klassifizierter Text"
       limeImageSrc="/instance-6-lime.png"
+      confidencePercent="90"
       dateViews="08. Juni 2025, 16:06 · 142 Mal angezeigt"
       aiBadgeText="Kein Strafbestand"
       aiBadgeColorKey="Kein Strafbestand"
@@ -123,6 +125,7 @@ export default function Instance6({ onUnsavedChanges }: Instance6Props) {
       authorTab={authorTab}
       contentTab={contentTab}
       onUnsavedChanges={onUnsavedChanges}
+      onNext={onNext}
       highlightText="Menschen wie du sollten in diesem land nicht leben dürfen. Ihr seid alle gleich und macht nur Probleme."
       maxHighlights={8}
       onHighlightChange={(indices, words) => {

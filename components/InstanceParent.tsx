@@ -31,6 +31,7 @@ export type InstanceParentProps = {
   instanceImageAlt: string
   dateViews: string // e.g., "09. Juni 2025, 9:55 · 20.142 Mal angezeigt"
   limeImageSrc: string // e.g., "/instance-2-lime.png"
+  confidencePercent: string // e.g., 0.97
 
   // AI badge
   aiBadgeText: string // e.g., "§140 Belohnung und Billigung von Straftaten"
@@ -54,6 +55,9 @@ export type InstanceParentProps = {
   highlightText?: string; // text to highlight (per instance)
   maxHighlights?: number;
   onHighlightChange?: (indices: number[], words: string[]) => void;
+
+  // Next Page for Navigation
+  onNext?: () => void;
 
   onUnsavedChanges?: (hasChanges: boolean) => void
 }
@@ -134,6 +138,7 @@ export default function InstanceParent({
   instanceImageSrc,
   instanceImageAlt,
   limeImageSrc, 
+  confidencePercent,
   dateViews,
   aiBadgeText,
   aiBadgeColorKey,
@@ -148,6 +153,7 @@ export default function InstanceParent({
   onUnsavedChanges = () => {},
   highlightText = "",
   maxHighlights = 10,
+  onNext,
   onHighlightChange,
 }: InstanceParentProps) {
   // ----- shared state -----
@@ -275,48 +281,6 @@ export default function InstanceParent({
 
   return (
     <div className="flex">
-      {/* --- left navigation (shared) --- */}
-      <div className="w-80 bg-white shadow-lg border-r border-gray-200 h-screen sticky top-0 overflow-y-auto">
-        <div className="p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-semibold text-gray-900">Navigation</h3>
-            <div className="flex items-center space-x-2">
-              <Button variant="ghost" size="sm" className="p-1"><ChevronLeft className="w-4 h-4" /></Button>
-              <Button variant="ghost" size="sm" className="p-1"><ChevronRight className="w-4 h-4" /></Button>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-              <h4 className="font-medium text-blue-900 mb-2">Aktuelle Navigation</h4>
-              <div className="space-y-2 text-sm text-blue-800">
-                <div className="flex items-center space-x-2"><Users className="w-4 h-4" /><span>Zu beurteilende Instanzen</span></div>
-                <div className="flex items-center space-x-2"><Filter className="w-4 h-4" /><span>Gefiltert nach: § 140 StGB</span></div>
-                <div className="flex items-center space-x-2"><Calendar className="w-4 h-4" /><span>Sortiert nach: Datum (aufsteigend)</span></div>
-              </div>
-            </div>
-
-            <div className="border-t pt-4">
-              <h4 className="font-medium text-gray-900 mb-3">Navigationsoptionen</h4>
-              <div className="space-y-2">
-                <Button variant="ghost" className="w-full justify-start text-sm"><Users className="w-4 h-4 mr-2" />Zugewiesene Posts (6)</Button>
-                <Button variant="ghost" className="w-full justify-start text-sm"><Search className="w-4 h-4 mr-2" />Automatisch erkannte Posts (3)</Button>
-                <Button variant="ghost" className="w-full justify-start text-sm"><Filter className="w-4 h-4 mr-2" />Gefilterte Posts</Button>
-                <Button variant="ghost" className="w-full justify-start text-sm"><Calendar className="w-4 h-4 mr-2" />Nach Datum sortiert</Button>
-              </div>
-            </div>
-
-            <div className="border-t pt-4">
-              <h4 className="font-medium text-gray-900 mb-3">Aktuelle Position</h4>
-              <div className="text-sm text-gray-600">
-                <p>Post 1 von 6</p>
-                <p>Instanz #{instanceId}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* --- main column --- */}
       <div className="flex-1 max-w-4xl mx-auto p-6 space-y-6">
         {/* Feedback dialog (shared) */}
@@ -437,7 +401,7 @@ export default function InstanceParent({
               </div>
               <div className="flex-1">
                 <p className="text-gray-900">
-                  Von KI mit 97% Sicherheit als{" "}
+                  Von KI mit {confidencePercent}% Sicherheit als{" "}
                   <span className={`px-2 py-1 rounded-full text-sm font-medium ${getCategoryColor(aiBadgeColorKey)}`}>
                     {aiBadgeText}
                   </span>{" "}
@@ -496,7 +460,7 @@ export default function InstanceParent({
 
         {/* Classification Section (shared) */}
         <Card className="bg-white">
-          <CardContent className="p-6">
+          <CardContent className="p-6 relative pb-20">
             <div className="flex items-start space-x-4">
               <Avatar className="w-10 h-10 rounded-full">
                 <AvatarImage src="/icon-user.png" />
@@ -574,6 +538,15 @@ export default function InstanceParent({
                       </Button>
                     )}
                   </div>
+                )}
+                {/* Nächste Instanz Button */}
+                {isSaved && onNext && (
+                  <Button
+                    onClick={onNext}
+                    className="bg-blue-600 hover:bg-blue-700 text-white absolute right-6 bottom-6"
+                  >
+                    Nächste Instanz
+                  </Button>
                 )}
               </div>
             </div>

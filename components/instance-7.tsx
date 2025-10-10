@@ -22,9 +22,10 @@ const categories = [
 ]
 interface Instance7Props {
   onUnsavedChanges: (hasChanges: boolean) => void
+  onNext?: () => void
 }
 
-export default function Instance7({ onUnsavedChanges }: Instance7Props) {
+export default function Instance7({ onUnsavedChanges, onNext }: Instance7Props) {
   const legalTab = (
     <div className="space-y-6 max-h-96 overflow-y-auto">
       <div>
@@ -120,6 +121,7 @@ export default function Instance7({ onUnsavedChanges }: Instance7Props) {
       instanceImageSrc="/instance-7-text.png"
       instanceImageAlt="Klassifizierter Text"
       limeImageSrc="/instance-7-lime.png"
+      confidencePercent="50"
       dateViews="08. Juni 2025, 15:30 · 786 Mal angezeigt"
       aiBadgeText="§ 111 Öffentliche Aufforderung zu Straftaten"
       aiBadgeColorKey="§ 111 Öffentliche Aufforderung zu Straftaten"
@@ -138,6 +140,7 @@ export default function Instance7({ onUnsavedChanges }: Instance7Props) {
       authorTab={authorTab}
       contentTab={contentTab}
       onUnsavedChanges={onUnsavedChanges}
+      onNext={onNext}
       highlightText="Du dummer Nazi-Hurensohn! Ich werde dich finden und dir zeigen was passiert. Geh zurück in dein Land, du gehörst nicht hierher. Diese Politiker sind alle korrupt und sollten alle ins Gefängnis!"
       maxHighlights={8}
       onHighlightChange={(indices, words) => {

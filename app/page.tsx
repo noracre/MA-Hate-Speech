@@ -4,7 +4,7 @@ import { useState } from "react"
 import ModellView from "@/components/modell-view"
 import OverviewView from "@/components/overview-view"
 import { Button } from "@/components/ui/button"
-import { Home } from "lucide-react"
+import { Home, X } from "lucide-react"
 import Instance1 from "@/components/instance-1"
 import Instance2 from "@/components/instance-2"
 import Instance3 from "@/components/instance-3"
@@ -26,6 +26,16 @@ export default function ClassificationApp() {
   const [showExitWarning, setShowExitWarning] = useState(false)
   const [pendingView, setPendingView] = useState("")
 
+  const sequence: Record<string, string | undefined> = {
+    "instance-1": "instance-2",
+    "instance-2": "instance-3",
+    "instance-3": "instance-4",
+    "instance-4": "instance-5",
+    "instance-5": "instance-7",
+    "instance-7": "instance-1",
+    // others can stay undefined (no next)
+  }
+  
   const handleViewChange = (newView: string, instanceId?: string) => {
     if (hasUnsavedChanges && newView !== currentView) {
       setPendingView(newView)
@@ -38,31 +48,76 @@ export default function ClassificationApp() {
   }
   
   const confirmViewChange = () => {
-    setCurrentView(pendingView)
-    if (pendingInstanceId) setCurrentInstanceId(pendingInstanceId)
-    setShowExitWarning(false)
-    setHasUnsavedChanges(false)
-    setPendingView("")
-    setPendingInstanceId(null)
-  }
+    setCurrentView(pendingView);
+    if (pendingInstanceId) setCurrentInstanceId(pendingInstanceId);
+
+    // If user clicked X and we’re actually leaving the instance, hide the tab now.
+    if (closeRequestedViaX && pendingView === "overview") {
+      setIsInstanceTabOpen(false);
+    }
+    setCloseRequestedViaX(false);
+
+    setShowExitWarning(false);
+    setHasUnsavedChanges(false);
+    setPendingView("");
+    setPendingInstanceId(null);
+  };
 
   const cancelViewChange = () => {
-    setShowExitWarning(false)
-    setPendingView("")
-  }
+    setShowExitWarning(false);
+    setPendingView("");
+    setCloseRequestedViaX(false); // don’t close if user cancelled
+  };
 
   const getInstanceComponent = (instanceFile: string) => {
     const map: Record<string, JSX.Element> = {
-      "instance-1": <Instance1 onUnsavedChanges={setHasUnsavedChanges} />,
-      "instance-2": <Instance2 onUnsavedChanges={setHasUnsavedChanges} />,
-      "instance-3": <Instance3 onUnsavedChanges={setHasUnsavedChanges} />,
-      "instance-4": <Instance4 onUnsavedChanges={setHasUnsavedChanges} />,
-      "instance-5": <Instance5 onUnsavedChanges={setHasUnsavedChanges} />,
-      "instance-6": <Instance6 onUnsavedChanges={setHasUnsavedChanges} />,
-      "instance-7": <Instance7 onUnsavedChanges={setHasUnsavedChanges} />,
+      "instance-1": (
+        <Instance1
+          onUnsavedChanges={setHasUnsavedChanges}
+          onNext={handleNextInstance}
+        />
+      ),
+      "instance-2": <Instance2 onUnsavedChanges={setHasUnsavedChanges} onNext={handleNextInstance} />,
+      "instance-3": <Instance3 onUnsavedChanges={setHasUnsavedChanges} onNext={handleNextInstance} />,
+      "instance-4": <Instance4 onUnsavedChanges={setHasUnsavedChanges} onNext={handleNextInstance} />,
+      "instance-5": <Instance5 onUnsavedChanges={setHasUnsavedChanges} onNext={handleNextInstance} />,
+      "instance-6": <Instance6 onUnsavedChanges={setHasUnsavedChanges} onNext={handleNextInstance} />,
+      "instance-7": <Instance7 onUnsavedChanges={setHasUnsavedChanges} onNext={handleNextInstance} />,
     }
     return map[instanceFile] ?? <Instance1 onUnsavedChanges={setHasUnsavedChanges} />
   }
+
+  const [tempInstanceTab, setTempInstanceTab] = useState<{ file: string; label: string } | null>(null);
+
+  const openTempInstanceTab = (file: string, label: string) => {
+    setTempInstanceTab({ file, label });
+    setCurrentInstanceLabel(label);
+    handleViewChange("instance", file);
+  };
+
+  const closeTempInstanceTab = () => {
+    setTempInstanceTab(null);
+    setCurrentView("modell");
+  };
+
+  const closePrimaryInstanceTab = () => {
+    // go back to Instanz Übersicht using your guarded navigation
+    handleViewChange("overview");
+  };
+
+  const handleNextInstance = () => {
+    const next = sequence[currentInstanceId]
+    if (!next) return
+    setCurrentInstanceId(next)
+    // keep the user in the "instance" view and the instance tab open
+    setCurrentView("instance")
+    // optional: update the visible label if you track labels per instance
+    // setCurrentInstanceLabel( ...lookup for `next`... )
+    setHasUnsavedChanges(false) // should already be false after save, but safe
+  }
+
+  const [isInstanceTabOpen, setIsInstanceTabOpen] = useState(false);
+  const [closeRequestedViaX, setCloseRequestedViaX] = useState(false);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -70,7 +125,8 @@ export default function ClassificationApp() {
       <nav className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between h-16">
-            <div className="flex items-center space-x-8">
+            <div className="sticky top-0 z-50 flex space-x-6 border-b bg-white">
+              {/* Instanzen Übersicht Menüpunkt */}
               <button
                 onClick={() => handleViewChange("overview")}
                 className={`flex items-center space-x-2 font-medium pb-4 ${
@@ -82,26 +138,39 @@ export default function ClassificationApp() {
                 <Home className="w-5 h-5" />
                 <span>Instanz Übersicht</span>
               </button>
-              <button
-                onClick={() => handleViewChange("instance")}
-                className={`flex items-center space-x-2 font-medium pb-4 ${
-                  currentView === "instance"
-                    ? "text-blue-600 border-b-2 border-blue-600"
-                    : "text-gray-600 hover:text-blue-600"
-                }`}
-              >
-                <span>Instanz #{currentInstanceLabel}</span>
-              </button>
-              <button
-                onClick={() => handleViewChange("modell")}
-                className={`flex items-center space-x-2 font-medium pb-4 ${
-                  currentView === "modell"
-                    ? "text-blue-600 border-b-2 border-blue-600"
-                    : "text-gray-600 hover:text-blue-600"
-                }`}
-              >
-                <span>Modell Übersicht</span>
-              </button>
+
+              {/* Instanz Nr Menüpunkt */}
+              {isInstanceTabOpen && (
+                <div className="flex items-center">
+                  <button
+                    onClick={() => handleViewChange("instance")}
+                    className={`flex items-center space-x-2 font-medium pb-4 ${
+                      currentView === "instance"
+                        ? "text-blue-600 border-b-2 border-blue-600"
+                        : "text-gray-600 hover:text-blue-600"
+                    }`}
+                    title={`Instanz #${currentInstanceLabel}`}
+                  >
+                    <span>Instanz #{currentInstanceLabel} Strafbestand überprüfen</span>
+                  </button>
+
+                  {/* The X */}
+                  <button
+                    aria-label="Instanz-Tab schließen"
+                    onClick={(e) => {
+                      e.stopPropagation();                 // IMPORTANT: don’t trigger the tab button
+                      setCloseRequestedViaX(true);         // remember user intent
+                      handleViewChange("overview");        // navigate back (will show modal if needed)
+                    }}
+                    className="ml-2 -mr-1 p-1 rounded hover:bg-gray-100 text-gray-500 hover:text-gray-700"
+                    title="Schließen"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
+
+              {/* FAQ Menüpunkt */}
               <button
                 onClick={() => handleViewChange("training-data")}
                 className={`flex items-center space-x-2 font-medium pb-4 ${
@@ -110,8 +179,48 @@ export default function ClassificationApp() {
                     : "text-gray-600 hover:text-blue-600"
                 }`}
               >
-                <span>Trainingsdaten und Kategorien Übersicht</span>
+                <span>FAQ zu Trainingsdaten und Kategorien</span>
               </button>
+
+              {/* Modell Übersicht Menüpunkt */}
+              <button
+                onClick={() => handleViewChange("modell")}
+                className={`flex items-center space-x-2 font-medium pb-4 ${
+                  currentView === "modell"
+                    ? "text-blue-600 border-b-2 border-blue-600"
+                    : "text-gray-600 hover:text-blue-600"
+                }`}
+              >
+                <span>Modell Performanz</span>
+              </button>
+              
+              {/* Evaluationsrunde Menüpunkt */}
+              {tempInstanceTab && (
+                <div className="flex items-center">
+                  <button
+                    onClick={() => handleViewChange("instance", tempInstanceTab.file)}
+                    className={`flex items-center space-x-2 font-medium pb-4 ${
+                      currentView === "instance" && currentInstanceId === tempInstanceTab.file
+                        ? "text-blue-600 border-b-2 border-blue-600"
+                        : "text-gray-600 hover:text-blue-600"
+                    }`}
+                    title={`Instanz #${tempInstanceTab.label}`}
+                  >
+                    <span>Instanz #{currentInstanceLabel} kein Strafbestand überprüfen</span>
+                  </button>
+                  <button
+                    aria-label="Instanz-Tab schließen"
+                    onClick={(e) => {
+                      e.stopPropagation(); // don't trigger the tab click
+                      closeTempInstanceTab();
+                    }}
+                    className="ml-2 -mr-1 p-1 rounded hover:bg-gray-100 text-gray-500 hover:text-gray-700"
+                    title="Schließen"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -140,12 +249,12 @@ export default function ClassificationApp() {
       {currentView === "overview" && (
         <OverviewView
           onInstanceSelect={(payload) => {
-            const [file, label] = payload.split("|")
-            handleViewChange("instance", file)
-            setCurrentInstanceLabel(label)
-            // if a view change gets blocked by the modal, remember the label too
-            setPendingInstanceLabel(label)
-          }}
+          const [file, label] = payload.split("|");
+          handleViewChange("instance", file);
+          setCurrentInstanceLabel(label);
+          setPendingInstanceLabel(label);
+          setIsInstanceTabOpen(true); // <-- show the tab
+        }}
         />
       )}
 
@@ -158,6 +267,7 @@ export default function ClassificationApp() {
             setCurrentInstanceLabel(label)
             setPendingInstanceLabel(label)
           }}
+          onOpenInstanceTab={(file, label) => openTempInstanceTab(file, label)}
         />
       )}
       {currentView === "training-data" && <TrainingDataOverview />}

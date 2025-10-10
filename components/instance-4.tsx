@@ -23,9 +23,10 @@ const categories = [
 
 interface Instance4Props {
   onUnsavedChanges: (hasChanges: boolean) => void
+  onNext?: () => void
 }
 
-export default function Instance4({ onUnsavedChanges }: Instance4Props) {
+export default function Instance4({ onUnsavedChanges, onNext }: Instance4Props) {
   const legalTab = (
     <div className="space-y-6 max-h-96 overflow-y-auto">
       <div>
@@ -138,6 +139,7 @@ export default function Instance4({ onUnsavedChanges }: Instance4Props) {
       instanceImageSrc="/instance-4-text.png"
       instanceImageAlt="Klassifizierter Text"
       limeImageSrc="/instance-4-lime.png"
+      confidencePercent="82"
       dateViews="09. Juni 2025, 8:59 · 1.142 Mal angezeigt"
       aiBadgeText="§241 Bedrohung"
       aiBadgeColorKey="§241 Bedrohung"
@@ -147,6 +149,7 @@ export default function Instance4({ onUnsavedChanges }: Instance4Props) {
       authorTab={authorTab}
       contentTab={contentTab}
       onUnsavedChanges={onUnsavedChanges}
+      onNext={onNext}
       highlightText="Ich werde dich finden und dir zeigen was passiert wenn man mich verärgert. Du wirst es bereuen!"
       maxHighlights={8}
       onHighlightChange={(indices, words) => {

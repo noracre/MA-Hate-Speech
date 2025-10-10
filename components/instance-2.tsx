@@ -22,9 +22,10 @@ const categories = [
 ]
 interface Instance2Props {
   onUnsavedChanges: (hasChanges: boolean) => void
+  onNext?: () => void
 }
 
-export default function Instance2({ onUnsavedChanges }: Instance2Props) {
+export default function Instance2({ onUnsavedChanges, onNext }: Instance2Props) {
   const legalTab = (
     <div className="space-y-6 max-h-96 overflow-y-auto">
       <div>
@@ -127,6 +128,7 @@ export default function Instance2({ onUnsavedChanges }: Instance2Props) {
       instanceId="7835"
       instanceTitle="Instanz #7835"
       instanceImageSrc="/instance-2-text.png"
+      confidencePercent="91"
       instanceImageAlt="Klassifizierter Text"
       limeImageSrc="/instance-2-lime.png"
       dateViews="09. Juni 2025, 9:55 · 20.142 Mal angezeigt"
@@ -148,6 +150,7 @@ export default function Instance2({ onUnsavedChanges }: Instance2Props) {
       authorTab={authorTab}
       contentTab={contentTab}
       onUnsavedChanges={onUnsavedChanges}
+      onNext={onNext}
       highlightText="Was für ein kleiner feiger besoffener Nazi Hurensohn. Hätte definitiv mit ihm gekämpft. Was für ein kranker dummer Mensch."
       maxHighlights={8}
       onHighlightChange={(indices, words) => {

@@ -46,6 +46,7 @@ const categories = [
 interface InstanceViewProps {
   instanceId?: string
   onUnsavedChanges: (hasChanges: boolean) => void
+  onNext?: () => void
 }
 
 interface Comment {
@@ -143,7 +144,7 @@ function HighlightableText({
   );
 }
 
-export default function InstanceView({ instanceId, onUnsavedChanges }: InstanceViewProps) {
+export default function InstanceView({ instanceId, onUnsavedChanges, onNext  }: InstanceViewProps) {
   const [selectFields, setSelectFields] = useState([{ id: 1, value: "" }])
   const [isSaved, setIsSaved] = useState(false)
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
@@ -450,74 +451,7 @@ export default function InstanceView({ instanceId, onUnsavedChanges }: InstanceV
 
   return (
     <div className="flex">
-      <div className="w-80 bg-white shadow-lg border-r border-gray-200 h-screen sticky top-0 overflow-y-auto">
-        <div className="p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-semibold text-gray-900">Navigation</h3>
-            <div className="flex items-center space-x-2">
-              <Button variant="ghost" size="sm" className="p-1">
-                <ChevronLeft className="w-4 h-4" />
-              </Button>
-              <Button variant="ghost" size="sm" className="p-1">
-                <ChevronRight className="w-4 h-4" />
-              </Button>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-              <h4 className="font-medium text-blue-900 mb-2">Aktuelle Navigation</h4>
-              <div className="space-y-2 text-sm text-blue-800">
-                <div className="flex items-center space-x-2">
-                  <Users className="w-4 h-4" />
-                  <span>Zugewiesene Posts</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Filter className="w-4 h-4" />
-                  <span>Gefiltert nach: § 140 StGB</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Calendar className="w-4 h-4" />
-                  <span>Sortiert nach: Datum (aufsteigend)</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="border-t pt-4">
-              <h4 className="font-medium text-gray-900 mb-3">Navigationsoptionen</h4>
-              <div className="space-y-2">
-                <Button variant="ghost" className="w-full justify-start text-sm">
-                  <Users className="w-4 h-4 mr-2" />
-                  Zugewiesene Posts (6)
-                </Button>
-                <Button variant="ghost" className="w-full justify-start text-sm">
-                  <Search className="w-4 h-4 mr-2" />
-                  Automatisch erkannte Posts (3)
-                </Button>
-                <Button variant="ghost" className="w-full justify-start text-sm">
-                  <Filter className="w-4 h-4 mr-2" />
-                  Gefilterte Posts
-                </Button>
-                <Button variant="ghost" className="w-full justify-start text-sm">
-                  <Calendar className="w-4 h-4 mr-2" />
-                  Nach Datum sortiert
-                </Button>
-              </div>
-            </div>
-
-            <div className="border-t pt-4">
-              <h4 className="font-medium text-gray-900 mb-3">Aktuelle Position</h4>
-              <div className="text-sm text-gray-600">
-                <p>Post 1 von 6 zugewiesenen Posts</p>
-                <p>Instanz #{instanceId}</p>
-                <p>Zugewiesen von: Kim Best</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="flex-1 max-w-4xl mx-auto p-6 space-y-6">
+      <div className="max-w-7xl mx-auto p-6 space-y-8">
         <Dialog open={showFeedbackModal} onOpenChange={setShowFeedbackModal}>
           <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
@@ -817,7 +751,7 @@ export default function InstanceView({ instanceId, onUnsavedChanges }: InstanceV
 
         {/* Classification Section */}
         <Card className="bg-white">
-          <CardContent className="p-6">
+          <CardContent className="p-6 relative pb-20">
             <div className="flex items-start space-x-4">
               <Avatar className="w-10 h-10 rounded-full">
                 <AvatarImage src="/icon-user.png" />
@@ -926,6 +860,15 @@ export default function InstanceView({ instanceId, onUnsavedChanges }: InstanceV
                       </Button>
                     )}
                   </div>
+                )}
+                {/* Nächste Instanz Button */}
+                {isSaved && onNext && (
+                  <Button
+                    onClick={onNext}
+                    className="bg-blue-600 hover:bg-blue-700 text-white absolute right-6 bottom-6"
+                  >
+                    Nächste Instanz
+                  </Button>
                 )}
               </div>
             </div>

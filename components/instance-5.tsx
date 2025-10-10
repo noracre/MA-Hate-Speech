@@ -22,9 +22,10 @@ const categories = [
 ]
 interface Instance5Props {
   onUnsavedChanges: (hasChanges: boolean) => void
+  onNext?: () => void
 }
 
-export default function Instance5({ onUnsavedChanges }: Instance5Props) {
+export default function Instance5({ onUnsavedChanges, onNext }: Instance5Props) {
   const legalTab = (
     <div className="space-y-6 max-h-96 overflow-y-auto">
       <div>
@@ -156,6 +157,7 @@ export default function Instance5({ onUnsavedChanges }: Instance5Props) {
       instanceImageSrc="/instance-5-text.png"
       instanceImageAlt="Klassifizierter Text"
       limeImageSrc="/instance-5-lime.png"
+      confidencePercent="70"
       dateViews="08. Juni 2025, 17:29 · 1.142 Mal angezeigt"
       aiBadgeText="§ 130 Volksverhetzung"
       aiBadgeColorKey="§130 Volksverhetzung"
@@ -182,6 +184,7 @@ export default function Instance5({ onUnsavedChanges }: Instance5Props) {
       authorTab={authorTab}
       contentTab={contentTab}
       onUnsavedChanges={onUnsavedChanges}
+      onNext={onNext}
       highlightText="Diese Politiker sind alle korrupt und sollten alle ins Gefängnis. Das System ist kaputt."
       maxHighlights={8}
       onHighlightChange={(indices, words) => {
