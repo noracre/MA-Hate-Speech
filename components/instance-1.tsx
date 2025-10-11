@@ -200,7 +200,7 @@ export default function InstanceView({ instanceId, onUnsavedChanges, onNext  }: 
 
     setTimeout(() => {
       setShowSuccessMessage(false)
-    }, 5000)
+    }, 10000)
   }
 
   const handleChangeDecision = () => {
@@ -451,7 +451,8 @@ export default function InstanceView({ instanceId, onUnsavedChanges, onNext  }: 
 
   return (
     <div className="flex">
-      <div className="max-w-7xl mx-auto p-6 space-y-8">
+      {/* --- main column --- */}
+      <div className="max-w-7xl mx-auto px-4 py-6 space-y-8">
         <Dialog open={showFeedbackModal} onOpenChange={setShowFeedbackModal}>
           <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
@@ -827,10 +828,20 @@ export default function InstanceView({ instanceId, onUnsavedChanges, onNext  }: 
 
                 {/* Success Messages */}
                 {showSuccessMessage && !feedbackSubmitted && (
-                  <div className="text-green-600 text-sm font-medium">Entscheidung wurde gespeichert</div>
+                    <div className="text-green-600 text-sm font-medium">
+                      Entscheidung wurde gespeichert.
+                      <div className="text-grey-700 text-xs font-normal">
+                        Normalerweise würde sich an dieser Stelle Ihr Arbeitsprozess anschließen.
+                      </div>
+                    </div>
                 )}
                 {feedbackSubmitted && (
-                  <div className="text-green-600 text-sm font-medium">Entscheidung wurde als Feedback genutzt</div>
+                  <div className="text-green-600 text-sm font-medium">
+                    Entscheidung wurde als Feedback genutzt.
+                    <div className="text-grey-700 text-xs font-normal">
+                        In der nächsten Trainingsphase wird sie genutzt, um das Modell zu verbessern.
+                    </div>
+                  </div>
                 )}
 
                 {/* Action Buttons */}

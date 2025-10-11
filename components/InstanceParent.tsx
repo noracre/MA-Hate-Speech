@@ -1,7 +1,7 @@
 // components/InstanceParent.tsx
 "use client"
 
-import { useMemo, useState, useRef } from "react"
+import { useMemo, useState, useRef, useEffect } from "react"
 import Image from "next/image"
 import {
   MessageCircle, User, Plus, Minus, ChevronLeft, ChevronRight, Info, Search, X, Filter, Calendar, Users,
@@ -174,6 +174,11 @@ export default function InstanceParent({
   const allFeedbackChecksComplete = feedbackChecks.classification && feedbackChecks.addressee && feedbackChecks.gap
 
   // ----- helpers -----
+  useEffect(() => {
+    onUnsavedChanges?.(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const addSelectField = () => {
     if (selectFields.length < 5) setSelectFields([...selectFields, { id: Date.now(), value: "" }])
   }
@@ -198,7 +203,7 @@ export default function InstanceParent({
     setShowSuccessMessage(true)
     setCanChangeDecision(true)
     onUnsavedChanges(false)
-    setTimeout(() => setShowSuccessMessage(false), 5000)
+    setTimeout(() => setShowSuccessMessage(false), 10000)
   }
 
   const handleChangeDecision = () => {
@@ -206,6 +211,8 @@ export default function InstanceParent({
     setCanChangeDecision(false)
     setFeedbackSubmitted(false)
     setShowSuccessMessage(false)
+    const hasValues = selectFields.some((f) => f.value !== "");
+    onUnsavedChanges?.(hasValues);
   }
 
   const handleUseFeedback = () => setShowFeedbackModal(true)
@@ -282,7 +289,7 @@ export default function InstanceParent({
   return (
     <div className="flex">
       {/* --- main column --- */}
-      <div className="flex-1 max-w-4xl mx-auto p-6 space-y-6">
+      <div className="max-w-7xl mx-auto px-4 py-6 space-y-8">
         {/* Feedback dialog (shared) */}
         <Dialog open={showFeedbackModal} onOpenChange={setShowFeedbackModal}>
           <DialogContent className="w-full max-w-[min(1100px,90vw)] max-h-[90vh] overflow-y-auto">
@@ -383,7 +390,7 @@ export default function InstanceParent({
         </Dialog>
 
         {/* Instance Card (per-instance content injected via props) */}
-        <Card className="bg-white">
+        <Card className="bg-white w-full">
           <CardContent className="p-6">
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-center space-x-4">
@@ -459,7 +466,7 @@ export default function InstanceParent({
         </Card>
 
         {/* Classification Section (shared) */}
-        <Card className="bg-white">
+        <Card className="bg-white w-full">
           <CardContent className="p-6 relative pb-20">
             <div className="flex items-start space-x-4">
               <Avatar className="w-10 h-10 rounded-full">
@@ -515,11 +522,22 @@ export default function InstanceParent({
                   })}
                 </div>
 
+                {/* Success Messages */}
                 {showSuccessMessage && !feedbackSubmitted && (
-                  <div className="text-green-600 text-sm font-medium">Entscheidung wurde gespeichert</div>
+                    <div className="text-green-600 text-sm font-medium">
+                      Entscheidung wurde gespeichert.
+                      <div className="text-grey-700 text-xs font-normal">
+                        Normalerweise würde sich an dieser Stelle Ihr Arbeitsprozess anschließen.
+                      </div>
+                    </div>
                 )}
                 {feedbackSubmitted && (
-                  <div className="text-green-600 text-sm font-medium">Entscheidung wurde als Feedback genutzt</div>
+                  <div className="text-green-600 text-sm font-medium">
+                    Entscheidung wurde als Feedback genutzt.
+                    <div className="text-grey-700 text-xs font-normal">
+                        In der nächsten Trainingsphase wird sie genutzt, um das Modell zu verbessern.
+                    </div>
+                  </div>
                 )}
 
                 {anyFieldHasValue && (

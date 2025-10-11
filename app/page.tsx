@@ -100,9 +100,15 @@ export default function ClassificationApp() {
     setCurrentView("modell");
   };
 
-  const closePrimaryInstanceTab = () => {
-    // go back to Instanz Übersicht using your guarded navigation
-    handleViewChange("overview");
+  const onCloseInstanceClick = () => {
+    if (hasUnsavedChanges) {
+      // keep your existing safety dialog flow
+      setPendingView("overview");        // or whatever target view you use
+      setShowExitWarning(true);
+    } else {
+      // nothing selected / no changes => close immediately, no dialog
+      setCurrentView("overview");
+    }
   };
 
   const handleNextInstance = () => {
@@ -157,11 +163,7 @@ export default function ClassificationApp() {
                   {/* The X */}
                   <button
                     aria-label="Instanz-Tab schließen"
-                    onClick={(e) => {
-                      e.stopPropagation();                 // IMPORTANT: don’t trigger the tab button
-                      setCloseRequestedViaX(true);         // remember user intent
-                      handleViewChange("overview");        // navigate back (will show modal if needed)
-                    }}
+                    onClick={onCloseInstanceClick}
                     className="ml-2 -mr-1 p-1 rounded hover:bg-gray-100 text-gray-500 hover:text-gray-700"
                     title="Schließen"
                   >
