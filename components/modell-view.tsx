@@ -116,7 +116,7 @@ interface OverviewViewProps {
 }
 
 const evaluatedInstances: OverviewInstance[] = [
-  {
+  /*{
     id: "7827",
     date: "08. Juni 2025, 16:06",
     content: "Menschen wie du sollten [...]",
@@ -125,7 +125,7 @@ const evaluatedInstances: OverviewInstance[] = [
     aiClassification: "Kein Strafbestand",
     humanClassification: undefined,
     instanceFile: "instance-6",
-  },
+  },*/
   {
     id: "7835",
     date: "11:55, 09. Juni 2025",

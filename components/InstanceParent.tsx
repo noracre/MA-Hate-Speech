@@ -289,9 +289,9 @@ export default function InstanceParent({
   }
 
   return (
-    <div className="flex">
+    <div className="w-full">
       {/* --- main column --- */}
-      <div className="max-w-7xl mx-auto px-4 py-6 space-y-8">
+      <div className="w-full min-w-0 max-w-7xl mx-auto px-4 py-6 space-y-8">
         {/* Feedback dialog (shared) */}
         <Dialog open={showFeedbackModal} onOpenChange={setShowFeedbackModal}>
           <DialogContent className="w-full max-w-[min(1100px,90vw)] max-h-[90vh] overflow-y-auto">
