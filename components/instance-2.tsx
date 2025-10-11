@@ -2,6 +2,7 @@
 import InstanceParent from "@/components/InstanceParent"
 import Image from "next/image"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { getCategoryColor } from "@/lib/category-colors"
 
 const categories = [
   "Kein Strafbestand",
@@ -29,8 +30,13 @@ export default function Instance2({ onUnsavedChanges, onNext }: Instance2Props) 
   const legalTab = (
     <div className="space-y-6 max-h-96 overflow-y-auto">
       <div>
-        <h3 className="font-semibold text-gray-900 mb-3">
-          Gesetzestext aus dem Strafgesetzbuch (StGB): § 140 StGB – Belohnung und Billigung von Straftaten
+        <h3 className="font-semibold text-gray-900 mb-3 flex flex-wrap items-center gap-2">
+          Gesetzestext aus dem Strafgesetzbuch (StGB):
+          <span
+            className={`px-2 py-1 rounded-full text-sm font-medium ${getCategoryColor("§140 Belohnung und Billigung von Straftaten")}`}
+          >
+            §140 Belohnung und Billigung von Straftaten
+          </span>
         </h3>
         <div className="text-gray-900 space-y-2">
           <p>

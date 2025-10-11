@@ -199,6 +199,8 @@ export default function InstanceParent({
   }
 
   const handleSave = () => {
+    const filtered = selectFields.filter(f => f.value.trim() !== "");
+    setSelectFields(filtered);
     setIsSaved(true)
     setShowSuccessMessage(true)
     setCanChangeDecision(true)
@@ -294,17 +296,20 @@ export default function InstanceParent({
         <Dialog open={showFeedbackModal} onOpenChange={setShowFeedbackModal}>
           <DialogContent className="w-full max-w-[min(1100px,90vw)] max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle className="text-left">Sie wollen die obenstehende Instanz als Beispiel für die Kategorie(n):</DialogTitle>
+              <DialogTitle className="text-left flex flex-wrap items-center gap-2">
+                Sie wollen die obenstehende Instanz dem Trainingsdatensatz zufügen; als Beispiel für diese Kategorie(n):
+                {getSelectedCategories().map((category, index) => (
+                  <span
+                    key={index}
+                    className={`px-2 py-1 rounded-full text-sm font-medium ${getCategoryColor(category)}`}
+                  >
+                    {category}
+                  </span>
+                ))}
+              </DialogTitle>
             </DialogHeader>
 
             <div className="space-y-6">
-              <div>
-                {getSelectedCategories().map((c, i) => (
-                  <div key={i} className="font-medium text-gray-900">{c}</div>
-                ))}
-                <p className="text-gray-700 mt-2">dem Trainingsdatensatz zufügen.</p>
-              </div>
-
               <div>
                 <h3 className="font-medium text-gray-900 mb-4">Bitte prüfen sie, ob die folgende Checkliste erfüllt ist.</h3>
                 <div className="space-y-3">

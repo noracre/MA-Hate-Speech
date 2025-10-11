@@ -193,6 +193,8 @@ export default function InstanceView({ instanceId, onUnsavedChanges, onNext  }: 
   const NO_OFFENSE = "Kein Strafbestand"
 
   const handleSave = () => {
+    const filtered = selectFields.filter(f => f.value.trim() !== "");
+    setSelectFields(filtered);
     setIsSaved(true)
     setShowSuccessMessage(true)
     setCanChangeDecision(true)
@@ -302,8 +304,13 @@ export default function InstanceView({ instanceId, onUnsavedChanges, onNext  }: 
         return (
           <div className="space-y-6 max-h-96 overflow-y-auto">
             <div>
-              <h3 className="font-semibold text-gray-900 mb-3">
-                Gesetzestext aus dem Strafgesetzbuch (StGB): § 140 StGB – Belohnung und Billigung von Straftaten
+              <h3 className="font-semibold text-gray-900 mb-3 flex flex-wrap items-center gap-2">
+                Gesetzestext aus dem Strafgesetzbuch (StGB):
+                <span
+                  className={`px-2 py-1 rounded-full text-sm font-medium ${getCategoryColor("§140 Belohnung und Billigung von Straftaten")}`}
+                >
+                  §140 Belohnung und Billigung von Straftaten
+                </span>
               </h3>
               <div className="text-gray-900 space-y-2">
                 <p>
@@ -456,21 +463,20 @@ export default function InstanceView({ instanceId, onUnsavedChanges, onNext  }: 
         <Dialog open={showFeedbackModal} onOpenChange={setShowFeedbackModal}>
           <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle className="text-left">
-                Sie wollen die obenstehende Instanz als Beispiel für die Kategorie(n):
+              <DialogTitle className="text-left flex flex-wrap items-center gap-2">
+                Sie wollen die obenstehende Instanz dem Trainingsdatensatz zufügen; als Beispiel für diese Kategorie(n):
+                {getSelectedCategories().map((category, index) => (
+                  <span
+                    key={index}
+                    className={`px-2 py-1 rounded-full text-sm font-medium ${getCategoryColor(category)}`}
+                  >
+                    {category}
+                  </span>
+                ))}
               </DialogTitle>
             </DialogHeader>
 
             <div className="space-y-6">
-              <div>
-                {getSelectedCategories().map((category, index) => (
-                  <div key={index} className="font-medium text-gray-900">
-                    {category}
-                  </div>
-                ))}
-                <p className="text-gray-700 mt-2">dem Trainingsdatensatz zufügen.</p>
-              </div>
-
               <div>
                 <h3 className="font-medium text-gray-900 mb-4">
                   Bitte prüfen sie, ob die folgende Checkliste erfüllt ist.

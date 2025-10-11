@@ -2,6 +2,7 @@
 import InstanceParent from "@/components/InstanceParent"
 import Image from "next/image"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { getCategoryColor } from "@/lib/category-colors"
 
 const categories = [
   "Kein Strafbestand",
@@ -29,8 +30,13 @@ export default function Instance6({ onUnsavedChanges, onNext }: Instance6Props) 
   const legalTab = (
     <div className="space-y-6 max-h-96 overflow-y-auto">
       <div>
-        <h3 className="font-semibold text-gray-900 mb-3">
-          Dieser Post wurde der Kategorie <span className="italic">"Kein Strafbestand"</span> zugeordnet.
+        <h3 className="font-semibold text-gray-900 mb-3 flex flex-wrap items-center gap-2">
+          Gesetzestext aus dem Strafgesetzbuch (StGB):
+          <span
+            className={`px-2 py-1 rounded-full text-sm font-medium ${getCategoryColor("Kein Strafbestand")}`}
+          >
+            Kein Strafbestand
+          </span>
         </h3>
         <div className="text-gray-900 space-y-2">
           <p> Alle Kategorie Definitionen finden Sie im FAQ.</p>
