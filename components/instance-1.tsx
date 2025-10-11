@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Textarea } from "@/components/ui/textarea"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
   MessageCircle,
@@ -461,7 +461,7 @@ export default function InstanceView({ instanceId, onUnsavedChanges, onNext  }: 
       {/* --- main column --- */}
       <div className="max-w-7xl mx-auto px-4 py-6 space-y-8">
         <Dialog open={showFeedbackModal} onOpenChange={setShowFeedbackModal}>
-          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="max-w-[900vw] max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle className="text-left flex flex-wrap items-center gap-2">
                 Sie wollen die obenstehende Instanz dem Trainingsdatensatz zufügen; als Beispiel für diese Kategorie(n):
@@ -479,7 +479,7 @@ export default function InstanceView({ instanceId, onUnsavedChanges, onNext  }: 
             <div className="space-y-6">
               <div>
                 <h3 className="font-medium text-gray-900 mb-4">
-                  Bitte prüfen sie, ob die folgende Checkliste erfüllt ist.
+                  Bitte haken Sie ab, ob die folgende Checkliste erfüllt ist.
                 </h3>
                 <div className="space-y-3">
                   <div className="flex items-start space-x-3">
@@ -602,6 +602,7 @@ export default function InstanceView({ instanceId, onUnsavedChanges, onNext  }: 
                 <Button
                   onClick={handleFeedbackSubmit}
                   disabled={!allFeedbackChecksComplete}
+                  title={!allFeedbackChecksComplete ? "Sie können das Feedback erst einreichen, wenn Sie die Checkliste oben abgearbeitet haben" : ""}
                   className="bg-blue-600 hover:bg-blue-700 text-white px-8 disabled:bg-gray-300 disabled:cursor-not-allowed"
                 >
                   Einreichen

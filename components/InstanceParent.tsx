@@ -311,7 +311,7 @@ export default function InstanceParent({
 
             <div className="space-y-6">
               <div>
-                <h3 className="font-medium text-gray-900 mb-4">Bitte prüfen sie, ob die folgende Checkliste erfüllt ist.</h3>
+                <h3 className="font-medium text-gray-900 mb-4">Bitte kaken Sie ab, ob die folgende Checkliste erfüllt ist.</h3>
                 <div className="space-y-3">
                   <div className="flex items-start space-x-3">
                     <Checkbox id="classification" checked={feedbackChecks.classification}
