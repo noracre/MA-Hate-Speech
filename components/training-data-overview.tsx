@@ -315,7 +315,7 @@ export default function TrainingDataOverview() {
 								{index === 3 && (
 									<div className="mt-4">
 										<Image
-											src="/histogram.png"
+											src="/histogram-colors.png"
 											alt="Histogram showing training data distribution"
 											width={600}
 											height={450}

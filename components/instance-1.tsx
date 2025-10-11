@@ -571,7 +571,7 @@ export default function InstanceView({ instanceId, onUnsavedChanges, onNext  }: 
 
               <div>
                 <Image
-                  src="/histogram.png"
+                  src="/histogram-colors.png"
                   alt="Anzahl Trainingsdatenpunkte pro Kategorie"
                   width={800}
                   height={400}
