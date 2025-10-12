@@ -34,7 +34,7 @@ const categories = [
   "§ 130 StGB – Volksverhetzung",
   "§ 131 StGB – Gewaltdarstellung",
   "§ 140 StGB – Belohnung und Billigung von Straftaten",
-  "§ 166 StGB – Beschimpfung von Bekenntnissen, Religionsgesellschaften und Weltanschauungsvereinigungen",
+  "§ 166 StGB – Beschimpfung von Bekenntnissen Religionsgesellschaften und Weltanschauungsvereinigungen",
   "§ 185 StGB – Beleidigung",
   "§ 186 StGB – Üble Nachrede",
   "§ 187 StGB – Verleumdung",

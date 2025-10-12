@@ -13,14 +13,15 @@ const categories = [
   "§ 130 StGB – Volksverhetzung",
   "§ 131 StGB – Gewaltdarstellung",
   "§ 140 StGB – Belohnung und Billigung von Straftaten",
-  "§ 166 StGB – Beschimpfung ...",
+  "§ 166 StGB – Beschimpfung von Bekenntnissen Religionsgesellschaften und Weltanschauungsvereinigungen",
   "§ 185 StGB – Beleidigung",
   "§ 186 StGB – Üble Nachrede",
   "§ 187 StGB – Verleumdung",
-  "§ 189 StGB – Verunglimpfung ...",
+  "§ 189 StGB – Verunglimpfung des Andenkens Verstorbener",
   "§ 240 StGB – Nötigung",
   "§ 241 StGB – Bedrohung",
 ]
+
 interface Instance7Props {
   onUnsavedChanges: (hasChanges: boolean) => void
   onNext?: () => void
