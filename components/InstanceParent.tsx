@@ -60,6 +60,12 @@ export type InstanceParentProps = {
   onNext?: () => void;
 
   onUnsavedChanges?: (hasChanges: boolean) => void
+  instanceMeta?: { instanceId: string; instanceFile: string }
+  onSaveHumanClassification?: (p: {
+    instanceId: string
+    instanceFile: string
+    selectedCategories: string[]
+  }) => void
 }
 
 const NO_OFFENSE = "Kein Strafbestand"
@@ -155,6 +161,8 @@ export default function InstanceParent({
   maxHighlights = 10,
   onNext,
   onHighlightChange,
+  instanceMeta,
+  onSaveHumanClassification,
 }: InstanceParentProps) {
   // ----- shared state -----
   const [selectFields, setSelectFields] = useState([{ id: 1, value: "" }])
@@ -201,6 +209,16 @@ export default function InstanceParent({
   const handleSave = () => {
     const filtered = selectFields.filter(f => f.value.trim() !== "");
     setSelectFields(filtered);
+
+    const selected = filtered.map(f => f.value);
+      if (onSaveHumanClassification && instanceMeta) {
+        onSaveHumanClassification({
+          instanceId: instanceMeta.instanceId,
+          instanceFile: instanceMeta.instanceFile,
+          selectedCategories: selected,
+        });
+      }
+
     setIsSaved(true)
     setShowSuccessMessage(true)
     setCanChangeDecision(true)

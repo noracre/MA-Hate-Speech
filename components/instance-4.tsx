@@ -25,9 +25,20 @@ const categories = [
 interface Instance4Props {
   onUnsavedChanges: (hasChanges: boolean) => void
   onNext?: () => void
+  instanceMeta: { instanceId: string; instanceFile: string }
+  onSaveHumanClassification: (p: {
+    instanceId: string
+    instanceFile: string
+    selectedCategories: string[]
+  }) => void
 }
 
-export default function Instance4({ onUnsavedChanges, onNext }: Instance4Props) {
+export default function Instance4({
+  onUnsavedChanges,
+  onNext,
+  instanceMeta,
+  onSaveHumanClassification,
+}: Instance4Props) {
   const legalTab = (
     <div className="space-y-6 max-h-96 overflow-y-auto">
       <div>
@@ -156,6 +167,8 @@ export default function Instance4({ onUnsavedChanges, onNext }: Instance4Props) 
       contentTab={contentTab}
       onUnsavedChanges={onUnsavedChanges}
       onNext={onNext}
+      instanceMeta={instanceMeta}
+      onSaveHumanClassification={onSaveHumanClassification}
       highlightText="Ich werde dich finden und dir zeigen was passiert wenn man mich verärgert. Du wirst es bereuen!"
       maxHighlights={8}
       onHighlightChange={(indices, words) => {

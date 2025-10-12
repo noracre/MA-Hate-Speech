@@ -110,45 +110,12 @@ interface OverviewInstance {
   instanceFile: string
 }
 
-interface OverviewViewProps {
-  onInstanceSelect?: (instanceId: string) => void;
+interface ModellViewProps {
+  instances: OverviewInstance[];
   onOpenInstanceTab?: (file: string, label: string) => void;
 }
 
-const evaluatedInstances: OverviewInstance[] = [
-  /*{
-    id: "7827",
-    date: "08. Juni 2025, 16:06",
-    content: "Menschen wie du sollten [...]",
-    author: "@mustermax",
-    colleagueCommented: false,
-    aiClassification: "Kein Strafbestand",
-    humanClassification: undefined,
-    instanceFile: "instance-6",
-  },*/
-  {
-    id: "7835",
-    date: "11:55, 09. Juni 2025",
-    content: "verschiedenen Arschlöchern zeigen [...]",
-    author: "Karl Lrak",
-    colleagueCommented: false,
-    aiClassification: "§ 86 StGB",
-    humanClassification: "§ 86 StGB",
-    instanceFile: "instance-8",
-  },
-  {
-    id: "7836",
-    date: "12:20, 09. Juni 2025",
-    content: "verherrlichen Gewaltstaaten [...]",
-    author: "Neo-Magazin-Royale",
-    colleagueCommented: true,
-    aiClassification: "§ 186 StGB",
-    humanClassification: "Kein Strafbestand",
-    instanceFile: "instance-9",
-  },
-]
-
-export default function ModellView({ onInstanceSelect, onOpenInstanceTab }: OverviewViewProps) {
+export default function ModellView({ instances, onOpenInstanceTab }: OverviewViewProps) {
   const [selectedLanguage, setSelectedLanguage] = useState("Alle")
   const [selectedCategory, setSelectedCategory] = useState("Alle")
   const [activeTab, setActiveTab] = useState<"live" | "test">("live")
@@ -190,10 +157,10 @@ export default function ModellView({ onInstanceSelect, onOpenInstanceTab }: Over
   }
 
   const filteredEvaluatedInstances = filterAndSortInstances(
-    evaluatedInstances,
+    instances,
     evaluatedFilterCategory,
-    evaluatedSortOrder,
-  )
+    evaluatedSortOrder as "asc" | "desc"
+  );
 
   const resetFilters = () => {
     setEvaluatedSortOrder("desc")

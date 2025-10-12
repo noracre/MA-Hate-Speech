@@ -24,9 +24,20 @@ const categories = [
 interface Instance6Props {
   onUnsavedChanges: (hasChanges: boolean) => void
   onNext?: () => void
+  instanceMeta: { instanceId: string; instanceFile: string }
+  onSaveHumanClassification: (p: {
+    instanceId: string
+    instanceFile: string
+    selectedCategories: string[]
+  }) => void
 }
 
-export default function Instance6({ onUnsavedChanges, onNext }: Instance6Props) {
+export default function Instance6({
+  onUnsavedChanges,
+  onNext,
+  instanceMeta,
+  onSaveHumanClassification,
+}: Instance6Props) {
   const legalTab = (
     <div className="space-y-6 max-h-96 overflow-y-auto">
       <div>
@@ -132,6 +143,8 @@ export default function Instance6({ onUnsavedChanges, onNext }: Instance6Props) 
       contentTab={contentTab}
       onUnsavedChanges={onUnsavedChanges}
       onNext={onNext}
+      instanceMeta={instanceMeta}
+      onSaveHumanClassification={onSaveHumanClassification}
       highlightText="Menschen wie du sollten in diesem land nicht leben dürfen. Ihr seid alle gleich und macht nur Probleme."
       maxHighlights={8}
       onHighlightChange={(indices, words) => {

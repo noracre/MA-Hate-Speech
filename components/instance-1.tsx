@@ -44,9 +44,11 @@ const categories = [
 ]
 
 interface InstanceViewProps {
-  instanceId?: string
-  onUnsavedChanges: (hasChanges: boolean) => void
-  onNext?: () => void
+  instanceId?: string; 
+  onUnsavedChanges: (hasChanges: boolean) => void;
+  onNext?: () => void;
+  instanceMeta: { instanceId: string; instanceFile: string };
+  onSaveHumanClassification: (p: { instanceId: string; instanceFile: string; selectedCategories: string[] }) => void;
 }
 
 interface Comment {
@@ -144,7 +146,13 @@ function HighlightableText({
   );
 }
 
-export default function InstanceView({ instanceId, onUnsavedChanges, onNext  }: InstanceViewProps) {
+export default function InstanceView({
+  instanceId,
+  onUnsavedChanges,
+  onNext,
+  instanceMeta,
+  onSaveHumanClassification,
+}: InstanceViewProps) {
   const [selectFields, setSelectFields] = useState([{ id: 1, value: "" }])
   const [isSaved, setIsSaved] = useState(false)
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
@@ -195,15 +203,22 @@ export default function InstanceView({ instanceId, onUnsavedChanges, onNext  }: 
   const handleSave = () => {
     const filtered = selectFields.filter(f => f.value.trim() !== "");
     setSelectFields(filtered);
-    setIsSaved(true)
-    setShowSuccessMessage(true)
-    setCanChangeDecision(true)
-    onUnsavedChanges(false)
+    const selected = filtered.map(f => f.value);
 
-    setTimeout(() => {
-      setShowSuccessMessage(false)
-    }, 10000)
-  }
+    if (onSaveHumanClassification && instanceMeta) {
+      onSaveHumanClassification({
+        instanceId: instanceMeta.instanceId,
+        instanceFile: instanceMeta.instanceFile,
+        selectedCategories: selected,
+      })
+    }
+
+    setIsSaved(true);
+    setShowSuccessMessage(true);
+    setCanChangeDecision(true);
+    onUnsavedChanges(false);
+    setTimeout(() => setShowSuccessMessage(false), 10000);
+  };
 
   const handleChangeDecision = () => {
     setIsSaved(false)
@@ -239,9 +254,8 @@ export default function InstanceView({ instanceId, onUnsavedChanges, onNext  }: 
     onUnsavedChanges(false)
   }
 
-  const getSelectedCategories = () => {
-    return selectFields.filter((field) => field.value !== "").map((field) => field.value)
-  }
+  const getSelectedCategories = () =>
+    selectFields.filter(f => f.value !== "").map(f => f.value);
 
   const isUnderrepresented = (category: string) => {
     // Categories 185 and 186 are NOT underrepresented

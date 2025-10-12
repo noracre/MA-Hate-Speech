@@ -24,9 +24,20 @@ const categories = [
 interface Instance7Props {
   onUnsavedChanges: (hasChanges: boolean) => void
   onNext?: () => void
+  instanceMeta: { instanceId: string; instanceFile: string }
+  onSaveHumanClassification: (p: {
+    instanceId: string
+    instanceFile: string
+    selectedCategories: string[]
+  }) => void
 }
 
-export default function Instance7({ onUnsavedChanges, onNext }: Instance7Props) {
+export default function Instance7({
+  onUnsavedChanges,
+  onNext,
+  instanceMeta,
+  onSaveHumanClassification,
+}: Instance7Props) {
   const legalTab = (
     <div className="space-y-6 max-h-96 overflow-y-auto">
       <div>
@@ -147,6 +158,8 @@ export default function Instance7({ onUnsavedChanges, onNext }: Instance7Props) 
       contentTab={contentTab}
       onUnsavedChanges={onUnsavedChanges}
       onNext={onNext}
+      instanceMeta={instanceMeta}
+      onSaveHumanClassification={onSaveHumanClassification}
       highlightText="Du dummer Nazi-Hurensohn! Ich werde dich finden und dir zeigen was passiert. Geh zurück in dein Land, du gehörst nicht hierher. Diese Politiker sind alle korrupt und sollten alle ins Gefängnis!"
       maxHighlights={8}
       onHighlightChange={(indices, words) => {

@@ -70,22 +70,83 @@ export default function ClassificationApp() {
   };
 
   const getInstanceComponent = (instanceFile: string) => {
+    const current = pendingInstances.find(p => p.instanceFile === currentInstanceId) 
+                ?? pendingInstances.find(p => p.instanceFile === instanceFile);
+    const instanceIdLabel = current?.id ?? currentInstanceLabel;
+
+    const common = {
+      onUnsavedChanges: setHasUnsavedChanges,
+      onNext: handleNextInstance,
+      instanceMeta: { instanceId: instanceIdLabel, instanceFile },
+      onSaveHumanClassification,
+    };
+
     const map: Record<string, JSX.Element> = {
       "instance-1": (
         <Instance1
           onUnsavedChanges={setHasUnsavedChanges}
           onNext={handleNextInstance}
+          instanceMeta={{ instanceId: currentInstanceLabel, instanceFile }}   
+          onSaveHumanClassification={onSaveHumanClassification}               
         />
       ),
-      "instance-2": <Instance2 onUnsavedChanges={setHasUnsavedChanges} onNext={handleNextInstance} />,
-      "instance-3": <Instance3 onUnsavedChanges={setHasUnsavedChanges} onNext={handleNextInstance} />,
-      "instance-4": <Instance4 onUnsavedChanges={setHasUnsavedChanges} onNext={handleNextInstance} />,
-      "instance-5": <Instance5 onUnsavedChanges={setHasUnsavedChanges} onNext={handleNextInstance} />,
-      "instance-6": <Instance6 onUnsavedChanges={setHasUnsavedChanges} onNext={handleNextInstance} />,
-      "instance-7": <Instance7 onUnsavedChanges={setHasUnsavedChanges} onNext={handleNextInstance} />,
-    }
-    return map[instanceFile] ?? <Instance1 onUnsavedChanges={setHasUnsavedChanges} />
-  }
+      "instance-2": (
+        <Instance2
+          onUnsavedChanges={setHasUnsavedChanges}
+          onNext={handleNextInstance}
+          instanceMeta={{ instanceId: currentInstanceLabel, instanceFile }}   
+          onSaveHumanClassification={onSaveHumanClassification}              
+        />
+      ),
+      "instance-3": (
+        <Instance3
+          onUnsavedChanges={setHasUnsavedChanges}
+          onNext={handleNextInstance}
+          instanceMeta={{ instanceId: currentInstanceLabel, instanceFile }}   
+          onSaveHumanClassification={onSaveHumanClassification}              
+        />
+      ),
+      "instance-4": (
+        <Instance4
+          onUnsavedChanges={setHasUnsavedChanges}
+          onNext={handleNextInstance}
+          instanceMeta={{ instanceId: currentInstanceLabel, instanceFile }}   
+          onSaveHumanClassification={onSaveHumanClassification}              
+        />
+      ),
+      "instance-5": (
+        <Instance5
+          onUnsavedChanges={setHasUnsavedChanges}
+          onNext={handleNextInstance}
+          instanceMeta={{ instanceId: currentInstanceLabel, instanceFile }}   
+          onSaveHumanClassification={onSaveHumanClassification}              
+        />
+      ), 
+      "instance-6": (
+        <Instance6
+          onUnsavedChanges={setHasUnsavedChanges}
+          onNext={handleNextInstance}
+          instanceMeta={{ instanceId: currentInstanceLabel, instanceFile }}   
+          onSaveHumanClassification={onSaveHumanClassification}              
+        />
+      ),
+      "instance-7": (
+        <Instance7
+          onUnsavedChanges={setHasUnsavedChanges}
+          onNext={handleNextInstance}
+          instanceMeta={{ instanceId: currentInstanceLabel, instanceFile }}   
+          onSaveHumanClassification={onSaveHumanClassification}              
+        />
+      ),           
+    };
+    return map[instanceFile] ?? (
+      <Instance1
+      onUnsavedChanges={setHasUnsavedChanges}
+      instanceMeta={{ instanceId: currentInstanceLabel, instanceFile }}
+      onSaveHumanClassification={onSaveHumanClassification}
+    />
+    )
+  };
 
   const [tempInstanceTab, setTempInstanceTab] = useState<{ file: string; label: string } | null>(null);
 
@@ -113,17 +174,145 @@ export default function ClassificationApp() {
 
   const handleNextInstance = () => {
     const next = sequence[currentInstanceId]
+    const nextRow = pendingInstances.find(p => p.instanceFile === next);
     if (!next) return
     setCurrentInstanceId(next)
-    // keep the user in the "instance" view and the instance tab open
+    if (nextRow?.id) setCurrentInstanceLabel(nextRow.id); 
+
     setCurrentView("instance")
-    // optional: update the visible label if you track labels per instance
-    // setCurrentInstanceLabel( ...lookup for `next`... )
-    setHasUnsavedChanges(false) // should already be false after save, but safe
+    setHasUnsavedChanges(false)
   }
 
   const [isInstanceTabOpen, setIsInstanceTabOpen] = useState(false);
   const [closeRequestedViaX, setCloseRequestedViaX] = useState(false);
+
+  type OverviewInstance = {
+    id: string;
+    date: string;
+    content: string;
+    author: string;
+    colleagueCommented: boolean;
+    aiClassification: string;
+    humanClassification?: string;   // comma-separated if multiple
+    instanceFile: string;
+  };
+
+  const [pendingInstances, setPendingInstances] = useState<OverviewInstance[]>([
+    {
+      id: "7835",
+      date: "09. Juni 2025, 9:55",
+      content: "Was für ein kleiner feiger [...]",
+      author: "@Beispieluser",
+      colleagueCommented: true,
+      aiClassification: "§ 140 StGB",
+      humanClassification: undefined,
+      instanceFile: "instance-2",
+    },
+    {
+      id: "7834",
+      date: "09. Juni 2025, 9:18",
+      content: "Du bist ein Wichser und [...]",
+      author: "@Badforyousteve",
+      colleagueCommented: false,
+      aiClassification: "§ 241 StGB",
+      humanClassification: undefined,
+      instanceFile: "instance-3",
+    },
+    {
+      id: "7832",
+      date: "09. Juni 2025, 8:59",
+      content: "Ich werde dich finden [...]",
+      author: "@Badforyousteve",
+      colleagueCommented: false,
+      aiClassification: "§ 241 StGB",
+      humanClassification: undefined,
+      instanceFile: "instance-4",
+    },
+    {
+      id: "7830",
+      date: "08. Juni 2025, 17:29",
+      content: "Diese Politiker sind alle [...]",
+      author: "@_Iamcate_",
+      colleagueCommented: true,
+      aiClassification: "§ 130 StGB",
+      humanClassification: undefined,
+      instanceFile: "instance-5",
+    },
+      {
+      id: "7826",
+      date: "08. Juni 2025, 15:30",
+      content: "Du dummer Nazi [...]",
+      author: "@classischeclaudia",
+      colleagueCommented: true,
+      aiClassification: "§ 111  StGB",
+      humanClassification: undefined,
+      instanceFile: "instance-7",
+    },
+      {
+      id: "7836",
+      date: "09. Juni 2025, 10:20",
+      content: "Kopf abhaken wurde [...]",
+      author: "@Beispielperson",
+      colleagueCommented: true,
+      aiClassification: "§ 140 StGB",
+      humanClassification: undefined,
+      instanceFile: "instance-1",
+    },
+  ]);
+
+  const [evaluatedInstances, setEvaluatedInstances] = useState<OverviewInstance[]>([
+    /*{
+      id: "7827",
+      date: "08. Juni 2025, 16:06",
+      content: "Menschen wie du sollten [...]",
+      author: "@mustermax",
+      colleagueCommented: false,
+      aiClassification: "Kein Strafbestand",
+      humanClassification: undefined,
+      instanceFile: "instance-6",
+    },
+    {
+      id: "7835",
+      date: "11:55, 09. Juni 2025",
+      content: "verschiedenen Arschlöchern zeigen [...]",
+      author: "Karl Lrak",
+      colleagueCommented: false,
+      aiClassification: "§ 86 StGB",
+      humanClassification: "§ 86 StGB",
+      instanceFile: "instance-8",
+    },
+    {
+      id: "7836",
+      date: "12:20, 09. Juni 2025",
+      content: "verherrlichen Gewaltstaaten [...]",
+      author: "Neo-Magazin-Royale",
+      colleagueCommented: true,
+      aiClassification: "§ 186 StGB",
+      humanClassification: "Kein Strafbestand",
+      instanceFile: "instance-9",
+    },*/
+  ]);
+
+  const onSaveHumanClassification = (payload: {
+    instanceId: string;              // e.g., "7836"
+    instanceFile: string;            // e.g., "instance-1"
+    selectedCategories: string[];    // up to 5
+  }) => {
+    const { instanceId, instanceFile, selectedCategories } = payload;
+    const saved = pendingInstances.find(p => p.id === instanceId && p.instanceFile === instanceFile);
+    if (!saved) return;
+
+    const humanClassification = selectedCategories.join(", ");
+
+    // remove from pending, add to evaluated (now with humanClassification)
+    setPendingInstances(prev =>
+      prev.filter(p => !(p.id === instanceId && p.instanceFile === instanceFile))
+    );
+    setEvaluatedInstances(prev => [
+      { ...saved, humanClassification },
+      ...prev,
+    ]);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -250,6 +439,7 @@ export default function ClassificationApp() {
       {/* Content */}
       {currentView === "overview" && (
         <OverviewView
+          instances={pendingInstances}
           onInstanceSelect={(payload) => {
           const [file, label] = payload.split("|");
           handleViewChange("instance", file);
@@ -262,7 +452,8 @@ export default function ClassificationApp() {
 
       {currentView === "instance" && getInstanceComponent(currentInstanceId)}
       {currentView === "modell" && (
-        <ModellView 
+        <ModellView
+          instances={evaluatedInstances} 
           onInstanceSelect={(payload) => {
             const [file, label] = payload.split("|")
             handleViewChange("instance", file)

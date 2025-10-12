@@ -25,9 +25,20 @@ const categories = [
 interface Instance3Props {
   onUnsavedChanges: (hasChanges: boolean) => void
   onNext?: () => void
+  instanceMeta: { instanceId: string; instanceFile: string }
+  onSaveHumanClassification: (p: {
+    instanceId: string
+    instanceFile: string
+    selectedCategories: string[]
+  }) => void
 }
 
-export default function Instance3({ onUnsavedChanges, onNext }: Instance3Props) {
+export default function Instance3({
+  onUnsavedChanges,
+  onNext,
+  instanceMeta,                
+  onSaveHumanClassification, 
+}: Instance3Props) {
   const legalTab = (
     <div className="space-y-6 max-h-96 overflow-y-auto">
       <div>
@@ -157,6 +168,8 @@ export default function Instance3({ onUnsavedChanges, onNext }: Instance3Props) 
       contentTab={contentTab}
       onUnsavedChanges={onUnsavedChanges}
       onNext={onNext}
+      instanceMeta={instanceMeta}
+      onSaveHumanClassification={onSaveHumanClassification}
       highlightText="Du bist ein Wichser und gehörst nicht hierher. Geh zurück in dein Land!"
       maxHighlights={8}
       onHighlightChange={(indices, words) => {

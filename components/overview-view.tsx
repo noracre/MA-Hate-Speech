@@ -18,71 +18,9 @@ interface OverviewInstance {
 }
 
 interface OverviewViewProps {
+  instances: OverviewInstance[];
   onInstanceSelect: (instanceId: string) => void
 }
-
-const pendingInstances: OverviewInstance[] = [
-  {
-    id: "7835",
-    date: "09. Juni 2025, 9:55",
-    content: "Was für ein kleiner feiger besoffener [...]",
-    author: "@Beispieluser",
-    colleagueCommented: true,
-    aiClassification: "§ 140 StGB",
-    humanClassification: undefined,
-    instanceFile: "instance-2",
-  },
-  {
-    id: "7834",
-    date: "09. Juni 2025, 9:18",
-    content: "Du bist ein Wichser und [...]",
-    author: "@Badforyousteve",
-    colleagueCommented: false,
-    aiClassification: "§ 241 StGB",
-    humanClassification: undefined,
-    instanceFile: "instance-3",
-  },
-  {
-    id: "7832",
-    date: "09. Juni 2025, 8:59",
-    content: "Ich werde dich finden [...]",
-    author: "@Badforyousteve",
-    colleagueCommented: false,
-    aiClassification: "§ 241 StGB",
-    humanClassification: undefined,
-    instanceFile: "instance-4",
-  },
-  {
-    id: "7830",
-    date: "08. Juni 2025, 17:29",
-    content: "Diese Politiker sind alle [...]",
-    author: "@_Iamcate_",
-    colleagueCommented: true,
-    aiClassification: "§ 130 StGB",
-    humanClassification: undefined,
-    instanceFile: "instance-5",
-  },
-    {
-    id: "7826",
-    date: "08. Juni 2025, 15:30",
-    content: "Du dummer Nazi [...]",
-    author: "@classischeclaudia",
-    colleagueCommented: true,
-    aiClassification: "§ 111  StGB",
-    humanClassification: undefined,
-    instanceFile: "instance-7",
-  },
-    {
-    id: "7836",
-    date: "09. Juni 2025, 10:20",
-    content: "Kopf abhaken wurde [...]",
-    author: "@Beispielperson",
-    colleagueCommented: true,
-    aiClassification: "§ 140 StGB",
-    humanClassification: undefined,
-    instanceFile: "instance-1",
-  },
-]
 
 const categories = [
   "§ 86 StGB",
@@ -103,34 +41,49 @@ const categories = [
   "Kein Strafbestand",
 ]
 
-export default function OverviewView({ onInstanceSelect }: OverviewViewProps) {
-  const [pendingSortOrder, setPendingSortOrder] = useState("desc")
-  const [pendingFilterCategory, setPendingFilterCategory] = useState("alle")
+export default function OverviewView({ instances, onInstanceSelect }: OverviewViewProps) {
+  const [pendingSortOrder, setPendingSortOrder] = useState("desc");
+  const [pendingFilterCategory, setPendingFilterCategory] = useState("alle");
 
-  const filterAndSortInstances = (instances: OverviewInstance[], filterCategory: string, sortOrder: string) => {
-    let filtered = instances
+ const filterAndSortInstances = (
+    instances: OverviewInstance[],
+    filterCategory: string,
+    sortOrder: "asc" | "desc"
+  ) => {
+    let filtered = instances;
 
     if (filterCategory !== "alle") {
       filtered = instances.filter((instance) => {
-        const aiMatch = instance.aiClassification.includes(filterCategory)
-        const humanMatch = instance.humanClassification?.includes(filterCategory)
-        return aiMatch || humanMatch
-      })
+        const aiMatch = instance.aiClassification?.includes(filterCategory);
+        const humanMatch = instance.humanClassification?.includes(filterCategory);
+        return aiMatch || humanMatch;
+      });
     }
 
-    return filtered.sort((a, b) => {
-      const dateA = new Date(a.date.replace(/(\d{2}):(\d{2}), (\d{2})\. (\w+) (\d{4})/, "$5-$4-$3 $1:$2"))
-      const dateB = new Date(b.date.replace(/(\d{2}):(\d{2}), (\d{2})\. (\w+) (\d{4})/, "$5-$4-$3 $1:$2"))
-      return sortOrder === "asc" ? dateA.getTime() - dateB.getTime() : dateB.getTime() - dateA.getTime()
-    })
-  }
+    // IMPORTANT: don't mutate props — sort a copy
+    return [...filtered].sort((a, b) => {
+      const dateA = new Date(
+        a.date.replace(/(\d{2}):(\d{2}), (\d{2})\. (\w+) (\d{4})/, "$5-$4-$3 $1:$2")
+      );
+      const dateB = new Date(
+        b.date.replace(/(\d{2}):(\d{2}), (\d{2})\. (\w+) (\d{4})/, "$5-$4-$3 $1:$2")
+      );
+      return sortOrder === "asc"
+        ? dateA.getTime() - dateB.getTime()
+        : dateB.getTime() - dateA.getTime();
+    });
+  };
+
+  const filteredPendingInstances = filterAndSortInstances(
+    instances,
+    pendingFilterCategory,
+    pendingSortOrder as "asc" | "desc"
+  );
 
   const resetFilters = () => {
     setPendingSortOrder("desc")
     setPendingFilterCategory("alle")
   }
-
-  const filteredPendingInstances = filterAndSortInstances(pendingInstances, pendingFilterCategory, pendingSortOrder)
 
   return (
     <div className="max-w-7xl mx-auto p-6 space-y-8">

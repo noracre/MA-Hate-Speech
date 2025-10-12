@@ -24,9 +24,20 @@ const categories = [
 interface Instance5Props {
   onUnsavedChanges: (hasChanges: boolean) => void
   onNext?: () => void
+  instanceMeta: { instanceId: string; instanceFile: string }
+  onSaveHumanClassification: (p: {
+    instanceId: string
+    instanceFile: string
+    selectedCategories: string[]
+  }) => void
 }
 
-export default function Instance5({ onUnsavedChanges, onNext }: Instance5Props) {
+export default function Instance5({
+  onUnsavedChanges,
+  onNext,
+  instanceMeta,
+  onSaveHumanClassification,
+}: Instance5Props) {
   const legalTab = (
     <div className="space-y-6 max-h-96 overflow-y-auto">
       <div>
@@ -191,6 +202,8 @@ export default function Instance5({ onUnsavedChanges, onNext }: Instance5Props) 
       contentTab={contentTab}
       onUnsavedChanges={onUnsavedChanges}
       onNext={onNext}
+      instanceMeta={instanceMeta}
+      onSaveHumanClassification={onSaveHumanClassification}
       highlightText="Diese Politiker sind alle korrupt und sollten alle ins Gefängnis. Das System ist kaputt."
       maxHighlights={8}
       onHighlightChange={(indices, words) => {

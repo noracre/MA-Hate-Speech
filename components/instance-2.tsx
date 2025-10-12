@@ -24,9 +24,20 @@ const categories = [
 interface Instance2Props {
   onUnsavedChanges: (hasChanges: boolean) => void
   onNext?: () => void
+  instanceMeta: { instanceId: string; instanceFile: string }
+  onSaveHumanClassification: (p: {
+    instanceId: string
+    instanceFile: string
+    selectedCategories: string[]
+  }) => void
 }
 
-export default function Instance2({ onUnsavedChanges, onNext }: Instance2Props) {
+export default function Instance2({
+  onUnsavedChanges,
+  onNext,
+  instanceMeta,
+  onSaveHumanClassification,
+}: Instance2Props) {
   const legalTab = (
     <div className="space-y-6 max-h-96 overflow-y-auto">
       <div>
@@ -157,6 +168,8 @@ export default function Instance2({ onUnsavedChanges, onNext }: Instance2Props) 
       contentTab={contentTab}
       onUnsavedChanges={onUnsavedChanges}
       onNext={onNext}
+      instanceMeta={instanceMeta}
+      onSaveHumanClassification={onSaveHumanClassification}
       highlightText="Was für ein kleiner feiger besoffener Nazi Hurensohn. Hätte definitiv mit ihm gekämpft. Was für ein kranker dummer Mensch."
       maxHighlights={8}
       onHighlightChange={(indices, words) => {
