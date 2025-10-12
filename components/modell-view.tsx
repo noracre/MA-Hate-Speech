@@ -451,6 +451,7 @@ export default function ModellView({ instances, onOpenInstanceTab }: ModellViewP
                       <tr
                         key={`${instance.id}-${index}`}
                         className="hover:bg-gray-50 cursor-pointer"
+                        onClick={() => onOpenInstanceTab?.(instance.instanceFile, instance.id)}
                       >
                         <td className="py-3 px-4 font-medium text-gray-900">#{instance.id}</td>
                         <td className="py-3 px-4 text-gray-700">{instance.date}</td>
