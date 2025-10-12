@@ -159,7 +159,7 @@ export default function ClassificationApp() {
     {
       id: "7835",
       date: "09. Juni 2025, 9:55",
-      content: "Was für ein kleiner feiger [...]",
+      content: "Was für ein kleiner [...]",
       author: "@Beispieluser",
       colleagueCommented: true,
       aiClassification: "§ 140 StGB",
@@ -169,7 +169,7 @@ export default function ClassificationApp() {
     {
       id: "7834",
       date: "09. Juni 2025, 9:18",
-      content: "Du bist ein Wichser und [...]",
+      content: "Du bist ein Wichser [...]",
       author: "@Badforyousteve",
       colleagueCommented: false,
       aiClassification: "§ 241 StGB",
@@ -189,7 +189,7 @@ export default function ClassificationApp() {
     {
       id: "7830",
       date: "08. Juni 2025, 17:29",
-      content: "Diese Politiker sind alle [...]",
+      content: "Diese Politiker sind [...]",
       author: "@_Iamcate_",
       colleagueCommented: true,
       aiClassification: "§ 130 StGB",
