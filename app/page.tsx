@@ -25,6 +25,7 @@ export default function ClassificationApp() {
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
   const [showExitWarning, setShowExitWarning] = useState(false)
   const [pendingView, setPendingView] = useState("")
+  const [reviewInstanceTab, setReviewInstanceTab] = useState<{ file: string; label: string } | null>(null);
 
   const sequence: Record<string, string | undefined> = {
     "instance-1": "instance-2",
@@ -371,8 +372,37 @@ export default function ClassificationApp() {
                   <button
                     aria-label="Instanz-Tab schließen"
                     onClick={(e) => {
-                      e.stopPropagation(); // don't trigger the tab click
+                      e.stopPropagation();
                       closeTempInstanceTab();
+                    }}
+                    className="ml-2 -mr-1 p-1 rounded hover:bg-gray-100 text-gray-500 hover:text-gray-700"
+                    title="Schließen"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
+
+              {/*"nochmal ansehen" Menüpunkt*/}
+              {reviewInstanceTab && (
+                <div className="flex items-center">
+                  <button
+                    onClick={() => handleViewChange("instance", reviewInstanceTab.file)}
+                    className={`flex items-center space-x-2 font-medium pb-4 ${
+                      currentView === "instance" && currentInstanceId === reviewInstanceTab.file
+                        ? "text-blue-600 border-b-2 border-blue-600"
+                        : "text-gray-600 hover:text-blue-600"
+                    }`}
+                    title={`Instanz #${reviewInstanceTab.label}`}
+                  >
+                    <span>Instanz #{currentInstanceLabel} nochmal ansehen</span>
+                  </button>
+                  <button
+                    aria-label="Instanz-Tab schließen"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setReviewInstanceTab(null);
+                      setCurrentView("modell");
                     }}
                     className="ml-2 -mr-1 p-1 rounded hover:bg-gray-100 text-gray-500 hover:text-gray-700"
                     title="Schließen"
@@ -423,11 +453,17 @@ export default function ClassificationApp() {
       {currentView === "modell" && (
         <ModellView
           instances={evaluatedInstances}
-          onOpenInstanceTab={(file, label) => {
+          onOpenInstanceTab={(file, label, type) => {
             handleViewChange("instance", file);
             setCurrentInstanceLabel(label);
-            setPendingInstanceLabel(label); // ok if you reuse this label state
-            openTempInstanceTab(file, label);
+            setPendingInstanceLabel(label);
+            if (type === "keinStrafbestand") {
+              openTempInstanceTab(file, label);
+              setReviewInstanceTab(null);
+            } else if (type === "nochmal") {
+              setReviewInstanceTab({ file, label });
+              setTempInstanceTab(null);
+            }
           }}
         />
       )}

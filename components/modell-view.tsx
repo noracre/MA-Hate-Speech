@@ -112,7 +112,7 @@ interface OverviewInstance {
 
 interface ModellViewProps {
   instances: OverviewInstance[];
-  onOpenInstanceTab?: (file: string, label: string) => void;
+  onOpenInstanceTab?: (file: string, label: string, type?: "keinStrafbestand" | "nochmal") => void;
 }
 
 export default function ModellView({ instances, onOpenInstanceTab }: ModellViewProps) {
@@ -321,7 +321,7 @@ export default function ModellView({ instances, onOpenInstanceTab }: ModellViewP
                 {/* Button now inside this card */}
                 <Button
                   className="mt-4 bg-blue-600 hover:bg-blue-700 text-white"
-                  onClick={() => onOpenInstanceTab?.("instance-6", "7827")}
+                  onClick={() => onOpenInstanceTab?.("instance-6", "7827", "keinStrafbestand")}
                 >
                   In Evaluationsrunde nach weiteren falschen Negativen suchen
                 </Button>
@@ -451,7 +451,7 @@ export default function ModellView({ instances, onOpenInstanceTab }: ModellViewP
                       <tr
                         key={`${instance.id}-${index}`}
                         className="hover:bg-gray-50 cursor-pointer"
-                        onClick={() => onOpenInstanceTab?.(instance.instanceFile, instance.id)}
+                        onClick={() => onOpenInstanceTab?.(instance.instanceFile, instance.id, "nochmal")}
                       >
                         <td className="py-3 px-4 font-medium text-gray-900">#{instance.id}</td>
                         <td className="py-3 px-4 text-gray-700">{instance.date}</td>
