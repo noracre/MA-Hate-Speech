@@ -470,11 +470,20 @@ export default function ModellView({ instances, onOpenInstanceTab }: OverviewVie
                         </td>
                         <td className="py-3 px-4">
                           {instance.humanClassification ? (
-                            <span
-                              className={`px-3 py-1 rounded-full text-sm font-medium ${getCategoryColor(instance.humanClassification)}`}
-                            >
-                              {instance.humanClassification}
-                            </span>
+                            <div className="flex flex-wrap gap-2">
+                              {instance.humanClassification
+                                .split(",")
+                                .map((c) => c.trim())
+                                .filter(Boolean)
+                                .map((c, i) => (
+                                  <span
+                                    key={`${c}-${i}`}
+                                    className={`px-3 py-1 rounded-full text-sm font-medium ${getCategoryColor(c)}`}
+                                  >
+                                    {c}
+                                  </span>
+                                ))}
+                            </div>
                           ) : (
                             <span className="text-gray-400">-</span>
                           )}
