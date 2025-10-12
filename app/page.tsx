@@ -422,14 +422,13 @@ export default function ClassificationApp() {
       {currentView === "instance" && getInstanceComponent(currentInstanceId)}
       {currentView === "modell" && (
         <ModellView
-          instances={evaluatedInstances} 
-          onInstanceSelect={(payload) => {
-            const [file, label] = payload.split("|")
-            handleViewChange("instance", file)
-            setCurrentInstanceLabel(label)
-            setPendingInstanceLabel(label)
+          instances={evaluatedInstances}
+          onOpenInstanceTab={(file, label) => {
+            handleViewChange("instance", file);
+            setCurrentInstanceLabel(label);
+            setPendingInstanceLabel(label); // ok if you reuse this label state
+            openTempInstanceTab(file, label);
           }}
-          onOpenInstanceTab={(file, label) => openTempInstanceTab(file, label)}
         />
       )}
       {currentView === "training-data" && <TrainingDataOverview />}

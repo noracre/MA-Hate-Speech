@@ -115,7 +115,7 @@ interface ModellViewProps {
   onOpenInstanceTab?: (file: string, label: string) => void;
 }
 
-export default function ModellView({ instances, onOpenInstanceTab }: OverviewViewProps) {
+export default function ModellView({ instances, onOpenInstanceTab }: ModellViewProps) {
   const [selectedLanguage, setSelectedLanguage] = useState("Alle")
   const [selectedCategory, setSelectedCategory] = useState("Alle")
   const [activeTab, setActiveTab] = useState<"live" | "test">("live")
