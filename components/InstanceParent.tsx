@@ -177,7 +177,9 @@ export default function InstanceParent({
   const [showFeedbackModal, setShowFeedbackModal] = useState(false)
   const [feedbackChecks, setFeedbackChecks] = useState({ classification: false, addressee: false, gap: false })
   const [comments, setComments] = useState<InstanceComment[]>(commentsSeed)
-
+  const ALL = categories; 
+  const getSelectedValues = () =>
+    selectFields.map(f => f.value).filter(Boolean);
   const isFrozen = isSaved || feedbackSubmitted
   const anyFieldHasValue = useMemo(() => selectFields.some((f) => f.value !== ""), [selectFields])
   const showPlusButton = !isSaved && !feedbackSubmitted
@@ -242,6 +244,13 @@ export default function InstanceParent({
     const hasValues = selectFields.some((f) => f.value !== "");
     onUnsavedChanges?.(hasValues);
   }
+
+  const getOptionsFor = (index: number) => {
+    const selected = new Set(getSelectedValues());
+    const current = selectFields[index]?.value;
+    if (current) selected.delete(current);
+    return ALL.filter(c => !selected.has(c));
+  };
 
   const handleUseFeedback = () => setShowFeedbackModal(true)
 
@@ -512,7 +521,12 @@ export default function InstanceParent({
 
                 <div className="space-y-3">
                   {selectFields.map((field, index) => {
-                    const options = index === 0 ? categories : categories.filter((c) => c !== NO_OFFENSE)
+                    const selectedValues = selectFields
+                      .filter((_, i) => i !== index)
+                      .map(f => f.value)
+                    const options = categories.filter(
+                      (c) => !selectedValues.includes(c) && (index === 0 || c !== NO_OFFENSE)
+                    )
                     return (
                       <div key={field.id} className="flex items-center space-x-2">
                         <div className="flex-1">

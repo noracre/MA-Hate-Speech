@@ -817,16 +817,24 @@ export default function InstanceView({
                             <SelectValue placeholder="Auswählen" />
                           </SelectTrigger>
                           <SelectContent>
-                            {(index === 0 ? categories : categories.filter((c) => c !== NO_OFFENSE)).map((category, idx) => {
-                                const categoryCode = category.match(/§\s*(\d+[a-z]?)/)?.[0] || category
-                                const colorClass = getCategoryColor(categoryCode)
-                                return (
-                                <SelectItem key={idx} value={category}>
-                                    <span className={`px-2 py-1 rounded text-sm ${colorClass}`}>{category}</span>
-                                </SelectItem>
-                                )
-                            })}
-                            </SelectContent>
+                            {(() => {
+                              // Exclude already selected categories in other fields
+                              const selectedValues = selectFields
+                                .filter((_, i) => i !== index)
+                                .map(f => f.value);
+                              return (index === 0 ? categories : categories.filter((c) => c !== NO_OFFENSE))
+                                .filter((category) => !selectedValues.includes(category))
+                                .map((category, idx) => {
+                                  const categoryCode = category.match(/§\s*(\d+[a-z]?)/)?.[0] || category;
+                                  const colorClass = getCategoryColor(categoryCode);
+                                  return (
+                                    <SelectItem key={idx} value={category}>
+                                      <span className={`px-2 py-1 rounded text-sm ${colorClass}`}>{category}</span>
+                                    </SelectItem>
+                                  );
+                                });
+                            })()}
+                          </SelectContent>
                         </Select>
                       </div>
                       
