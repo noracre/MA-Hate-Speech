@@ -30,6 +30,7 @@ interface Instance6Props {
     instanceFile: string
     selectedCategories: string[]
   }) => void
+  initialSelectedCategories?: string[]
 }
 
 export default function Instance6({
@@ -37,6 +38,7 @@ export default function Instance6({
   onNext,
   instanceMeta,
   onSaveHumanClassification,
+  initialSelectedCategories,
 }: Instance6Props) {
   const legalTab = (
     <div className="space-y-6 max-h-96 overflow-y-auto">
@@ -145,6 +147,7 @@ export default function Instance6({
       onNext={onNext}
       instanceMeta={instanceMeta}
       onSaveHumanClassification={onSaveHumanClassification}
+      initialSelectedCategories={initialSelectedCategories} 
       highlightText="Menschen wie du sollten in diesem land nicht leben dürfen. Ihr seid alle gleich und macht nur Probleme."
       maxHighlights={8}
       onHighlightChange={(indices, words) => {

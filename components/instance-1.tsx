@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent } from "@/components/ui/card"
@@ -48,7 +48,12 @@ interface InstanceViewProps {
   onUnsavedChanges: (hasChanges: boolean) => void;
   onNext?: () => void;
   instanceMeta: { instanceId: string; instanceFile: string };
-  onSaveHumanClassification: (p: { instanceId: string; instanceFile: string; selectedCategories: string[] }) => void;
+  onSaveHumanClassification: (p: {
+    instanceId: string
+    instanceFile: string
+    selectedCategories: string[]
+  }) => void
+  initialSelectedCategories?: string[]
 }
 
 interface Comment {
@@ -152,6 +157,7 @@ export default function InstanceView({
   onNext,
   instanceMeta,
   onSaveHumanClassification,
+  initialSelectedCategories,
 }: InstanceViewProps) {
   const [selectFields, setSelectFields] = useState([{ id: 1, value: "" }])
   const [isSaved, setIsSaved] = useState(false)
@@ -176,6 +182,16 @@ export default function InstanceView({
       avatar: "/icon-other-user.png",
     },
   ])
+
+  useEffect(() => {
+    if (initialSelectedCategories?.length) {
+      const hydrated = initialSelectedCategories.map((v, i) => ({ id: i + 1, value: v }));
+      setSelectFields(hydrated);
+      setIsSaved(true);
+      setCanChangeDecision(true);
+      onUnsavedChanges(false);
+    }
+  }, []);
 
   const addSelectField = () => {
     if (selectFields.length < 5) {

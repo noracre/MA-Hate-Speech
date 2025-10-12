@@ -30,6 +30,7 @@ interface Instance2Props {
     instanceFile: string
     selectedCategories: string[]
   }) => void
+  initialSelectedCategories?: string[]
 }
 
 export default function Instance2({
@@ -37,6 +38,7 @@ export default function Instance2({
   onNext,
   instanceMeta,
   onSaveHumanClassification,
+  initialSelectedCategories, 
 }: Instance2Props) {
   const legalTab = (
     <div className="space-y-6 max-h-96 overflow-y-auto">
@@ -170,6 +172,7 @@ export default function Instance2({
       onNext={onNext}
       instanceMeta={instanceMeta}
       onSaveHumanClassification={onSaveHumanClassification}
+      initialSelectedCategories={initialSelectedCategories}
       highlightText="Was für ein kleiner feiger besoffener Nazi Hurensohn. Hätte definitiv mit ihm gekämpft. Was für ein kranker dummer Mensch."
       maxHighlights={8}
       onHighlightChange={(indices, words) => {

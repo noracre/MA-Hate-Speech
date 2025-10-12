@@ -79,73 +79,19 @@ export default function ClassificationApp() {
       onNext: handleNextInstance,
       instanceMeta: { instanceId: instanceIdLabel, instanceFile },
       onSaveHumanClassification,
+      initialSelectedCategories: getInitialSelectedCategories(instanceFile, instanceIdLabel),
     };
 
     const map: Record<string, JSX.Element> = {
-      "instance-1": (
-        <Instance1
-          onUnsavedChanges={setHasUnsavedChanges}
-          onNext={handleNextInstance}
-          instanceMeta={{ instanceId: currentInstanceLabel, instanceFile }}   
-          onSaveHumanClassification={onSaveHumanClassification}               
-        />
-      ),
-      "instance-2": (
-        <Instance2
-          onUnsavedChanges={setHasUnsavedChanges}
-          onNext={handleNextInstance}
-          instanceMeta={{ instanceId: currentInstanceLabel, instanceFile }}   
-          onSaveHumanClassification={onSaveHumanClassification}              
-        />
-      ),
-      "instance-3": (
-        <Instance3
-          onUnsavedChanges={setHasUnsavedChanges}
-          onNext={handleNextInstance}
-          instanceMeta={{ instanceId: currentInstanceLabel, instanceFile }}   
-          onSaveHumanClassification={onSaveHumanClassification}              
-        />
-      ),
-      "instance-4": (
-        <Instance4
-          onUnsavedChanges={setHasUnsavedChanges}
-          onNext={handleNextInstance}
-          instanceMeta={{ instanceId: currentInstanceLabel, instanceFile }}   
-          onSaveHumanClassification={onSaveHumanClassification}              
-        />
-      ),
-      "instance-5": (
-        <Instance5
-          onUnsavedChanges={setHasUnsavedChanges}
-          onNext={handleNextInstance}
-          instanceMeta={{ instanceId: currentInstanceLabel, instanceFile }}   
-          onSaveHumanClassification={onSaveHumanClassification}              
-        />
-      ), 
-      "instance-6": (
-        <Instance6
-          onUnsavedChanges={setHasUnsavedChanges}
-          onNext={handleNextInstance}
-          instanceMeta={{ instanceId: currentInstanceLabel, instanceFile }}   
-          onSaveHumanClassification={onSaveHumanClassification}              
-        />
-      ),
-      "instance-7": (
-        <Instance7
-          onUnsavedChanges={setHasUnsavedChanges}
-          onNext={handleNextInstance}
-          instanceMeta={{ instanceId: currentInstanceLabel, instanceFile }}   
-          onSaveHumanClassification={onSaveHumanClassification}              
-        />
-      ),           
+      "instance-1": <Instance1 {...common} />,
+      "instance-2": <Instance2 {...common} />,
+      "instance-3": <Instance3 {...common} />,
+      "instance-4": <Instance4 {...common} />,
+      "instance-5": <Instance5 {...common} />,
+      "instance-6": <Instance6 {...common} />,
+      "instance-7": <Instance7 {...common} />,
     };
-    return map[instanceFile] ?? (
-      <Instance1
-      onUnsavedChanges={setHasUnsavedChanges}
-      instanceMeta={{ instanceId: currentInstanceLabel, instanceFile }}
-      onSaveHumanClassification={onSaveHumanClassification}
-    />
-    )
+    return map[instanceFile] ?? <Instance1 {...common} />;
   };
 
   const [tempInstanceTab, setTempInstanceTab] = useState<{ file: string; label: string } | null>(null);
@@ -182,6 +128,18 @@ export default function ClassificationApp() {
     setCurrentView("instance")
     setHasUnsavedChanges(false)
   }
+
+  const getInitialSelectedCategories = (instanceFile: string, instanceIdLabel: string) => {
+    const fromEvaluated = evaluatedInstances.find(
+      (p) => p.instanceFile === instanceFile && p.id === instanceIdLabel
+    )?.humanClassification;
+    const fromPending = pendingInstances.find(
+      (p) => p.instanceFile === instanceFile && p.id === instanceIdLabel
+    )?.humanClassification;
+
+    const src = fromEvaluated ?? fromPending;
+    return src ? src.split(", ").filter(Boolean) : [];
+  };
 
   const [isInstanceTabOpen, setIsInstanceTabOpen] = useState(false);
   const [closeRequestedViaX, setCloseRequestedViaX] = useState(false);
@@ -293,26 +251,37 @@ export default function ClassificationApp() {
     },*/
   ]);
 
-  const onSaveHumanClassification = (payload: {
-    instanceId: string;              // e.g., "7836"
-    instanceFile: string;            // e.g., "instance-1"
-    selectedCategories: string[];    // up to 5
+  const onSaveHumanClassification = ({
+    instanceId,
+    instanceFile,
+    selectedCategories,
+  }: {
+    instanceId: string;
+    instanceFile: string;
+    selectedCategories: string[];
   }) => {
-    const { instanceId, instanceFile, selectedCategories } = payload;
-    const saved = pendingInstances.find(p => p.id === instanceId && p.instanceFile === instanceFile);
-    if (!saved) return;
-
     const humanClassification = selectedCategories.join(", ");
 
-    // remove from pending, add to evaluated (now with humanClassification)
-    setPendingInstances(prev =>
-      prev.filter(p => !(p.id === instanceId && p.instanceFile === instanceFile))
+  // 1) If still pending → move to evaluated
+  const savedPending = pendingInstances.find(p => p.id === instanceId && p.instanceFile === instanceFile);
+  if (savedPending) {
+    setPendingInstances(prev => prev.filter(p => !(p.id === instanceId && p.instanceFile === instanceFile)));
+    setEvaluatedInstances(prev => [{ ...savedPending, humanClassification }, ...prev]);
+    return;
+  }
+
+  // 2) Else already in evaluated → update there
+  const savedEvaluated = evaluatedInstances.some(p => p.id === instanceId && p.instanceFile === instanceFile);
+  if (savedEvaluated) {
+    setEvaluatedInstances(prev =>
+      prev.map(p =>
+        p.id === instanceId && p.instanceFile === instanceFile
+          ? { ...p, humanClassification }
+          : p
+      )
     );
-    setEvaluatedInstances(prev => [
-      { ...saved, humanClassification },
-      ...prev,
-    ]);
-  };
+  }
+};
 
   return (
     <div className="min-h-screen bg-gray-50">

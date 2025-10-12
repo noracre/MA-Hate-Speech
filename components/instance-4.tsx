@@ -31,6 +31,7 @@ interface Instance4Props {
     instanceFile: string
     selectedCategories: string[]
   }) => void
+  initialSelectedCategories?: string[] 
 }
 
 export default function Instance4({
@@ -38,6 +39,7 @@ export default function Instance4({
   onNext,
   instanceMeta,
   onSaveHumanClassification,
+  initialSelectedCategories, 
 }: Instance4Props) {
   const legalTab = (
     <div className="space-y-6 max-h-96 overflow-y-auto">
@@ -169,6 +171,7 @@ export default function Instance4({
       onNext={onNext}
       instanceMeta={instanceMeta}
       onSaveHumanClassification={onSaveHumanClassification}
+      initialSelectedCategories={initialSelectedCategories} 
       highlightText="Ich werde dich finden und dir zeigen was passiert wenn man mich verärgert. Du wirst es bereuen!"
       maxHighlights={8}
       onHighlightChange={(indices, words) => {

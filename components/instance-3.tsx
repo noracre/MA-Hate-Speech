@@ -31,13 +31,15 @@ interface Instance3Props {
     instanceFile: string
     selectedCategories: string[]
   }) => void
+  initialSelectedCategories?: string[]
 }
 
 export default function Instance3({
   onUnsavedChanges,
   onNext,
   instanceMeta,                
-  onSaveHumanClassification, 
+  onSaveHumanClassification,
+  initialSelectedCategories,  
 }: Instance3Props) {
   const legalTab = (
     <div className="space-y-6 max-h-96 overflow-y-auto">
@@ -170,6 +172,7 @@ export default function Instance3({
       onNext={onNext}
       instanceMeta={instanceMeta}
       onSaveHumanClassification={onSaveHumanClassification}
+      initialSelectedCategories={initialSelectedCategories} 
       highlightText="Du bist ein Wichser und gehörst nicht hierher. Geh zurück in dein Land!"
       maxHighlights={8}
       onHighlightChange={(indices, words) => {

@@ -30,6 +30,7 @@ interface Instance5Props {
     instanceFile: string
     selectedCategories: string[]
   }) => void
+  initialSelectedCategories?: string[]
 }
 
 export default function Instance5({
@@ -37,6 +38,7 @@ export default function Instance5({
   onNext,
   instanceMeta,
   onSaveHumanClassification,
+  initialSelectedCategories, 
 }: Instance5Props) {
   const legalTab = (
     <div className="space-y-6 max-h-96 overflow-y-auto">
@@ -204,6 +206,7 @@ export default function Instance5({
       onNext={onNext}
       instanceMeta={instanceMeta}
       onSaveHumanClassification={onSaveHumanClassification}
+      initialSelectedCategories={initialSelectedCategories} 
       highlightText="Diese Politiker sind alle korrupt und sollten alle ins Gefängnis. Das System ist kaputt."
       maxHighlights={8}
       onHighlightChange={(indices, words) => {

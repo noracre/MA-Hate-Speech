@@ -60,6 +60,7 @@ export type InstanceParentProps = {
   onNext?: () => void;
 
   onUnsavedChanges?: (hasChanges: boolean) => void
+  initialSelectedCategories?: string[];
   instanceMeta?: { instanceId: string; instanceFile: string }
   onSaveHumanClassification?: (p: {
     instanceId: string
@@ -156,6 +157,7 @@ export default function InstanceParent({
   legalCount = 1,
   histogramSrc = "/histogram-colors.png",
   histogramAlt = "Anzahl Trainingsdatenpunkte pro Kategorie",
+  initialSelectedCategories = [],
   onUnsavedChanges = () => {},
   highlightText = "",
   maxHighlights = 10,
@@ -183,7 +185,13 @@ export default function InstanceParent({
 
   // ----- helpers -----
   useEffect(() => {
-    onUnsavedChanges?.(false);
+    if (initialSelectedCategories.length > 0) {
+      const hydrated = initialSelectedCategories.map((v, i) => ({ id: i + 1, value: v }));
+      setSelectFields(hydrated);
+      setIsSaved(true);                 // show frozen state
+      setCanChangeDecision(true);       // allow “Entscheidung ändern”
+      onUnsavedChanges(false);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
