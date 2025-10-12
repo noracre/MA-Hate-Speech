@@ -53,7 +53,7 @@ export default function ClassificationApp() {
 
     // If user clicked X and we’re actually leaving the instance, hide the tab now.
     if (closeRequestedViaX && pendingView === "overview") {
-      setIsInstanceTabOpen(false);
+      setIsInstanceTabOpen(false); // <-- close the tab
     }
     setCloseRequestedViaX(false);
 
@@ -109,11 +109,11 @@ export default function ClassificationApp() {
 
   const onCloseInstanceClick = () => {
     if (hasUnsavedChanges) {
-      // keep your existing safety dialog flow
-      setPendingView("overview");        // or whatever target view you use
+      setPendingView("overview");
       setShowExitWarning(true);
+      setCloseRequestedViaX(true); // <-- set this!
     } else {
-      // nothing selected / no changes => close immediately, no dialog
+      setIsInstanceTabOpen(false); // <-- close tab immediately
       setCurrentView("overview");
     }
   };
