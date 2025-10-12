@@ -200,7 +200,7 @@ export default function ModellView({ instances, onOpenInstanceTab }: ModellViewP
           {/* Info on Top */}
           <div className="text-sm text-gray-600 mb-4">
             Ihr Team hat bisher <strong>7829</strong> Instanzen kategorisiert. Sie haben davon{" "}
-            <strong>1652</strong> Instanzen kategorisiert.
+            <strong>{filteredEvaluatedInstances.length}</strong> Instanzen kategorisiert.
           </div>
 
           {/* Charts Row */}
