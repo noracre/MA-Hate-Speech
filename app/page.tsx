@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import ModellView from "@/components/modell-view"
 import OverviewView from "@/components/overview-view"
 import { Button } from "@/components/ui/button"
@@ -26,6 +26,8 @@ export default function ClassificationApp() {
   const [showExitWarning, setShowExitWarning] = useState(false)
   const [pendingView, setPendingView] = useState("")
   const [reviewInstanceTab, setReviewInstanceTab] = useState<{ file: string; label: string } | null>(null);
+  const [orderMode, setOrderMode] = useState<"date-desc" | "date-asc" | "id-desc" | "id-asc" | "custom">("date-desc");
+  const [customOrder, setCustomOrder] = useState<string[]>([]); // array of instanceFile strings for manual order
 
   const sequence: Record<string, string | undefined> = {
     "instance-1": "instance-2",
@@ -36,7 +38,36 @@ export default function ClassificationApp() {
     "instance-7": "instance-1",
     // others can stay undefined (no next)
   }
-  
+
+  // helper: parse date strings used in Overview
+  const parseDateString = (d: string) => {
+    // matches your overview regex format "HH:MM, DD. Monat YYYY" or "DD. Monat YYYY, HH:MM"
+    const m1 = d.replace(/(\d{2}):(\d{2}), (\d{2})\. (\w+) (\d{4})/, "$5-$4-$3 $1:$2");
+    return new Date(m1);
+  };
+
+  const getOrderedInstances = (list: OverviewInstance[]) => {
+    if (orderMode === "custom" && customOrder.length > 0) {
+      // place items by customOrder, fall back to remaining items appended
+      const map = new Map(list.map(i => [i.instanceFile, i]));
+      const ordered = customOrder.map(f => map.get(f)).filter(Boolean) as OverviewInstance[];
+      const remaining = list.filter(i => !customOrder.includes(i.instanceFile));
+      return [...ordered, ...remaining];
+    }
+    const copy = [...list];
+    switch (orderMode) {
+      case "date-asc":
+        return copy.sort((a, b) => parseDateString(a.date).getTime() - parseDateString(b.date).getTime());
+      case "date-desc":
+        return copy.sort((a, b) => parseDateString(b.date).getTime() - parseDateString(a.date).getTime());
+      case "id-asc":
+        return copy.sort((a, b) => Number(a.id) - Number(b.id));
+      case "id-desc":
+      default:
+        return copy.sort((a, b) => Number(b.id) - Number(a.id));
+    }
+  };
+
   const handleViewChange = (newView: string, instanceId?: string) => {
     if (hasUnsavedChanges && newView !== currentView) {
       setPendingView(newView)
@@ -120,12 +151,15 @@ export default function ClassificationApp() {
   };
 
   const handleNextInstance = () => {
-    const next = sequence[currentInstanceId]
-    const nextRow = pendingInstances.find(p => p.instanceFile === next);
-    if (!next) return
+    setCurrentView("instance")
+    // traverse using the ordered list
+    const order = orderedPendingInstances.map(p => p.instanceFile)
+    const idx = order.indexOf(currentInstanceId)
+    if (idx === -1) return
+    const next = order[(idx + 1) % order.length] // wrap-around
+    const nextRow = orderedPendingInstances.find(p => p.instanceFile === next)
     setCurrentInstanceId(next)
-    if (nextRow?.id) setCurrentInstanceLabel(nextRow.id); 
-
+    if (nextRow?.id) setCurrentInstanceLabel(nextRow.id)
     setCurrentView("instance")
     setHasUnsavedChanges(false)
   }
@@ -158,8 +192,18 @@ export default function ClassificationApp() {
 
   const [pendingInstances, setPendingInstances] = useState<OverviewInstance[]>([
     {
+      id: "7836",
+      date: "09. Juni 2025, 10:20",
+      content: "Kopf abhaken wurde [...]",
+      author: "@Beispielperson",
+      colleagueCommented: true,
+      aiClassification: "§ 140 StGB",
+      humanClassification: undefined,
+      instanceFile: "instance-1",
+    },
+    {
       id: "7835",
-      date: "09. Juni 2025, 9:55",
+      date: "08. Juni 2025, 15:30",
       content: "Was für ein kleiner [...]",
       author: "@Beispieluser",
       colleagueCommented: true,
@@ -168,8 +212,18 @@ export default function ClassificationApp() {
       instanceFile: "instance-2",
     },
     {
-      id: "7832",
+      id: "7834",
       date: "09. Juni 2025, 8:59",
+      content: "Du bist ein Wichser [...]",
+      author: "@Badforyousteve",
+      colleagueCommented: false,
+      aiClassification: "§ 241 StGB",
+      humanClassification: undefined,
+      instanceFile: "instance-3",
+    },
+    {
+      id: "7832",
+      date: "09. Juni 2025, 9:18",
       content: "Ich werde dich finden [...]",
       author: "@Badforyousteve",
       colleagueCommented: false,
@@ -189,33 +243,13 @@ export default function ClassificationApp() {
     },
       {
       id: "7826",
-      date: "08. Juni 2025, 15:30",
+      date: "09. Juni 2025, 9:55",
       content: "Du dummer Nazi [...]",
       author: "@classischeclaudia",
       colleagueCommented: true,
       aiClassification: "§ 111  StGB",
       humanClassification: undefined,
       instanceFile: "instance-7",
-    },
-      {
-      id: "7836",
-      date: "09. Juni 2025, 10:20",
-      content: "Kopf abhaken wurde [...]",
-      author: "@Beispielperson",
-      colleagueCommented: true,
-      aiClassification: "§ 140 StGB",
-      humanClassification: undefined,
-      instanceFile: "instance-1",
-    },
-    {
-      id: "7834",
-      date: "09. Juni 2025, 9:18",
-      content: "Du bist ein Wichser [...]",
-      author: "@Badforyousteve",
-      colleagueCommented: false,
-      aiClassification: "§ 241 StGB",
-      humanClassification: undefined,
-      instanceFile: "instance-3",
     },
   ]);
 
@@ -251,6 +285,9 @@ export default function ClassificationApp() {
       instanceFile: "instance-9",
     },*/
   ]);
+
+    // memoize ordered list so overview and next traversal use identical ordering
+  const orderedPendingInstances = useMemo(() => getOrderedInstances(pendingInstances), [pendingInstances, orderMode, customOrder]);
 
   const onSaveHumanClassification = ({
     instanceId,
@@ -352,7 +389,7 @@ export default function ClassificationApp() {
                     : "text-gray-600 hover:text-blue-600"
                 }`}
               >
-                <span>Modell Performanz</span>
+                <span>Modell Performance</span>
               </button>
               
               {/* Evaluationsrunde Menüpunkt */}
@@ -438,14 +475,14 @@ export default function ClassificationApp() {
       {/* Content */}
       {currentView === "overview" && (
         <OverviewView
-          instances={pendingInstances}
+          instances={orderedPendingInstances} // pass ordered list
           onInstanceSelect={(payload) => {
-          const [file, label] = payload.split("|");
-          handleViewChange("instance", file);
-          setCurrentInstanceLabel(label);
-          setPendingInstanceLabel(label);
-          setIsInstanceTabOpen(true); // <-- show the tab
-        }}
+            const [file, label] = payload.split("|");
+            handleViewChange("instance", file);
+            setCurrentInstanceLabel(label);
+            setPendingInstanceLabel(label);
+            setIsInstanceTabOpen(true); // <-- show the tab
+          }}
         />
       )}
 
