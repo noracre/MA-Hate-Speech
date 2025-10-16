@@ -141,7 +141,7 @@ export default function Instance7({
       instanceImageSrc="/instance-7-text.png"
       instanceImageAlt="Klassifizierter Text"
       limeImageSrc="/instance-7-lime.png"
-      confidencePercent="50"
+      confidencePercent="87"
       dateViews="08. Juni 2025, 15:30 · 786 Mal angezeigt"
       aiBadgeText="§ 111 Öffentliche Aufforderung zu Straftaten"
       aiBadgeColorKey="§ 111 Öffentliche Aufforderung zu Straftaten"

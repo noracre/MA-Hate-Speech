@@ -410,11 +410,18 @@ export default function InstanceView({
               <div className="flex-1">
                 <p className="text-gray-900 mb-3">
                   "Die IP-Adresse von Beispielperson @Beispielperson ist in <strong>Aschaffenburg, Bayern</strong>. 
-                  Es wurde 1 andere Instanz gefunden, die als <strong>§ 185 StGB – Beleidigung</strong> kategorisiert wurde. Hier ist die
-                  Instanz:"
+                  Die KI hat <strong>1</strong> andere Instanz von diesem/ dieser Verfasser*in gefunden:
                 </p>
                 <div className="text-gray-900 mb-3">
-                  Du bist so ein <span className="bg-blue-300 px-1">Dummer Mensch!!</span>
+                  Du musst <span className="bg-red-300 px-1">erschossen</span> werden!! <span className="bg-red-300 px-1">Kopfschuss</span> von hinten.
+                </div>
+                <div className="text-gray-900 mb-3"> Von KI mit 97% Sicherheit als{" "}
+                  <span
+                    className={`px-2 py-1 rounded-full text-sm font-medium ${getCategoryColor("§140 Belohnung und Billigung von Straftaten")}`}
+                  >
+                    §140 Belohnung und Billigung von Straftaten
+                  </span>{" "}
+                  eingestuft."
                 </div>
               </div>
             </div>
@@ -687,7 +694,7 @@ export default function InstanceView({
               </div>
               <div className="flex-1">
                 <p className="text-gray-900">
-                  Von KI mit 97% Sicherheit als{" "}
+                  Von KI mit 85% Sicherheit als{" "}
                   <span
                     className={`px-2 py-1 rounded-full text-sm font-medium ${getCategoryColor("§140 Belohnung und Billigung von Straftaten")}`}
                   >

@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts"
-import { ChevronUp, ChevronDown, MessageCircle, RotateCcw } from "lucide-react"
+import { ChevronUp, ChevronDown, MessageCircle, RotateCcw, Info } from "lucide-react"
 import { getCategoryColor } from "@/lib/category-colors"
 
 // Data
@@ -208,11 +208,13 @@ export default function ModellView({ instances, onOpenInstanceTab }: ModellViewP
             {/* --- Accuracy Card --- */}
             <Card>
               <CardHeader>
-                <CardTitle
-                  className="text-lg font-semibold"
-                  title="Dieses Kreisdiagramm zeigt, wie viele Instanzen insgesamt der richtigen Kategorie zugeordnet wurden."
-                >
-                  Genauigkeit
+                <CardTitle className="text-lg font-semibold">
+                  <span className="inline-flex items-center">
+                    Genauigkeit
+                    <span title="Dieses Kreisdiagramm zeigt, wie viele Instanzen insgesamt der richtigen Kategorie zugeordnet wurden." className="ml-2 text-gray-400 hover:text-gray-600">
+                      <Info className="w-4 h-4 inline" />
+                    </span>
+                  </span>
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -292,11 +294,13 @@ export default function ModellView({ instances, onOpenInstanceTab }: ModellViewP
             {/* --- False Negatives Card --- */}
             <Card>
               <CardHeader>
-                <CardTitle
-                  className="text-lg font-semibold"
-                  title="Dieses Kreisdiagramm zeigt, wie viele Instanzen bei der letzten Evaluationsrunde gefunden wurden, die fälschlicherweise keiner Kategorie zugeordnet wurden."
-                >
-                  Falsche Negative
+                <CardTitle className="text-lg font-semibold">
+                  <span className="inline-flex items-center">
+                    Falsche Negative
+                    <span title="Dieses Kreisdiagramm zeigt, wie viele Instanzen bei der letzten Evaluationsrunde gefunden wurden, die fälschlicherweise keiner Kategorie zugeordnet wurden." className="ml-2 text-gray-400 hover:text-gray-600">
+                      <Info className="w-4 h-4 inline" />
+                    </span>
+                  </span>
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -332,11 +336,13 @@ export default function ModellView({ instances, onOpenInstanceTab }: ModellViewP
           {/* Confusion Matrix */}
           <Card>
             <CardHeader>
-              <CardTitle
-                className="text-lg font-semibold"
-                title="Diese Konfusionsmatrix zeigt, wie Instanzen seit de Einführung zugeordnet wurden. Die Zeilen entsprechen der Zuordnung durch Menschen, die Spalten der Zuordnung durch das KI-Modell. Grüne Zellen auf der diagonalen wurden richtig zugeordnet, andere Zellen wurden falsch zugeordnet. "
-              >
-                Zuordnungen
+              <CardTitle className="text-lg font-semibold">
+                <span className="inline-flex items-center">
+                  Zuordnungen
+                  <span title="Diese Konfusionsmatrix zeigt, wie Instanzen seit de Einführung zugeordnet wurden. Die Zeilen entsprechen der Zuordnung durch Menschen, die Spalten der Zuordnung durch das KI-Modell. Grüne Zellen auf der diagonalen wurden richtig zugeordnet, andere Zellen wurden falsch zugeordnet." className="ml-2 text-gray-400 hover:text-gray-600">
+                    <Info className="w-4 h-4 inline" />
+                  </span>
+                </span>
               </CardTitle>
             </CardHeader>
             <CardContent>

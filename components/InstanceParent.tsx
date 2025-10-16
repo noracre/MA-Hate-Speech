@@ -438,7 +438,14 @@ export default function InstanceParent({
               </div>
             </div>
             <div className="bg-white p-3 rounded border">
-              <Image src={instanceImageSrc} alt={instanceImageAlt} width={756} height={110} className="w-full h-auto" priority />
+              <Image
+                              src={instanceImageSrc}
+                              alt={instanceImageAlt}
+                              width={756}
+                              height={110}
+                              className="max-w-[95%] h-auto"
+                              priority
+                            />
             </div>
             <div className="text-sm text-gray-500 mb-4">{dateViews}</div>
             {/* AI Classification Result (shared shell, per-instance badge) */}
@@ -466,6 +473,7 @@ export default function InstanceParent({
                 priority
               />
             </div>
+            <p className="text-gray-900">  </p>
 
             <div className="flex items-center justify-between mt-6 border-b border-gray-200">
               <div className="flex items-center space-x-8">

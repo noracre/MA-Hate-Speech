@@ -134,7 +134,7 @@ export default function Instance6({
       instanceImageSrc="/instance-6-text.png"
       instanceImageAlt="Klassifizierter Text"
       limeImageSrc="/instance-6-lime.png"
-      confidencePercent="90"
+      confidencePercent="71"
       dateViews="08. Juni 2025, 16:06 · 142 Mal angezeigt"
       aiBadgeText="Kein Strafbestand"
       aiBadgeColorKey="Kein Strafbestand"

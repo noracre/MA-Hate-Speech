@@ -168,16 +168,6 @@ export default function ClassificationApp() {
       instanceFile: "instance-2",
     },
     {
-      id: "7834",
-      date: "09. Juni 2025, 9:18",
-      content: "Du bist ein Wichser [...]",
-      author: "@Badforyousteve",
-      colleagueCommented: false,
-      aiClassification: "§ 241 StGB",
-      humanClassification: undefined,
-      instanceFile: "instance-3",
-    },
-    {
       id: "7832",
       date: "09. Juni 2025, 8:59",
       content: "Ich werde dich finden [...]",
@@ -216,6 +206,16 @@ export default function ClassificationApp() {
       aiClassification: "§ 140 StGB",
       humanClassification: undefined,
       instanceFile: "instance-1",
+    },
+    {
+      id: "7834",
+      date: "09. Juni 2025, 9:18",
+      content: "Du bist ein Wichser [...]",
+      author: "@Badforyousteve",
+      colleagueCommented: false,
+      aiClassification: "§ 241 StGB",
+      humanClassification: undefined,
+      instanceFile: "instance-3",
     },
   ]);
 

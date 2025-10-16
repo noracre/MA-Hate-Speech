@@ -93,11 +93,19 @@ export default function Instance3({
         </Avatar>
         <div className="flex-1">
           <p className="text-gray-900 mb-3">
-            "Die IP-Adresse von Steffen Bäcker @Badforyousteve ist in <strong>Kerpen, Nordrhein-Westfalen</strong>. Es wurde eine andere
-            Instanz gefunden, die als <strong>§ 241 StGB – Bedrohung</strong> kategorisiert wurde. Hier ist die Instanz:"
+            "Die IP-Adresse von Steffen Bäcker @Badforyousteve ist in <strong>Kerpen, Nordrhein-Westfalen</strong>. 
+            Die KI hat <strong>1</strong> andere Instanz von diesem/ dieser Verfasser*in gefunden:
           </p>
           <div className="bg-white p-3 rounded border">
             <Image src="/instance-4-text.png" alt="Klassifizierter Text" width={756} height={110} className="w-full h-auto" priority />
+          </div>
+          <div className="text-gray-900 mb-3"> Von KI mit 97% Sicherheit als{" "}
+            <span
+              className={`px-2 py-1 rounded-full text-sm font-medium ${getCategoryColor("§241 Bedrohung")}`}
+            >
+              §241 Bedrohung
+            </span>{" "}
+            eingestuft."
           </div>
         </div>
       </div>
@@ -157,7 +165,7 @@ export default function Instance3({
       instanceId="7834"
       instanceTitle="Instanz #7834"
       instanceImageSrc="/instance-3-text.png"
-      confidencePercent="75"
+      confidencePercent="97"
       instanceImageAlt="Klassifizierter Text"
       limeImageSrc="/instance-3-lime.png"
       dateViews="09. Juni 2025, 9:18 · 1.142 Mal angezeigt"

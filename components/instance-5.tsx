@@ -177,7 +177,7 @@ export default function Instance5({
       instanceImageSrc="/instance-5-text.png"
       instanceImageAlt="Klassifizierter Text"
       limeImageSrc="/instance-5-lime.png"
-      confidencePercent="70"
+      confidencePercent="96"
       dateViews="08. Juni 2025, 17:29 · 1.142 Mal angezeigt"
       aiBadgeText="§ 130 Volksverhetzung"
       aiBadgeColorKey="§130 Volksverhetzung"

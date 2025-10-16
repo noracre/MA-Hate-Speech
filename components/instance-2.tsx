@@ -148,7 +148,7 @@ export default function Instance2({
       instanceId="7835"
       instanceTitle="Instanz #7835"
       instanceImageSrc="/instance-2-text.png"
-      confidencePercent="91"
+      confidencePercent="85"
       instanceImageAlt="Klassifizierter Text"
       limeImageSrc="/instance-2-lime.png"
       dateViews="09. Juni 2025, 9:55 · 20.142 Mal angezeigt"
