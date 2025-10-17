@@ -211,7 +211,7 @@ export default function ModellView({ instances, onOpenInstanceTab }: ModellViewP
                 <CardTitle className="text-lg font-semibold">
                   <span className="inline-flex items-center">
                     Genauigkeit
-                    <span title="Dieses Kreisdiagramm zeigt, wie viele Instanzen insgesamt der richtigen Kategorie zugeordnet wurden." className="ml-2 text-gray-400 hover:text-gray-600">
+                    <span title="Dieses Kreisdiagramm zeigt, wie viele Instanzen seit der Inbetriebnahme der richtigen Kategorie zugeordnet wurden." className="ml-2 text-gray-400 hover:text-gray-600">
                       <Info className="w-4 h-4 inline" />
                     </span>
                   </span>
@@ -346,37 +346,50 @@ export default function ModellView({ instances, onOpenInstanceTab }: ModellViewP
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="overflow-x-auto">
-                <table className="border-collapse">
-                  <thead>
-                    <tr>
-                      <th className="w-32"></th>
-                      {headers.map((header, i) => (
-                        <th key={i} className="relative w-16 h-24 border border-gray-300 text-xs font-normal text-gray-700">
-                          <div className="absolute inset-0 flex items-center justify-center text-center">
-                            <span className="inline-block transform -rotate-45 whitespace-nowrap">{header}</span>
-                          </div>
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {confusionMatrixData.map((row, r) => (
-                      <tr key={r}>
-                        <td className="p-2 text-xs border border-gray-300 bg-gray-50">{row[0]}</td>
-                        {(row.slice(1) as number[]).map((val, c) => (
-                          <td
-                            key={c}
-                            className="w-16 h-8 text-xs text-center border border-gray-300"
-                            style={{ backgroundColor: getHeatmapColor(val, r, c) }}
-                          >
-                            {val}
-                          </td>
+              <div className="relative">
+                {/* X-axis label (KI) centered above the headers */}
+                <div className="absolute left-1/2 -translate-x-1/2 -top-6 text-sm font-medium text-gray-600">
+                  KI
+                </div>
+
+                {/* Y-axis label (Mensch) rotated and centered at the left side */}
+                <div className="absolute -left-10 top-1/2 -translate-y-1/2 text-sm font-medium text-gray-600 transform -rotate-90 origin-center">
+                  Mensch
+                </div>
+
+                {/* give left padding so the rotated Y label has space */}
+                <div className="overflow-x-auto pl-6">
+                  <table className="border-collapse">
+                    <thead>
+                      <tr>
+                        <th className="w-32"></th>
+                        {headers.map((header, i) => (
+                          <th key={i} className="relative w-16 h-24 border border-gray-300 text-xs font-normal text-gray-700">
+                            <div className="absolute inset-0 flex items-center justify-center text-center">
+                              <span className="inline-block transform -rotate-45 whitespace-nowrap">{header}</span>
+                            </div>
+                          </th>
                         ))}
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {confusionMatrixData.map((row, r) => (
+                        <tr key={r}>
+                          <td className="p-2 text-xs border border-gray-300 bg-gray-50">{row[0]}</td>
+                          {(row.slice(1) as number[]).map((val, c) => (
+                            <td
+                              key={c}
+                              className="w-16 h-8 text-xs text-center border border-gray-300"
+                              style={{ backgroundColor: getHeatmapColor(val, r, c) }}
+                            >
+                              {val}
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -519,11 +532,13 @@ export default function ModellView({ instances, onOpenInstanceTab }: ModellViewP
             {/* --- Accuracy Card --- */}
             <Card>
               <CardHeader>
-                <CardTitle
-                  className="text-lg font-semibold"
-                  title="Dieses Kreisdiagramm zeigt, wie viele Instanzen insgesamt der richtigen Kategorie zugeordnet wurden."
-                >
-                  Genauigkeit
+                <CardTitle className="text-lg font-semibold">
+                  <span className="inline-flex items-center">
+                    Genauigkeit
+                    <span title="Dieses Kreisdiagramm zeigt, wie viele Instanzen auf den Testdaten der richtigen Kategorie zugeordnet wurden." className="ml-2 text-gray-400 hover:text-gray-600">
+                      <Info className="w-4 h-4 inline" />
+                    </span>
+                  </span>
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -603,11 +618,13 @@ export default function ModellView({ instances, onOpenInstanceTab }: ModellViewP
             {/* --- False Negatives Card --- */}
             <Card>
               <CardHeader>
-                <CardTitle
-                  className="text-lg font-semibold"
-                  title="Dieses Kreisdiagramm zeigt, wie viele Instanzen bei der letzten Evaluationsrunde gefunden wurden, die fälschlicherweise keiner Kategorie zugeordnet wurden."
-                >
-                  Falsche Negative
+                <CardTitle className="text-lg font-semibold">
+                  <span className="inline-flex items-center">
+                    Falsche Negative
+                    <span title="Dieses Kreisdiagramm zeigt, wie viele Instanzen auf den Testdaten fälschlicherweise keiner Kategorie zugeordnet wurden." className="ml-2 text-gray-400 hover:text-gray-600">
+                      <Info className="w-4 h-4 inline" />
+                    </span>
+                  </span>
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -636,45 +653,60 @@ export default function ModellView({ instances, onOpenInstanceTab }: ModellViewP
           {/* Confusion Matrix */}
           <Card>
             <CardHeader>
-              <CardTitle
-                className="text-lg font-semibold"
-                title="Diese Konfusionsmatrix zeigt, wie Instanzen seit de Einführung zugeordnet wurden. Die Zeilen entsprechen der Zuordnung durch Menschen, die Spalten der Zuordnung durch das KI-Modell. Grüne Zellen auf der diagonalen wurden richtig zugeordnet, andere Zellen wurden falsch zugeordnet. "
-              >
-                Zuordnungen
+              <CardTitle className="text-lg font-semibold">
+                <span className="inline-flex items-center">
+                  Zuordnungen
+                  <span title="Diese Konfusionsmatrix zeigt, wie Instanzen auf dem Test-Datensatz zugeordnet wurden. Die Zeilen entsprechen den richtigen Labels, die Spalten Labels, die durch das KI-Modell zugordnet wurden. Grüne Zellen auf der diagonalen wurden richtig zugeordnet, andere Zellen wurden falsch zugeordnet." className="ml-2 text-gray-400 hover:text-gray-600">
+                    <Info className="w-4 h-4 inline" />
+                  </span>
+                </span>
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="overflow-x-auto">
-                <table className="border-collapse">
-                  <thead>
-                    <tr>
-                      <th className="w-32"></th>
-                      {headers.map((header, i) => (
-                        <th key={i} className="relative w-16 h-24 border border-gray-300 text-xs font-normal text-gray-700">
-                          <div className="absolute inset-0 flex items-center justify-center text-center">
-                            <span className="inline-block transform -rotate-45 whitespace-nowrap">{header}</span>
-                          </div>
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {confusionMatrixData.map((row, r) => (
-                      <tr key={r}>
-                        <td className="p-2 text-xs border border-gray-300 bg-gray-50">{row[0]}</td>
-                        {(row.slice(1) as number[]).map((val, c) => (
-                          <td
-                            key={c}
-                            className="w-16 h-8 text-xs text-center border border-gray-300"
-                            style={{ backgroundColor: getHeatmapColor(val, r, c) }}
-                          >
-                            {val}
-                          </td>
+              <div className="relative">
+                {/* X-axis label (KI) centered above the headers */}
+                <div className="absolute left-1/2 -translate-x-1/2 -top-6 text-sm font-medium text-gray-600">
+                  KI
+                </div>
+
+                {/* Y-axis label (Mensch) rotated and centered at the left side */}
+                <div className="absolute -left-10 top-1/2 -translate-y-1/2 text-sm font-medium text-gray-600 transform -rotate-90 origin-center">
+                  Mensch
+                </div>
+
+                {/* give left padding so the rotated Y label has space */}
+                <div className="overflow-x-auto pl-6">
+                  <table className="border-collapse">
+                    <thead>
+                      <tr>
+                        <th className="w-32"></th>
+                        {headers.map((header, i) => (
+                          <th key={i} className="relative w-16 h-24 border border-gray-300 text-xs font-normal text-gray-700">
+                            <div className="absolute inset-0 flex items-center justify-center text-center">
+                              <span className="inline-block transform -rotate-45 whitespace-nowrap">{header}</span>
+                            </div>
+                          </th>
                         ))}
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {confusionMatrixData.map((row, r) => (
+                        <tr key={r}>
+                          <td className="p-2 text-xs border border-gray-300 bg-gray-50">{row[0]}</td>
+                          {(row.slice(1) as number[]).map((val, c) => (
+                            <td
+                              key={c}
+                              className="w-16 h-8 text-xs text-center border border-gray-300"
+                              style={{ backgroundColor: getHeatmapColor(val, r, c) }}
+                            >
+                              {val}
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </CardContent>
           </Card>
