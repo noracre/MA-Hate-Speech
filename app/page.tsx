@@ -151,15 +151,26 @@ export default function ClassificationApp() {
   };
 
   const handleNextInstance = () => {
-    setCurrentView("instance")
-    // traverse using the ordered list
+    // Build ordered list of pending instance files
     const order = orderedPendingInstances.map(p => p.instanceFile)
+    if (order.length === 0) return
+
     const idx = order.indexOf(currentInstanceId)
-    if (idx === -1) return
-    const next = order[(idx + 1) % order.length] // wrap-around
-    const nextRow = orderedPendingInstances.find(p => p.instanceFile === next)
-    setCurrentInstanceId(next)
-    if (nextRow?.id) setCurrentInstanceLabel(nextRow.id)
+    let nextFile: string
+
+    if (idx === -1) {
+      // current instance not in pending list → open first pending
+      nextFile = order[0]
+    } else {
+      // otherwise go to next (wrap)
+      nextFile = order[(idx + 1) % order.length]
+    }
+
+    const nextRow = orderedPendingInstances.find(p => p.instanceFile === nextFile)
+    if (!nextRow) return
+
+    setCurrentInstanceId(nextFile)
+    if (nextRow.id) setCurrentInstanceLabel(nextRow.id)
     setCurrentView("instance")
     setHasUnsavedChanges(false)
   }
