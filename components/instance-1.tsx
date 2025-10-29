@@ -528,7 +528,7 @@ export default function InstanceView({
                       }
                     />
                     <label htmlFor="classification" className="text-gray-700 cursor-pointer">
-                      Der Post lässt sich dem Strafbestand klar und plausibel zuordnen.
+                      er Post lässt sich der oben ausgewählten Kategorie klar und plausibel zuordnen.
                     </label>
                   </div>
                   <div className="flex items-start space-x-3">

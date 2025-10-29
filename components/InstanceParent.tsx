@@ -351,7 +351,7 @@ export default function InstanceParent({
                   <div className="flex items-start space-x-3">
                     <Checkbox id="classification" checked={feedbackChecks.classification}
                       onCheckedChange={(checked) => setFeedbackChecks((p) => ({ ...p, classification: !!checked }))}/>
-                    <label htmlFor="classification" className="text-gray-700 cursor-pointer">Der Post lässt sich dem Strafbestand klar und plausibel zuordnen.</label>
+                    <label htmlFor="classification" className="text-gray-700 cursor-pointer">Der Post lässt sich der oben ausgewählten Kategorie klar und plausibel zuordnen.</label>
                   </div>
                   <div className="flex items-start space-x-3">
                     <Checkbox id="addressee" checked={feedbackChecks.addressee}
