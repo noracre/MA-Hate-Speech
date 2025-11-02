@@ -27,10 +27,10 @@ Each section has its own page file, typically located under `app/<section>/page.
 
 ### `components/` Directory
 Contains pages used across the app, including:
-- **(1) Instance Overview** – in overview-view.tsx
-- **(2) Instance Classification** – all instances (in instance 2.tsx to instance 7.tsx) inherit from InstanceParent.tsx. instance-1.tsx contains everything for quick checks.
-- **(3) Dataset and Category Information** – in training-data-overview.tsx
-- **(4) Model Performance** – in modell-view.tsx
+- **(1) Instance Overview** – in `overview-view.tsx`
+- **(2) Instance Classification** – all instances (in `instance 2.tsx` to `instance 7.tsx`) inherit from `InstanceParent.tsx`. `instance-1.tsx` contains everything for quick checks.
+- **(3) Dataset and Category Information** – in `training-data-overview.tsx`
+- **(4) Model Performance** – in `modell-view.tsx`
 
 
 ### `lib/` Directory
@@ -56,6 +56,7 @@ Contains global styles and Tailwind or CSS module definitions for consistent UI 
     cd to project directory
     npm install to console
     Change next.config. Overwrite everything with:
+        ```bash
         /** @type {import('next').NextConfig} */
         const nextConfig = {
         output: 'export',
@@ -68,7 +69,9 @@ Contains global styles and Tailwind or CSS module definitions for consistent UI 
 
 3. **Start the development server**
     cd to project directory
-    in console run "npm run dev"  
+    in console run
+        ```bash
+        npm run dev
 
 4. **Open the app** 
     Visit http://localhost:3000 in browser
