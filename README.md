@@ -45,30 +45,30 @@ Contains global styles and Tailwind or CSS module definitions for consistent UI 
 
 ## Running Locally
 
-1. **Clone the repository**
+1. **Clone the repository**  
    ```bash
    git clone https://github.com/noracre/MA-Hate-Speech.git
    cd MA-Hate-Speech
 
-2. **Install dependencies**
+2. **Install dependencies**  
     download node.js from nodejs.org
     Open console (cmd)
     `cd` to project directory
     `npm install` to console
     Change next.config. Overwrite everything with:
-        /** @type {import('next').NextConfig} */
-        const nextConfig = {
-        output: 'export',
-        trailingSlash: true,
-        images: {
-            unoptimized: true
-        }
-        }
+        /** @type {import('next').NextConfig} */  
+        const nextConfig = {  
+        output: 'export',  
+        trailingSlash: true,  
+        images: {  
+            unoptimized: true  
+        }  
+        }  
     export default nextConfig
 
-3. **Start the development server**
+3. **Start the development server**  
     `cd` to project directory
     in console run `npm run dev`
 
-4. **Open the app** 
+4. **Open the app**   
     Visit http://localhost:3000 in browser
