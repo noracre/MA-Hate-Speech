@@ -1,32 +1,74 @@
-# Dashboard for a Hate Speech Classifier with XAI
+# MA-Hate-Speech  
+**Dashboard for a Hate Speech Classifier with Explainable AI**
 
-## Overview
+## Overview  
+This project provides a web-based dashboard to a hate-speech classification system.  
+It includes views for (1) Instance Overview, (2) Instance Classification, (3) Dataset and Category Information, and (4) Model Performance.
 
-This is the Front-End for a Hate Speech Classifier. The main menu contains the following pages:
-"Instance Overview" contains an Overview of Instances. Clicking on them leads to view individual instances.
-"Modell Overview" is a dashboard for model performance metrics.
-"Traning data and categories Overview" is an FAQ with central questions about training data and definitions for all categories.
+Live Deployment: [https://ma-hate-speech.vercel.app/](https://ma-hate-speech.vercel.app/)  
+Hosted on **Vercel**
 
-## Deployment
+---
 
-Your project is live at:
+## Structure & Key Pages
 
-**[https://vercel.com/noras-projects-52946114/v0-ma-hate-speech-classifier](https://vercel.com/noras-projects-52946114/v0-ma-hate-speech-classifier)**
+### `app/page.tsx`
+- Serves as the **main landing page** for the deployment.
+- Provides the base layout, top-level navigation, and links to key sections:
+  - **Instance Overview**
+  - **Model Overview**
+  - **Training Data & Categories Overview**
 
-## Build your app
+### Section Pages
+Each section has its own page file, typically located under `app/<section>/page.tsx`, for example:
+- `app/instance/page.tsx` – Displays a list or details of classification instances.
+- `app/model/page.tsx` – Shows model metrics, visualizations, and diagnostic charts.
+- `app/data/page.tsx` – Explains training data categories, definitions, and FAQ-style information.
 
-Continue building your app on:
+### `components/` Directory
+Contains pages used across the app, including:
+- **(1) Instance Overview** – in overview-view.tsx
+- **(2) Instance Classification** – all instances (in instance 2.tsx to instance 7.tsx) inherit from InstanceParent.tsx. instance-1.tsx contains everything for quick checks.
+- **(3) Dataset and Category Information** – in training-data-overview.tsx
+- **(4) Model Performance** – in modell-view.tsx
 
-**[https://v0.app/chat/projects/kYV0voOtibJ](https://v0.app/chat/projects/kYV0voOtibJ)**
 
-## How It Works
+### `lib/` Directory
+Houses utility functions and API logic such as:
+- Data fetching for instances and model metrics.
+- Shared helper functions for formatting or computation.
 
-1. Create and modify your project using [v0.app](https://v0.app)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+### `styles/` Directory
+Contains global styles and Tailwind or CSS module definitions for consistent UI styling.
 
-*Automatically synced with your [v0.app](https://v0.app) deployments*
+---
 
-[![Originally deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/noras-projects-52946114/v0-ma-hate-speech-classifier)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/projects/kYV0voOtibJ)
+## Running Locally
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/noracre/MA-Hate-Speech.git
+   cd MA-Hate-Speech
+
+2. **Install dependencies**
+    download node.js from nodejs.org
+    Open console (cmd)
+    cd to project directory
+    npm install to console
+    Change next.config. Overwrite everything with:
+        /** @type {import('next').NextConfig} */
+        const nextConfig = {
+        output: 'export',
+        trailingSlash: true,
+        images: {
+            unoptimized: true
+        }
+        }
+    export default nextConfig
+
+3. **Start the development server**
+    cd to project directory
+    in console run "npm run dev"  
+
+4. **Open the app** 
+    Visit http://localhost:3000 in browser
