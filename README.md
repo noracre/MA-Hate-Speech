@@ -53,10 +53,9 @@ Contains global styles and Tailwind or CSS module definitions for consistent UI 
 2. **Install dependencies**
     download node.js from nodejs.org
     Open console (cmd)
-    cd to project directory
-    npm install to console
+    `cd` to project directory
+    `npm install` to console
     Change next.config. Overwrite everything with:
-        ```bash
         /** @type {import('next').NextConfig} */
         const nextConfig = {
         output: 'export',
@@ -68,10 +67,8 @@ Contains global styles and Tailwind or CSS module definitions for consistent UI 
     export default nextConfig
 
 3. **Start the development server**
-    cd to project directory
-    in console run
-        ```bash
-        npm run dev
+    `cd` to project directory
+    in console run `npm run dev`
 
 4. **Open the app** 
     Visit http://localhost:3000 in browser
